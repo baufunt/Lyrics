@@ -52,12 +52,12 @@
     .nav-add:hover { background: #b0c860 !important; transform: scale(1.04) !important; }
 
     /* HERO */
-    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 24px 0; position: relative; overflow: hidden; }
     .hero-bg { position: absolute; inset: 0; pointer-events: none; }
     .hero-bg::before { content: ''; position: absolute; top: -10%; left: -10%; width: 70%; height: 70%; background: radial-gradient(ellipse, rgba(154,175,82,0.12) 0%, transparent 70%); animation: pulse 6s ease-in-out infinite alternate; }
     .hero-bg::after { content: ''; position: absolute; bottom: 0; right: -5%; width: 50%; height: 60%; background: radial-gradient(ellipse, rgba(154,175,82,0.07) 0%, transparent 70%); }
     @keyframes pulse { from { opacity: 0.6; transform: scale(1); } to { opacity: 1; transform: scale(1.08); } }
-    .hero-inner { max-width: 900px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+    .hero-inner { max-width: 900px; margin: 0 auto; width: 100%; position: relative; z-index: 1; padding-bottom: 60px; }
     .hero-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(154,175,82,0.1); border: 1px solid var(--border); border-radius: 999px; padding: 5px 14px; font-size: 0.75rem; font-weight: 500; color: var(--green); margin-bottom: 28px; letter-spacing: 0.05em; text-transform: uppercase; }
     .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
@@ -76,6 +76,92 @@
     .hero-btns { animation-delay: 0.4s; }
     @keyframes heroFadeIn { to { opacity: 1; transform: translateY(0); } }
 
+    /* ===================== GUILD STRIP ===================== */
+    .guild-strip-section {
+      position: relative; z-index: 1;
+      padding: 0 0 80px;
+      opacity: 0; transform: translateY(20px);
+      animation: heroFadeIn 0.7s ease 0.55s forwards;
+    }
+    .guild-strip-label {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      letter-spacing: 0.01em;
+    }
+    .guild-strip-label strong { color: var(--text); font-weight: 600; }
+
+    .guild-strip-outer {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .guild-strip-track {
+      display: flex;
+      gap: 10px;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+    }
+    .guild-strip-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .guild-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 16px 7px 7px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      cursor: default;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .guild-card:hover { border-color: var(--border2); background: var(--surface2); }
+
+    .guild-card-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--green-glow);
+      border: 1px solid var(--border);
+    }
+    .guild-card-fallback {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--green-glow);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 0.8rem;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+    .guild-card-info { display: flex; flex-direction: column; gap: 1px; }
+    .guild-card-name { font-size: 0.83rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+    .guild-card-members { font-size: 0.72rem; color: var(--muted); }
+
+    /* skeleton cards while loading */
+    .guild-card-skeleton {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 7px 16px 7px 7px;
+      flex-shrink: 0;
+    }
+    .skeleton-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--border); animation: skshimmer 1.4s ease-in-out infinite; }
+    .skeleton-lines { display: flex; flex-direction: column; gap: 5px; }
+    .skeleton-line { height: 8px; border-radius: 4px; background: var(--border); animation: skshimmer 1.4s ease-in-out infinite; }
+    .skeleton-line.wide { width: 90px; }
+    .skeleton-line.narrow { width: 55px; animation-delay: 0.2s; }
+    @keyframes skshimmer { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
+
     /* ===================== STATUS SECTION ===================== */
     .status-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
     .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
@@ -84,85 +170,32 @@
     .status-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
     @media (max-width: 600px) { .status-cards { grid-template-columns: 1fr; } }
 
-    .status-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 24px 28px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      transition: border-color 0.2s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .status-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      opacity: 0; transition: opacity 0.3s;
-    }
+    .status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px 28px; display: flex; align-items: center; gap: 18px; transition: border-color 0.2s, transform 0.2s; position: relative; overflow: hidden; }
+    .status-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: 0; transition: opacity 0.3s; }
     .status-card:hover { border-color: var(--border2); transform: translateY(-3px); }
     .status-card:hover::before { opacity: 1; }
-
-    .status-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      background: var(--green-glow); border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--green); flex-shrink: 0;
-    }
+    .status-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--green); flex-shrink: 0; }
     .status-icon svg { width: 22px; height: 22px; }
     .status-info { flex: 1; min-width: 0; }
     .status-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; }
-    .status-value {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem; font-weight: 800;
-      color: var(--text); line-height: 1;
-      letter-spacing: -0.03em;
-    }
+    .status-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
     .status-value.loading { color: var(--muted); font-size: 1.2rem; animation: shimmer 1.5s ease-in-out infinite; }
     @keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
 
-    /* LATENCY COLOR */
     .latency-good { color: #4ade80; }
     .latency-ok { color: #facc15; }
     .latency-bad { color: #f87171; }
 
-    /* ONLINE BADGE */
-    .online-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25);
-      border-radius: 999px; padding: 4px 12px;
-      font-size: 0.75rem; font-weight: 600; color: #4ade80;
-      margin-bottom: 32px;
-    }
+    .online-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25); border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: #4ade80; margin-bottom: 32px; }
     .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 2s ease-in-out infinite; }
-    .offline-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.25);
-      border-radius: 999px; padding: 4px 12px;
-      font-size: 0.75rem; font-weight: 600; color: #f87171;
-      margin-bottom: 32px;
-    }
+    .offline-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.25); border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: #f87171; margin-bottom: 32px; }
     .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #f87171; }
 
-    /* UPTIME ROW */
-    .uptime-row {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-      padding: 18px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    }
+    .uptime-row { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .uptime-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
     .uptime-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--green); }
     .uptime-sep { width: 1px; height: 20px; background: var(--border); }
     .last-updated { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
-
-    /* STATS STRIP (kept for commands / uptime) */
-    .stats-strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 48px 24px; }
-    .stats-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; }
-    .stat-item { text-align: center; padding: 16px; border-right: 1px solid var(--border); }
-    .stat-item:last-child { border-right: none; }
-    .stat-num { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 6px; letter-spacing: -0.03em; }
-    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; }
 
     /* FEATURES */
     .features { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
@@ -387,47 +420,45 @@
         </a>
       </div>
     </div>
+
+    <!-- GUILD STRIP -->
+    <div class="guild-strip-section">
+      <p class="guild-strip-label" id="guild-strip-label">Loading communities...</p>
+      <div class="guild-strip-outer">
+        <div class="guild-strip-track" id="guild-strip-track">
+          <!-- skeleton placeholders -->
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- STATUS SECTION -->
   <section class="status-section" id="status">
     <div class="section-label reveal">Live</div>
     <div class="section-title reveal reveal-delay-1">Bot Status</div>
-
     <div id="status-badge" class="online-badge reveal reveal-delay-2">
       <span class="online-dot"></span> Checking...
     </div>
-
     <div class="status-cards reveal reveal-delay-2">
       <div class="status-card">
-        <div class="status-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </div>
-        <div class="status-info">
-          <div class="status-label">Guilds</div>
-          <div class="status-value loading" id="stat-guilds">—</div>
-        </div>
+        <div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div class="status-info"><div class="status-label">Guilds</div><div class="status-value loading" id="stat-guilds">—</div></div>
       </div>
       <div class="status-card">
-        <div class="status-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="status-info">
-          <div class="status-label">Members</div>
-          <div class="status-value loading" id="stat-members">—</div>
-        </div>
+        <div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="status-info"><div class="status-label">Members</div><div class="status-value loading" id="stat-members">—</div></div>
       </div>
       <div class="status-card">
-        <div class="status-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <div class="status-info">
-          <div class="status-label">Latency</div>
-          <div class="status-value loading" id="stat-latency">—</div>
-        </div>
+        <div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="status-info"><div class="status-label">Latency</div><div class="status-value loading" id="stat-latency">—</div></div>
       </div>
     </div>
-
     <div class="uptime-row reveal reveal-delay-3">
       <span class="uptime-label">Uptime</span>
       <span class="uptime-value" id="stat-uptime">—</span>
@@ -747,10 +778,7 @@
   </footer>
 
   <script>
-    /* ===================== CONFIG — CHANGE THIS ===================== */
-    // Replace with your ngrok URL each time you restart it
     const API_URL = 'https://whacky-onion-erratic.ngrok-free.dev';
-    /* =============================================================== */
 
     /* SCROLL REVEAL */
     const revealObserver = new IntersectionObserver((entries) => {
@@ -760,31 +788,93 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+    /* ===================== GUILD STRIP ===================== */
+    async function fetchGuilds() {
+      try {
+        const res = await fetch(`${API_URL}/guilds`, {
+          headers: { 'ngrok-skip-browser-warning': 'true' }
+        });
+        if (!res.ok) throw new Error('failed');
+        const guilds = await res.json();
+
+        const totalMembers = guilds.reduce((a, g) => a + g.members, 0);
+        document.getElementById('guild-strip-label').innerHTML =
+          `Powering <strong>${totalMembers.toLocaleString()}</strong> users across <strong>${guilds.length}</strong> communities`;
+
+        const track = document.getElementById('guild-strip-track');
+        track.innerHTML = ''; // clear skeletons
+
+        // Build a card element
+        const makeCard = (g) => {
+          const card = document.createElement('div');
+          card.className = 'guild-card';
+
+          let avatarEl;
+          if (g.icon) {
+            avatarEl = document.createElement('img');
+            avatarEl.className = 'guild-card-avatar';
+            avatarEl.src = g.icon;
+            avatarEl.alt = g.name;
+            avatarEl.onerror = function() {
+              const fb = document.createElement('div');
+              fb.className = 'guild-card-fallback';
+              fb.textContent = g.name.charAt(0).toUpperCase();
+              this.replaceWith(fb);
+            };
+          } else {
+            avatarEl = document.createElement('div');
+            avatarEl.className = 'guild-card-fallback';
+            avatarEl.textContent = g.name.charAt(0).toUpperCase();
+          }
+
+          const info = document.createElement('div');
+          info.className = 'guild-card-info';
+          info.innerHTML = `
+            <div class="guild-card-name">${g.name}</div>
+            <div class="guild-card-members">${g.members.toLocaleString()} members</div>
+          `;
+
+          card.appendChild(avatarEl);
+          card.appendChild(info);
+          return card;
+        };
+
+        // Render twice for seamless infinite loop
+        const allCards = [...guilds, ...guilds];
+        allCards.forEach(g => track.appendChild(makeCard(g)));
+
+        // Adjust animation speed based on total width
+        const cardWidth = 220; // approx per card
+        const totalWidth = guilds.length * cardWidth;
+        const speed = Math.max(20, totalWidth / 8); // seconds
+        track.style.animationDuration = speed + 's';
+
+      } catch (e) {
+        document.getElementById('guild-strip-label').textContent = '';
+        document.getElementById('guild-strip-track').innerHTML = '';
+      }
+    }
+
+    fetchGuilds();
+
     /* ===================== LIVE STATS ===================== */
     function formatNumber(n) {
       if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
       if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
       return n.toLocaleString();
     }
-
     function formatUptime(seconds) {
-      const d = Math.floor(seconds / 86400);
-      const h = Math.floor((seconds % 86400) / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
+      const d = Math.floor(seconds / 86400), h = Math.floor((seconds % 86400) / 3600), m = Math.floor((seconds % 3600) / 60);
       if (d > 0) return `${d}d ${h}h ${m}m`;
       if (h > 0) return `${h}h ${m}m`;
       return `${m}m`;
     }
-
     function animateNum(el, target) {
-      const duration = 1200;
-      const start = performance.now();
-      const from = 0;
+      const duration = 1200, start = performance.now();
       const update = (now) => {
         const progress = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.floor(from + eased * (target - from));
-        el.textContent = formatNumber(current);
+        el.textContent = formatNumber(Math.floor(eased * target));
         if (progress < 1) requestAnimationFrame(update);
         else el.textContent = formatNumber(target);
       };
@@ -793,50 +883,34 @@
 
     async function fetchStats() {
       try {
-        const res = await fetch(`${API_URL}/stats`, {
-          headers: { 'ngrok-skip-browser-warning': 'true' }
-        });
+        const res = await fetch(`${API_URL}/stats`, { headers: { 'ngrok-skip-browser-warning': 'true' } });
         if (!res.ok) throw new Error('non-ok');
         const data = await res.json();
 
-        // Guilds
         const guildsEl = document.getElementById('stat-guilds');
         guildsEl.classList.remove('loading');
         animateNum(guildsEl, data.guilds || 0);
 
-        // Members
         const membersEl = document.getElementById('stat-members');
         membersEl.classList.remove('loading');
         animateNum(membersEl, data.members || 0);
 
-        // Latency
         const latencyEl = document.getElementById('stat-latency');
         latencyEl.classList.remove('loading');
         const ms = data.latency || 0;
         latencyEl.textContent = ms + 'ms';
-        if (ms < 100) latencyEl.classList.add('latency-good');
-        else if (ms < 250) latencyEl.classList.add('latency-ok');
-        else latencyEl.classList.add('latency-bad');
+        latencyEl.className = 'status-value ' + (ms < 100 ? 'latency-good' : ms < 250 ? 'latency-ok' : 'latency-bad');
 
-        // Uptime
-        if (data.uptime) {
-          document.getElementById('stat-uptime').textContent = formatUptime(data.uptime);
-        }
+        if (data.uptime) document.getElementById('stat-uptime').textContent = formatUptime(data.uptime);
 
-        // Badge
         const badge = document.getElementById('status-badge');
         badge.className = 'online-badge reveal visible';
         badge.innerHTML = '<span class="online-dot"></span> Online';
-
-        // Last updated
         document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
-
       } catch (e) {
-        // Offline state
         const badge = document.getElementById('status-badge');
         badge.className = 'offline-badge reveal visible';
         badge.innerHTML = '<span class="offline-dot"></span> Offline / Unreachable';
-
         ['stat-guilds','stat-members','stat-latency'].forEach(id => {
           const el = document.getElementById(id);
           el.classList.add('loading');
@@ -846,7 +920,6 @@
       }
     }
 
-    // Fetch on load, then every 30 seconds
     fetchStats();
     setInterval(fetchStats, 30000);
 
@@ -860,7 +933,6 @@
 
     /* ===================== EMBED BUILDER ===================== */
     const fields = [], buttons = [];
-
     const VARS = [
       { code: '{user.mention}', desc: 'pings the user' },
       { code: '{username}', desc: 'their username' },
@@ -873,7 +945,6 @@
       { code: '{boosts}', desc: 'total boost count' },
       { code: '{bot.avatar}', desc: 'bot avatar URL' },
     ];
-
     const vg = document.getElementById('vars-grid');
     VARS.forEach(v => {
       const chip = document.createElement('div');
@@ -882,7 +953,6 @@
       chip.onclick = () => { navigator.clipboard.writeText(v.code); chip.style.borderColor = 'var(--green)'; setTimeout(() => chip.style.borderColor = '', 1000); };
       vg.appendChild(chip);
     });
-
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -891,10 +961,8 @@
         document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
       });
     });
-
     function syncColor(el) { document.getElementById('b-color').value = el.value.replace('#', ''); updatePreview(); }
     function syncColorText(el) { const hex = el.value.replace('#', ''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('b-color-pick').value = '#' + hex; updatePreview(); }
-
     function resolveVar(text) {
       return text
         .replace(/\{user\.mention\}/g, '@username').replace(/\{username\}/g, 'username')
@@ -905,7 +973,6 @@
         .replace(/\{bot\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/2.png');
     }
     function isImageUrl(url) { return url && (url.startsWith('http') || url.includes('cdn.discordapp')); }
-
     function updatePreview() {
       const title = document.getElementById('b-title').value;
       const desc = document.getElementById('b-desc').value;
@@ -919,11 +986,9 @@
       const message = document.getElementById('b-message').value;
       const message2 = document.getElementById('b-message2').value;
       const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
-
       document.getElementById('prev-message').textContent = resolveVar(message);
       const msg2El = document.getElementById('prev-message2');
       if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; } else { msg2El.style.display = 'none'; }
-
       const authorEl = document.getElementById('prev-author');
       if (authorName) {
         authorEl.style.display = 'flex';
@@ -932,24 +997,18 @@
         const authorIconEl = document.getElementById('prev-author-icon');
         if (authorIcon && isImageUrl(iconResolved)) { authorIconEl.src = iconResolved; authorIconEl.style.display = 'block'; } else { authorIconEl.style.display = 'none'; }
       } else { authorEl.style.display = 'none'; }
-
       const thumbResolved = resolveVar(thumbnail);
       const thumbEl = document.getElementById('prev-thumbnail');
       if (thumbnail && isImageUrl(thumbResolved)) { document.getElementById('prev-thumb-img').src = thumbResolved; thumbEl.style.display = 'block'; } else { thumbEl.style.display = 'none'; }
-
       const titleEl = document.getElementById('prev-title');
       if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; } else { titleEl.style.display = 'none'; }
-
       const descEl = document.getElementById('prev-desc');
       if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; } else { descEl.style.display = 'none'; }
-
       const fieldsEl = document.getElementById('prev-fields');
       if (fields.length > 0) { fieldsEl.style.display = 'flex'; fieldsEl.innerHTML = fields.map(f => `<div class="mock-embed-field ${f.inline ? 'inline' : ''}"><div class="mock-embed-field-name">${resolveVar(f.name)}</div><div class="mock-embed-field-value">${resolveVar(f.value)}</div></div>`).join(''); } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
-
       const imageResolved = resolveVar(image);
       const imageEl = document.getElementById('prev-image');
       if (image && isImageUrl(imageResolved)) { document.getElementById('prev-img').src = imageResolved; imageEl.style.display = 'block'; } else { imageEl.style.display = 'none'; }
-
       const footerWrap = document.getElementById('prev-footer-wrap');
       if (footer || timestamp) {
         footerWrap.style.display = 'flex';
@@ -957,18 +1016,14 @@
         const tsEl = document.getElementById('prev-ts');
         if (timestamp) { tsEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); tsEl.style.display = 'inline'; } else { tsEl.style.display = 'none'; }
       } else { footerWrap.style.display = 'none'; }
-
       const btnsEl = document.getElementById('prev-buttons');
       if (buttons.length > 0) { btnsEl.style.display = 'flex'; btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>`).join(''); } else { btnsEl.style.display = 'none'; }
-
       const hasEmbed = title || desc || authorName || footer || thumbnail || image || fields.length > 0 || timestamp;
       const embedEl = document.getElementById('prev-embed');
       embedEl.style.display = hasEmbed ? 'block' : 'none';
       if (hasEmbed) embedEl.style.borderLeftColor = color;
-
       generateOutput();
     }
-
     function addField() {
       const name = document.getElementById('f-name').value.trim();
       const value = document.getElementById('f-value').value.trim();
@@ -980,7 +1035,6 @@
     }
     function renderFieldsList() { document.getElementById('fields-list').innerHTML = fields.map((f, i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div>${f.inline ? '<span class="field-item-badge">inline</span>' : ''}<button class="remove-btn" onclick="removeField(${i})">x</button></div>`).join(''); }
     function removeField(i) { fields.splice(i, 1); renderFieldsList(); updatePreview(); }
-
     function addButton() {
       const label = document.getElementById('btn-label').value.trim();
       const url = document.getElementById('btn-url').value.trim();
@@ -992,7 +1046,6 @@
     }
     function renderButtonsList() { document.getElementById('buttons-list').innerHTML = buttons.map((b, i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="removeButton(${i})">x</button></div>`).join(''); }
     function removeButton(i) { buttons.splice(i, 1); renderButtonsList(); updatePreview(); }
-
     function generateOutput() {
       const title = document.getElementById('b-title').value;
       const desc = document.getElementById('b-desc').value;
@@ -1020,14 +1073,12 @@
       if (message2) out += `\n$v{message2: ${message2}}`;
       document.getElementById('output-box').textContent = out;
     }
-
     function copyOutput() {
       navigator.clipboard.writeText(document.getElementById('output-box').textContent);
       const btn = document.getElementById('copy-btn');
       btn.textContent = 'Copied!'; btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'Copy Command'; btn.classList.remove('copied'); }, 2000);
     }
-
     updatePreview();
   </script>
 </body>

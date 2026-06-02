@@ -24,6 +24,23 @@
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+    .reveal-delay-5 { transition-delay: 0.4s; }
+    .reveal-delay-6 { transition-delay: 0.48s; }
+
     /* NAV */
     nav {
       position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
@@ -62,6 +79,22 @@
     .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.15s; }
     .btn-secondary:hover { border-color: var(--green); background: var(--green-glow); transform: translateY(-2px); }
 
+    /* HERO FADE IN */
+    .hero-tag, h1, .hero-desc, .hero-btns { opacity: 0; transform: translateY(24px); animation: heroFadeIn 0.7s ease forwards; }
+    .hero-tag { animation-delay: 0.1s; }
+    h1 { animation-delay: 0.2s; }
+    .hero-desc { animation-delay: 0.3s; }
+    .hero-btns { animation-delay: 0.4s; }
+    @keyframes heroFadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    /* STATS STRIP */
+    .stats-strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 48px 24px; }
+    .stats-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; }
+    .stat-item { text-align: center; padding: 16px; border-right: 1px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; color: var(--green); line-height: 1; margin-bottom: 6px; letter-spacing: -0.03em; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 400; letter-spacing: 0.04em; }
+
     /* FEATURES */
     .features { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
     .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
@@ -75,6 +108,46 @@
     .feature-icon svg { width: 20px; height: 20px; }
     .feature-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; letter-spacing: -0.01em; }
     .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* COMMANDS SECTION */
+    .commands-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .commands-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .cmd-category { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .cmd-category-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .cmd-category-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .cmd-category-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: -0.01em; }
+    .cmd-category-count { font-size: 0.72rem; color: var(--muted); background: var(--green-glow); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin-left: auto; }
+    .cmd-list { display: flex; flex-direction: column; gap: 6px; }
+    .cmd-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s; }
+    .cmd-item:hover { border-color: var(--border2); }
+    .cmd-name { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--green); }
+    .cmd-desc { font-size: 0.75rem; color: var(--muted); }
+
+    /* HOW IT WORKS */
+    .how-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
+    .step-item { display: grid; grid-template-columns: 48px 1fr; gap: 24px; padding-bottom: 40px; position: relative; }
+    .step-item:last-child { padding-bottom: 0; }
+    .step-item:not(:last-child) .step-line { position: absolute; left: 23px; top: 48px; bottom: 0; width: 1px; background: var(--border); }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border2); background: var(--surface); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--green); flex-shrink: 0; position: relative; z-index: 1; }
+    .step-body { padding-top: 10px; }
+    .step-body h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; letter-spacing: -0.01em; }
+    .step-body p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    /* PERMISSIONS / SETUP */
+    .setup-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .perms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 32px; }
+    .perm-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; color: var(--muted); }
+    .perm-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .perm-item strong { color: var(--text); font-weight: 500; }
+
+    /* CTA BANNER */
+    .cta-banner { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .cta-inner { background: var(--surface); border: 1px solid var(--border2); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
+    .cta-inner::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(154,175,82,0.1) 0%, transparent 60%); pointer-events: none; }
+    .cta-inner h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; position: relative; }
+    .cta-inner p { color: var(--muted); font-size: 1rem; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.65; position: relative; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
 
     /* EMBED BUILDER */
     .embed-builder { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
@@ -181,17 +254,45 @@
     .var-chip code { font-size: 0.78rem; color: var(--green); font-family: 'Courier New', monospace; }
     .var-chip span { font-size: 0.72rem; color: var(--muted); }
 
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 32px 24px; max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .footer-left { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.85rem; }
-    .footer-left img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
-    footer a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
-    footer a:hover { color: var(--green); }
+    /* FAQ */
+    .faq-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 40px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item.open { border-color: var(--border2); }
+    .faq-q { padding: 20px 24px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; user-select: none; }
+    .faq-q:hover { color: var(--green); }
+    .faq-arrow { flex-shrink: 0; width: 20px; height: 20px; color: var(--muted); transition: transform 0.3s, color 0.2s; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--green); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.3s; padding: 0 24px; font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
 
-    /* ANIMATIONS */
-    .fade-in { opacity: 0; transform: translateY(24px); animation: fadeIn 0.7s ease forwards; }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-    .fade-in:nth-child(1){animation-delay:0.1s}.fade-in:nth-child(2){animation-delay:0.2s}.fade-in:nth-child(3){animation-delay:0.3s}.fade-in:nth-child(4){animation-delay:0.4s}.fade-in:nth-child(5){animation-delay:0.5s}
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 48px 24px 32px; max-width: 900px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1fr auto auto; gap: 48px; margin-bottom: 40px; align-items: start; }
+    @media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; gap: 24px; } }
+    .footer-brand { display: flex; flex-direction: column; gap: 12px; }
+    .footer-brand-row { display: flex; align-items: center; gap: 10px; }
+    .footer-brand-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+    .footer-brand-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+    .footer-brand p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 240px; }
+    .footer-col h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--text); margin-bottom: 14px; letter-spacing: 0.02em; }
+    .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--green); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-bottom span { color: var(--muted); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+    .footer-bottom a:hover { color: var(--green); }
+
+    /* MOBILE NAV ADJUSTMENTS */
+    @media (max-width: 680px) {
+      nav { width: calc(100% - 24px); }
+      .nav-links a:not(.nav-add):not(:last-child) { display: none; }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
+      .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .cta-inner { padding: 36px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -210,6 +311,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         Features
       </a>
+      <a href="#commands">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Commands
+      </a>
       <a href="https://discord.gg/V3uXKHQvJu" target="_blank">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Support
@@ -218,13 +323,14 @@
     </div>
   </nav>
 
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
-      <div class="hero-tag fade-in"><span></span> Discord Bot</div>
-      <h1 class="fade-in">Lyrics is your server's<br><span class="accent">perfect companion.</span></h1>
-      <p class="hero-desc fade-in">A friendly, all-in-one Discord bot built to make your server better — with moderation, utilities, and everything your community needs.</p>
-      <div class="hero-btns fade-in">
+      <div class="hero-tag"><span></span> Discord Bot</div>
+      <h1>Lyrics is your server's<br><span class="accent">perfect companion.</span></h1>
+      <p class="hero-desc">A friendly, all-in-one Discord bot built to make your server better — with moderation, utilities, and everything your community needs.</p>
+      <div class="hero-btns">
         <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary">
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
           Add to Discord
@@ -237,40 +343,195 @@
     </div>
   </section>
 
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item reveal">
+        <div class="stat-num" data-target="500">0</div>
+        <div class="stat-label">Servers</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-1">
+        <div class="stat-num" data-target="30">0</div>
+        <div class="stat-label">Commands</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-2">
+        <div class="stat-num" data-target="99">0</div>
+        <div class="stat-label">Uptime %</div>
+      </div>
+      <div class="stat-item reveal reveal-delay-3">
+        <div class="stat-num" data-target="24">0</div>
+        <div class="stat-label">Support hours</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
   <section class="features" id="features">
-    <div class="section-label">What it does</div>
-    <div class="section-title">Everything your server needs.</div>
+    <div class="section-label reveal">What it does</div>
+    <div class="section-title reveal reveal-delay-1">Everything your server needs.</div>
     <div class="features-grid">
-      <div class="feature-card">
+      <div class="feature-card reveal reveal-delay-1">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>Moderation</h3>
-        <p>Keep your server clean with powerful mod tools — ban, kick, mute, lock channels and more.</p>
+        <p>Keep your server clean with powerful mod tools — ban, kick, mute, warn, lock channels and more with full audit logging.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal reveal-delay-2">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
         <h3>Welcome System</h3>
-        <p>Greet new members with fully customizable welcome messages and embed builder.</p>
+        <p>Greet new members with fully customizable welcome messages, embeds, and auto-role assignment on join.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal reveal-delay-3">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
         <h3>Embed Builder</h3>
-        <p>Create stunning embeds with fields, buttons, thumbnails and live preview using simple syntax.</p>
+        <p>Create stunning embeds with fields, buttons, thumbnails and live preview. Use the builder above to get started instantly.</p>
       </div>
-      <div class="feature-card">
+      <div class="feature-card reveal reveal-delay-4">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <h3>User Friendly</h3>
-        <p>Simple commands with a clean prefix system — easy for everyone in your server to use.</p>
+        <h3>User Info</h3>
+        <p>Look up detailed user and server info — join dates, roles, account creation, server stats and much more.</p>
       </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+        <h3>Logging</h3>
+        <p>Track message edits, deletes, member joins/leaves, role changes, and more in a dedicated log channel.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+        <h3>Auto-Responses</h3>
+        <p>Set up custom triggers that automatically respond with messages or embeds when certain keywords are used.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <h3>Custom Prefix</h3>
+        <p>Set a unique bot prefix per server so Lyrics fits right in alongside your other bots without any conflicts.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-4">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <h3>Reliable</h3>
+        <p>Near-perfect uptime with fast response times. Lyrics is always there when your members need it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section class="commands-section" id="commands">
+    <div class="section-label reveal">Full command list</div>
+    <div class="section-title reveal reveal-delay-1">Commands at a glance.</div>
+    <div class="commands-grid">
+      <div class="cmd-category reveal reveal-delay-1">
+        <div class="cmd-category-header">
+          <div class="cmd-category-dot"></div>
+          <span class="cmd-category-name">Moderation</span>
+          <span class="cmd-category-count">7 commands</span>
+        </div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,ban</span><span class="cmd-desc">Ban a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,kick</span><span class="cmd-desc">Kick a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,mute</span><span class="cmd-desc">Timeout a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,warn</span><span class="cmd-desc">Issue a warning</span></div>
+          <div class="cmd-item"><span class="cmd-name">,purge</span><span class="cmd-desc">Bulk delete messages</span></div>
+          <div class="cmd-item"><span class="cmd-name">,lock</span><span class="cmd-desc">Lock a channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,slowmode</span><span class="cmd-desc">Set channel slowmode</span></div>
+        </div>
+      </div>
+      <div class="cmd-category reveal reveal-delay-2">
+        <div class="cmd-category-header">
+          <div class="cmd-category-dot"></div>
+          <span class="cmd-category-name">Utility</span>
+          <span class="cmd-category-count">8 commands</span>
+        </div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,userinfo</span><span class="cmd-desc">User details</span></div>
+          <div class="cmd-item"><span class="cmd-name">,serverinfo</span><span class="cmd-desc">Server details</span></div>
+          <div class="cmd-item"><span class="cmd-name">,avatar</span><span class="cmd-desc">Get user avatar</span></div>
+          <div class="cmd-item"><span class="cmd-name">,ping</span><span class="cmd-desc">Check bot latency</span></div>
+          <div class="cmd-item"><span class="cmd-name">,prefix</span><span class="cmd-desc">Change bot prefix</span></div>
+          <div class="cmd-item"><span class="cmd-name">,help</span><span class="cmd-desc">View all commands</span></div>
+          <div class="cmd-item"><span class="cmd-name">,embed</span><span class="cmd-desc">Send a custom embed</span></div>
+          <div class="cmd-item"><span class="cmd-name">,announce</span><span class="cmd-desc">Post an announcement</span></div>
+        </div>
+      </div>
+      <div class="cmd-category reveal reveal-delay-3">
+        <div class="cmd-category-header">
+          <div class="cmd-category-dot"></div>
+          <span class="cmd-category-name">Config</span>
+          <span class="cmd-category-count">6 commands</span>
+        </div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,setwelcome</span><span class="cmd-desc">Set welcome channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,setlog</span><span class="cmd-desc">Set log channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,setleave</span><span class="cmd-desc">Set leave message</span></div>
+          <div class="cmd-item"><span class="cmd-name">,autorole</span><span class="cmd-desc">Set auto-join role</span></div>
+          <div class="cmd-item"><span class="cmd-name">,autoreply</span><span class="cmd-desc">Add auto-response</span></div>
+          <div class="cmd-item"><span class="cmd-name">,settings</span><span class="cmd-desc">View server settings</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="setup">
+    <div class="section-label reveal">Getting started</div>
+    <div class="section-title reveal reveal-delay-1">Up and running in minutes.</div>
+    <div class="steps-list">
+      <div class="step-item reveal reveal-delay-1">
+        <div class="step-line"></div>
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Invite Lyrics to your server</h3>
+          <p>Click "Add to Discord" and authorise Lyrics on your server. Make sure to grant the recommended permissions so all features work correctly.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-2">
+        <div class="step-line"></div>
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Configure your setup</h3>
+          <p>Use <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setwelcome</code>, <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setlog</code> and <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix</code> to tailor Lyrics to your server's needs.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-3">
+        <div class="step-line"></div>
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>Build your first embed</h3>
+          <p>Head to the Embed Builder on this page, design your welcome message or announcement, copy the generated command and paste it in Discord.</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-4">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h3>You're done</h3>
+          <p>Lyrics will handle the rest. Join the support server any time if you run into questions or want to suggest new features.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUIRED PERMISSIONS -->
+  <section class="setup-section">
+    <div class="section-label reveal">Permissions</div>
+    <div class="section-title reveal reveal-delay-1">What Lyrics needs access to.</div>
+    <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:0.9rem;max-width:540px;line-height:1.7;margin-top:-24px;margin-bottom:0;">Lyrics only requests what it genuinely uses. No excessive permissions, no data collection beyond what Discord provides.</p>
+    <div class="perms-grid">
+      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Read & Send Messages</strong> — core functionality</div></div>
+      <div class="perm-item reveal reveal-delay-2"><div class="perm-dot"></div><div><strong>Embed Links</strong> — for embeds and previews</div></div>
+      <div class="perm-item reveal reveal-delay-3"><div class="perm-dot"></div><div><strong>Manage Messages</strong> — purge command</div></div>
+      <div class="perm-item reveal reveal-delay-4"><div class="perm-dot"></div><div><strong>Moderate Members</strong> — mute / timeout</div></div>
+      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Ban / Kick Members</strong> — moderation commands</div></div>
+      <div class="perm-item reveal reveal-delay-2"><div class="perm-dot"></div><div><strong>View Audit Log</strong> — logging features</div></div>
+      <div class="perm-item reveal reveal-delay-3"><div class="perm-dot"></div><div><strong>Manage Roles</strong> — auto-role on join</div></div>
+      <div class="perm-item reveal reveal-delay-4"><div class="perm-dot"></div><div><strong>Attach Files</strong> — image commands</div></div>
     </div>
   </section>
 
   <!-- EMBED BUILDER -->
   <section class="embed-builder" id="builder">
-    <div class="section-label">Try it out</div>
-    <div class="section-title">Embed Builder</div>
+    <div class="section-label reveal">Try it out</div>
+    <div class="section-title reveal reveal-delay-1">Embed Builder</div>
     <div class="builder-wrap">
       <!-- LEFT: FORM -->
-      <div class="builder-panel">
+      <div class="builder-panel reveal reveal-delay-2">
         <div class="builder-tabs">
           <button class="tab-btn active" data-tab="basic">Basic</button>
           <button class="tab-btn" data-tab="author">Author & Footer</button>
@@ -280,7 +541,6 @@
           <button class="tab-btn" data-tab="message">Message</button>
         </div>
 
-        <!-- BASIC -->
         <div class="tab-content active" id="tab-basic">
           <div class="form-group">
             <label>Title</label>
@@ -302,7 +562,6 @@
           </div>
         </div>
 
-        <!-- AUTHOR & FOOTER -->
         <div class="tab-content" id="tab-author">
           <div class="form-group">
             <label>Author Name</label>
@@ -318,7 +577,6 @@
           </div>
         </div>
 
-        <!-- MEDIA -->
         <div class="tab-content" id="tab-media">
           <div class="form-group">
             <label>Thumbnail URL</label>
@@ -330,7 +588,6 @@
           </div>
         </div>
 
-        <!-- FIELDS -->
         <div class="tab-content" id="tab-fields">
           <div class="form-group">
             <label>Field Name</label>
@@ -348,7 +605,6 @@
           <div class="fields-list" id="fields-list"></div>
         </div>
 
-        <!-- BUTTONS -->
         <div class="tab-content" id="tab-buttons">
           <div class="form-group">
             <label>Button Label</label>
@@ -360,13 +616,12 @@
           </div>
           <div class="form-group">
             <label>Emoji (optional)</label>
-            <input type="text" id="btn-emoji" placeholder="🔗" />
+            <input type="text" id="btn-emoji" placeholder="optional" />
           </div>
           <button class="add-btn" onclick="addButton()">+ Add Button</button>
           <div class="fields-list" id="buttons-list"></div>
         </div>
 
-        <!-- MESSAGE -->
         <div class="tab-content" id="tab-message">
           <div class="form-group">
             <label>Message (above embed)</label>
@@ -380,7 +635,7 @@
       </div>
 
       <!-- RIGHT: PREVIEW -->
-      <div>
+      <div class="reveal reveal-delay-3">
         <div class="preview-panel">
           <div class="preview-header">
             <span>Live Preview</span>
@@ -438,16 +693,156 @@
     </div>
   </section>
 
-  <footer>
-    <div class="footer-left">
-      <img src="lyrics-pfp.png" alt="Lyrics" />
-      <span>Lyrics © 2026</span>
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-label reveal">Questions</div>
+    <div class="section-title reveal reveal-delay-1">Frequently asked.</div>
+    <div class="faq-list">
+      <div class="faq-item reveal reveal-delay-1">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Is Lyrics free to use?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Yes, Lyrics is completely free. All commands and features are available to every server without any paid tier or subscription.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I change the bot prefix?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Use the <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix [new prefix]</code> command. The default prefix is a comma (<code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,</code>) and each server can have its own unique prefix.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-3">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          What permissions does Lyrics need?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Lyrics only requests permissions it actively uses. The full list is shown in the Permissions section above. If you're running into issues, make sure Lyrics' role is above the roles it needs to manage in your role hierarchy.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-4">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          How do I use the Embed Builder?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Fill in the fields in the builder on this page, watch the Discord preview update live, then click "Copy Command" and paste the generated syntax into any channel where Lyrics is present.</div>
+      </div>
+      <div class="faq-item reveal reveal-delay-1">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Where do I get help or report a bug?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="faq-a">Join the support server at discord.gg/V3uXKHQvJu and open a ticket. The team responds quickly and all bug reports are tracked and fixed.</div>
+      </div>
     </div>
-    <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="cta-inner reveal">
+      <h2>Ready to get started?</h2>
+      <p>Add Lyrics to your server in seconds and start building the community you want.</p>
+      <div class="cta-btns">
+        <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Add to Discord
+        </a>
+        <a href="https://discord.gg/V3uXKHQvJu" target="_blank" class="btn-secondary">Join Support Server</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-row">
+          <img src="lyrics-pfp.png" alt="Lyrics" />
+          <span class="footer-brand-name">Lyrics</span>
+        </div>
+        <p>A friendly Discord bot built to make your server better, one command at a time.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Bot</h4>
+        <a href="https://discord.com/oauth2/authorize" target="_blank">Add to Discord</a>
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="#builder">Embed Builder</a>
+      </div>
+      <div class="footer-col">
+        <h4>Links</h4>
+        <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+        <a href="#faq">FAQ</a>
+        <a href="#setup">Setup Guide</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Lyrics &copy; 2026</span>
+      <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+    </div>
   </footer>
 
   <script>
-    // State
+    /* =========================================================
+       SCROLL REVEAL
+    ========================================================= */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* =========================================================
+       COUNT-UP ANIMATION FOR STATS
+    ========================================================= */
+    function animateCount(el, target, suffix) {
+      const duration = 1400;
+      const start = performance.now();
+      const update = (now) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.floor(eased * target) + (suffix || '');
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target + (suffix || '');
+      };
+      requestAnimationFrame(update);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const nums = entry.target.querySelectorAll('.stat-num[data-target]');
+          nums.forEach(el => {
+            const target = parseInt(el.dataset.target);
+            const suffix = el.dataset.suffix || (el.dataset.target === '99' ? '%' : (el.dataset.target === '24' ? '/7' : '+'));
+            animateCount(el, target, suffix);
+          });
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const strip = document.querySelector('.stats-strip');
+    if (strip) statObserver.observe(strip);
+
+    /* =========================================================
+       FAQ ACCORDION
+    ========================================================= */
+    function toggleFaq(el) {
+      const item = el.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
+    /* =========================================================
+       EMBED BUILDER
+    ========================================================= */
     const fields = [];
     const buttons = [];
 
@@ -464,17 +859,19 @@
       { code: '{bot.avatar}', desc: 'bot avatar URL' },
     ];
 
-    // Render var chips
     const vg = document.getElementById('vars-grid');
     VARS.forEach(v => {
       const chip = document.createElement('div');
       chip.className = 'var-chip';
       chip.innerHTML = `<code>${v.code}</code><span>${v.desc}</span>`;
-      chip.onclick = () => { navigator.clipboard.writeText(v.code); chip.style.borderColor='var(--green)'; setTimeout(()=>chip.style.borderColor='',1000); };
+      chip.onclick = () => {
+        navigator.clipboard.writeText(v.code);
+        chip.style.borderColor = 'var(--green)';
+        setTimeout(() => chip.style.borderColor = '', 1000);
+      };
       vg.appendChild(chip);
     });
 
-    // Tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -485,8 +882,7 @@
     });
 
     function syncColor(el) {
-      const hex = el.value.replace('#', '');
-      document.getElementById('b-color').value = hex;
+      document.getElementById('b-color').value = el.value.replace('#', '');
       updatePreview();
     }
 
@@ -528,51 +924,38 @@
       const image = document.getElementById('b-image').value;
       const message = document.getElementById('b-message').value;
       const message2 = document.getElementById('b-message2').value;
-
       const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
 
-      // Message above
       const msgEl = document.getElementById('prev-message');
       msgEl.textContent = resolveVar(message);
 
-      // Message2 below
       const msg2El = document.getElementById('prev-message2');
       if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; }
       else { msg2El.style.display = 'none'; }
 
-      const embedEl = document.getElementById('prev-embed');
-
-      // Author
       const authorEl = document.getElementById('prev-author');
       if (authorName) {
         authorEl.style.display = 'flex';
         document.getElementById('prev-author-name').textContent = resolveVar(authorName);
         const iconResolved = resolveVar(authorIcon);
         const authorIconEl = document.getElementById('prev-author-icon');
-        if (authorIcon && isImageUrl(iconResolved)) {
-          authorIconEl.src = iconResolved; authorIconEl.style.display = 'block';
-        } else { authorIconEl.style.display = 'none'; }
+        if (authorIcon && isImageUrl(iconResolved)) { authorIconEl.src = iconResolved; authorIconEl.style.display = 'block'; }
+        else { authorIconEl.style.display = 'none'; }
       } else { authorEl.style.display = 'none'; }
 
-      // Thumbnail
       const thumbResolved = resolveVar(thumbnail);
       const thumbEl = document.getElementById('prev-thumbnail');
-      if (thumbnail && isImageUrl(thumbResolved)) {
-        document.getElementById('prev-thumb-img').src = thumbResolved;
-        thumbEl.style.display = 'block';
-      } else { thumbEl.style.display = 'none'; }
+      if (thumbnail && isImageUrl(thumbResolved)) { document.getElementById('prev-thumb-img').src = thumbResolved; thumbEl.style.display = 'block'; }
+      else { thumbEl.style.display = 'none'; }
 
-      // Title
       const titleEl = document.getElementById('prev-title');
       if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; }
       else { titleEl.style.display = 'none'; }
 
-      // Desc
       const descEl = document.getElementById('prev-desc');
       if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; }
       else { descEl.style.display = 'none'; }
 
-      // Fields
       const fieldsEl = document.getElementById('prev-fields');
       if (fields.length > 0) {
         fieldsEl.style.display = 'flex';
@@ -583,15 +966,11 @@
           </div>`).join('');
       } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
 
-      // Image
       const imageResolved = resolveVar(image);
       const imageEl = document.getElementById('prev-image');
-      if (image && isImageUrl(imageResolved)) {
-        document.getElementById('prev-img').src = imageResolved;
-        imageEl.style.display = 'block';
-      } else { imageEl.style.display = 'none'; }
+      if (image && isImageUrl(imageResolved)) { document.getElementById('prev-img').src = imageResolved; imageEl.style.display = 'block'; }
+      else { imageEl.style.display = 'none'; }
 
-      // Footer + timestamp
       const footerWrap = document.getElementById('prev-footer-wrap');
       const footerText = document.getElementById('prev-footer-text');
       const tsEl = document.getElementById('prev-ts');
@@ -602,15 +981,14 @@
         else { tsEl.style.display = 'none'; }
       } else { footerWrap.style.display = 'none'; }
 
-      // Buttons
       const btnsEl = document.getElementById('prev-buttons');
       if (buttons.length > 0) {
         btnsEl.style.display = 'flex';
-        btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label} ↗</div>`).join('');
+        btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label} </div>`).join('');
       } else { btnsEl.style.display = 'none'; }
 
-      // Show/hide embed
       const hasEmbed = title || desc || authorName || footer || thumbnail || image || fields.length > 0 || timestamp;
+      const embedEl = document.getElementById('prev-embed');
       embedEl.style.display = hasEmbed ? 'block' : 'none';
       if (hasEmbed) embedEl.style.borderLeftColor = color;
 
@@ -626,20 +1004,18 @@
       document.getElementById('f-name').value = '';
       document.getElementById('f-value').value = '';
       document.getElementById('f-inline').checked = false;
-      renderFieldsList();
-      updatePreview();
+      renderFieldsList(); updatePreview();
     }
 
     function renderFieldsList() {
-      const list = document.getElementById('fields-list');
-      list.innerHTML = fields.map((f, i) => `
+      document.getElementById('fields-list').innerHTML = fields.map((f, i) => `
         <div class="field-item">
           <div class="field-item-info">
             <div class="field-item-name">${f.name}</div>
             <div class="field-item-val">${f.value}</div>
           </div>
           ${f.inline ? '<span class="field-item-badge">inline</span>' : ''}
-          <button class="remove-btn" onclick="removeField(${i})">✕</button>
+          <button class="remove-btn" onclick="removeField(${i})">x</button>
         </div>`).join('');
     }
 
@@ -654,19 +1030,17 @@
       document.getElementById('btn-label').value = '';
       document.getElementById('btn-url').value = '';
       document.getElementById('btn-emoji').value = '';
-      renderButtonsList();
-      updatePreview();
+      renderButtonsList(); updatePreview();
     }
 
     function renderButtonsList() {
-      const list = document.getElementById('buttons-list');
-      list.innerHTML = buttons.map((b, i) => `
+      document.getElementById('buttons-list').innerHTML = buttons.map((b, i) => `
         <div class="field-item">
           <div class="field-item-info">
             <div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>
             <div class="field-item-val">${b.url}</div>
           </div>
-          <button class="remove-btn" onclick="removeButton(${i})">✕</button>
+          <button class="remove-btn" onclick="removeButton(${i})">x</button>
         </div>`).join('');
     }
 
@@ -696,22 +1070,17 @@
       if (desc) out += `\n$v{description: ${desc}}`;
       if (thumbnail) out += `\n$v{thumbnail: ${thumbnail}}`;
       if (image) out += `\n$v{image: ${image}}`;
-      fields.forEach(f => {
-        out += `\n$v{field: ${f.name} && ${f.value}${f.inline ? ' && inline' : ''}}`;
-      });
+      fields.forEach(f => { out += `\n$v{field: ${f.name} && ${f.value}${f.inline ? ' && inline' : ''}}`; });
       if (footer) out += `\n$v{footer: ${footer}}`;
       if (timestamp) out += `\n$v{timestamp: true}`;
-      buttons.forEach(b => {
-        out += `\n$v{button: ${b.label} && ${b.url}${b.emoji ? ' && ' + b.emoji : ''}}`;
-      });
+      buttons.forEach(b => { out += `\n$v{button: ${b.label} && ${b.url}${b.emoji ? ' && ' + b.emoji : ''}}`; });
       if (message2) out += `\n$v{message2: ${message2}}`;
 
       document.getElementById('output-box').textContent = out;
     }
 
     function copyOutput() {
-      const text = document.getElementById('output-box').textContent;
-      navigator.clipboard.writeText(text);
+      navigator.clipboard.writeText(document.getElementById('output-box').textContent);
       const btn = document.getElementById('copy-btn');
       btn.textContent = 'Copied!';
       btn.classList.add('copied');

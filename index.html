@@ -347,11 +347,11 @@
   <div class="stats-strip">
     <div class="stats-inner">
       <div class="stat-item reveal">
-        <div class="stat-num" data-target="500">0</div>
+        <div class="stat-num" data-target="30">0</div>
         <div class="stat-label">Servers</div>
       </div>
       <div class="stat-item reveal reveal-delay-1">
-        <div class="stat-num" data-target="30">0</div>
+        <div class="stat-num" data-target="180+">0</div>
         <div class="stat-label">Commands</div>
       </div>
       <div class="stat-item reveal reveal-delay-2">
@@ -466,6 +466,16 @@
           <div class="cmd-item"><span class="cmd-name">,settings</span><span class="cmd-desc">View server settings</span></div>
         </div>
       </div>
+       <div class="cmd-category reveal reveal-delay-3">
+        <div class="cmd-category-header">
+          <div class="cmd-category-dot"></div>
+          <span class="cmd-category-name">Commands</span>
+          <span class="cmd-category-count">180+ commands</span>
+        </div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,cmds</span><span class="cmd-desc">Run ,cmds to see all commands!</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -487,7 +497,7 @@
         <div class="step-num">2</div>
         <div class="step-body">
           <h3>Configure your setup</h3>
-          <p>Use <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setwelcome</code>, <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setlog</code> and <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix</code> to tailor Lyrics to your server's needs.</p>
+          <p>Use <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,enable welcome #channel</code>, <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,modlogs enable #channel</code> and <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix AND ,setprefix</code> to tailor Lyrics to your server's needs.</p>
         </div>
       </div>
       <div class="step-item reveal reveal-delay-3">
@@ -514,14 +524,7 @@
     <div class="section-title reveal reveal-delay-1">What Lyrics needs access to.</div>
     <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:0.9rem;max-width:540px;line-height:1.7;margin-top:-24px;margin-bottom:0;">Lyrics only requests what it genuinely uses. No excessive permissions, no data collection beyond what Discord provides.</p>
     <div class="perms-grid">
-      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Read & Send Messages</strong> — core functionality</div></div>
-      <div class="perm-item reveal reveal-delay-2"><div class="perm-dot"></div><div><strong>Embed Links</strong> — for embeds and previews</div></div>
-      <div class="perm-item reveal reveal-delay-3"><div class="perm-dot"></div><div><strong>Manage Messages</strong> — purge command</div></div>
-      <div class="perm-item reveal reveal-delay-4"><div class="perm-dot"></div><div><strong>Moderate Members</strong> — mute / timeout</div></div>
-      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Ban / Kick Members</strong> — moderation commands</div></div>
-      <div class="perm-item reveal reveal-delay-2"><div class="perm-dot"></div><div><strong>View Audit Log</strong> — logging features</div></div>
-      <div class="perm-item reveal reveal-delay-3"><div class="perm-dot"></div><div><strong>Manage Roles</strong> — auto-role on join</div></div>
-      <div class="perm-item reveal reveal-delay-4"><div class="perm-dot"></div><div><strong>Attach Files</strong> — image commands</div></div>
+      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Administrator</strong> — Access to every permission in the guild.</div></div>
     </div>
   </section>
 
@@ -710,7 +713,7 @@
           How do I change the bot prefix?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div class="faq-a">Use the <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix [new prefix]</code> command. The default prefix is a comma (<code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,</code>) and each server can have its own unique prefix.</div>
+        <div class="faq-a">Use the <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setprefix [new prefix]</code> command. The default prefix is a comma (<code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,</code>) and each server can have its own unique prefix.</div>
       </div>
       <div class="faq-item reveal reveal-delay-3">
         <div class="faq-q" onclick="toggleFaq(this)">

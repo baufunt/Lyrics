@@ -25,21 +25,12 @@
     body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
     /* SCROLL REVEAL */
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.08s; }
     .reveal-delay-2 { transition-delay: 0.16s; }
     .reveal-delay-3 { transition-delay: 0.24s; }
     .reveal-delay-4 { transition-delay: 0.32s; }
-    .reveal-delay-5 { transition-delay: 0.4s; }
-    .reveal-delay-6 { transition-delay: 0.48s; }
 
     /* NAV */
     nav {
@@ -78,8 +69,6 @@
     .btn-primary:hover { background: #b0c860; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(154,175,82,0.35); }
     .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.15s; }
     .btn-secondary:hover { border-color: var(--green); background: var(--green-glow); transform: translateY(-2px); }
-
-    /* HERO FADE IN */
     .hero-tag, h1, .hero-desc, .hero-btns { opacity: 0; transform: translateY(24px); animation: heroFadeIn 0.7s ease forwards; }
     .hero-tag { animation-delay: 0.1s; }
     h1 { animation-delay: 0.2s; }
@@ -87,7 +76,87 @@
     .hero-btns { animation-delay: 0.4s; }
     @keyframes heroFadeIn { to { opacity: 1; transform: translateY(0); } }
 
-    /* STATS STRIP */
+    /* ===================== STATUS SECTION ===================== */
+    .status-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 40px; letter-spacing: -0.02em; }
+
+    .status-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+    @media (max-width: 600px) { .status-cards { grid-template-columns: 1fr; } }
+
+    .status-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 28px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: border-color 0.2s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .status-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .status-card:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .status-card:hover::before { opacity: 1; }
+
+    .status-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--green-glow); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green); flex-shrink: 0;
+    }
+    .status-icon svg { width: 22px; height: 22px; }
+    .status-info { flex: 1; min-width: 0; }
+    .status-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; }
+    .status-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      color: var(--text); line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .status-value.loading { color: var(--muted); font-size: 1.2rem; animation: shimmer 1.5s ease-in-out infinite; }
+    @keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    /* LATENCY COLOR */
+    .latency-good { color: #4ade80; }
+    .latency-ok { color: #facc15; }
+    .latency-bad { color: #f87171; }
+
+    /* ONLINE BADGE */
+    .online-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(74, 222, 128, 0.1); border: 1px solid rgba(74, 222, 128, 0.25);
+      border-radius: 999px; padding: 4px 12px;
+      font-size: 0.75rem; font-weight: 600; color: #4ade80;
+      margin-bottom: 32px;
+    }
+    .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 2s ease-in-out infinite; }
+    .offline-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(248, 113, 113, 0.1); border: 1px solid rgba(248, 113, 113, 0.25);
+      border-radius: 999px; padding: 4px 12px;
+      font-size: 0.75rem; font-weight: 600; color: #f87171;
+      margin-bottom: 32px;
+    }
+    .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #f87171; }
+
+    /* UPTIME ROW */
+    .uptime-row {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .uptime-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+    .uptime-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--green); }
+    .uptime-sep { width: 1px; height: 20px; background: var(--border); }
+    .last-updated { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+    /* STATS STRIP (kept for commands / uptime) */
     .stats-strip { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 48px 24px; }
     .stats-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0; }
     .stat-item { text-align: center; padding: 16px; border-right: 1px solid var(--border); }
@@ -97,8 +166,6 @@
 
     /* FEATURES */
     .features { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
-    .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
-    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 48px; letter-spacing: -0.02em; }
     .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
     .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
     .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: 0; transition: opacity 0.3s; }
@@ -109,7 +176,7 @@
     .feature-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; letter-spacing: -0.01em; }
     .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    /* COMMANDS SECTION */
+    /* COMMANDS */
     .commands-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
     .commands-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
     .cmd-category { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
@@ -134,57 +201,38 @@
     .step-body h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; letter-spacing: -0.01em; }
     .step-body p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
 
-    /* PERMISSIONS / SETUP */
+    /* PERMISSIONS */
     .setup-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
     .perms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 32px; }
     .perm-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; color: var(--muted); }
     .perm-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
     .perm-item strong { color: var(--text); font-weight: 500; }
 
-    /* CTA BANNER */
-    .cta-banner { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
-    .cta-inner { background: var(--surface); border: 1px solid var(--border2); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
-    .cta-inner::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(154,175,82,0.1) 0%, transparent 60%); pointer-events: none; }
-    .cta-inner h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; position: relative; }
-    .cta-inner p { color: var(--muted); font-size: 1rem; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.65; position: relative; }
-    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
-
     /* EMBED BUILDER */
     .embed-builder { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
     .builder-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
     @media (max-width: 800px) { .builder-wrap { grid-template-columns: 1fr; } }
-
     .builder-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
     .builder-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--border); scrollbar-width: none; }
     .builder-tabs::-webkit-scrollbar { display: none; }
     .tab-btn { flex-shrink: 0; padding: 12px 16px; background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
     .tab-btn:hover { color: var(--text); background: rgba(154,175,82,0.05); }
     .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
-
     .tab-content { display: none; padding: 20px; flex-direction: column; gap: 14px; }
     .tab-content.active { display: flex; }
-
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 0.78rem; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
-    .form-group input, .form-group textarea, .form-group select {
-      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
-      padding: 10px 14px; transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%;
-    }
+    .form-group input, .form-group textarea, .form-group select { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.875rem; padding: 10px 14px; transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(154,175,82,0.1); }
     .form-group textarea { resize: vertical; min-height: 160px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .color-row { display: flex; gap: 10px; align-items: center; }
     .color-row input[type="color"] { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); background: none; cursor: pointer; padding: 3px; flex-shrink: 0; }
     .color-row input[type="text"] { flex: 1; }
-
     .inline-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .inline-check input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
     .inline-check span { font-size: 0.85rem; color: var(--muted); }
-
     .add-btn { background: var(--green-glow); border: 1px solid var(--border2); border-radius: 10px; color: var(--green); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; padding: 10px 16px; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
     .add-btn:hover { background: rgba(154,175,82,0.25); transform: translateY(-1px); }
-
     .fields-list { display: flex; flex-direction: column; gap: 8px; }
     .field-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .field-item-info { flex: 1; min-width: 0; }
@@ -193,18 +241,13 @@
     .field-item-badge { font-size: 0.7rem; color: var(--green); background: var(--green-glow); border-radius: 4px; padding: 2px 6px; flex-shrink: 0; }
     .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 2px 6px; border-radius: 4px; transition: color 0.2s, background 0.2s; flex-shrink: 0; }
     .remove-btn:hover { color: #e74c3c; background: rgba(231,76,60,0.1); }
-
-    /* PREVIEW */
     .preview-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: sticky; top: 100px; }
     .preview-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .preview-header span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--green); }
     .preview-body { padding: 20px; }
-
-    /* DISCORD MOCK */
     .discord-mock { background: #313338; border-radius: 12px; padding: 16px; font-family: 'gg sans', 'Noto Sans', sans-serif; }
     .mock-msg { display: flex; gap: 12px; }
     .mock-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: #0b0d09; flex-shrink: 0; overflow: hidden; }
-    .mock-avatar img { width: 100%; height: 100%; object-fit: cover; }
     .mock-right { flex: 1; min-width: 0; }
     .mock-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
     .mock-name { font-weight: 600; font-size: 0.95rem; color: #9aaf52; }
@@ -212,7 +255,6 @@
     .mock-time { color: #949ba4; font-size: 0.72rem; }
     .mock-content { color: #dbdee1; font-size: 0.9rem; margin-bottom: 4px; word-break: break-word; }
     .mock-content:empty { display: none; }
-
     .mock-embed { border-left: 4px solid #9aaf52; background: #2b2d31; border-radius: 4px; padding: 12px 16px; margin-top: 4px; max-width: 440px; }
     .mock-embed-author { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .mock-embed-author-icon { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
@@ -229,23 +271,18 @@
     .mock-embed-image { margin-top: 8px; }
     .mock-embed-image img { max-width: 100%; border-radius: 4px; }
     .mock-embed-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
-    .mock-embed-footer-icon { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
     .mock-embed-footer-text { font-size: 0.72rem; color: #949ba4; }
     .mock-embed-ts { font-size: 0.72rem; color: #949ba4; }
     .mock-embed-ts::before { content: ' • '; }
     .mock-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .mock-button { background: #4e5058; border-radius: 4px; padding: 6px 14px; font-size: 0.82rem; color: #dbdee1; display: flex; align-items: center; gap: 6px; font-weight: 500; }
     .mock-msg2 { color: #dbdee1; font-size: 0.9rem; margin-top: 4px; padding-left: 52px; }
-
-    /* OUTPUT */
     .output-section { padding: 20px; border-top: 1px solid var(--border); }
     .output-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--green); word-break: break-all; line-height: 1.6; max-height: 160px; overflow-y: auto; white-space: pre-wrap; }
     .copy-btn { margin-top: 10px; background: var(--green); color: #0b0d09; border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
     .copy-btn:hover { background: #b0c860; transform: translateY(-1px); }
     .copy-btn.copied { background: #3bad64; }
-
-    /* PLACEHOLDERS REF */
     .vars-ref { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-top: 24px; }
     .vars-ref h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 20px; color: var(--text); }
     .vars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
@@ -266,6 +303,14 @@
     .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.3s; padding: 0 24px; font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
     .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
 
+    /* CTA */
+    .cta-banner { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .cta-inner { background: var(--surface); border: 1px solid var(--border2); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
+    .cta-inner::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(154,175,82,0.1) 0%, transparent 60%); pointer-events: none; }
+    .cta-inner h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; position: relative; }
+    .cta-inner p { color: var(--muted); font-size: 1rem; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.65; position: relative; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
     /* FOOTER */
     footer { border-top: 1px solid var(--border); padding: 48px 24px 32px; max-width: 900px; margin: 0 auto; }
     .footer-top { display: grid; grid-template-columns: 1fr auto auto; gap: 48px; margin-bottom: 40px; align-items: start; }
@@ -283,16 +328,13 @@
     .footer-bottom a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
     .footer-bottom a:hover { color: var(--green); }
 
-    /* MOBILE NAV ADJUSTMENTS */
     @media (max-width: 680px) {
       nav { width: calc(100% - 24px); }
       .nav-links a:not(.nav-add):not(:last-child) { display: none; }
-      .stats-inner { grid-template-columns: repeat(2, 1fr); }
-      .stat-item:nth-child(2) { border-right: none; }
-      .stat-item:nth-child(3) { border-top: 1px solid var(--border); }
-      .stat-item:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
       .cta-inner { padding: 36px 24px; }
     }
+
+    code.inline { background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green); }
   </style>
 </head>
 <body>
@@ -303,6 +345,10 @@
       <span>Lyrics</span>
     </div>
     <div class="nav-links">
+      <a href="#status">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        Status
+      </a>
       <a href="#builder">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
         Builder
@@ -335,35 +381,65 @@
           <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
           Add to Discord
         </a>
-        <a href="https://discord.gg/V3uXKHQvJu" target="_blank" class="btn-secondary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Support Server
+        <a href="#status" class="btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          View Status
         </a>
       </div>
     </div>
   </section>
 
-  <!-- STATS STRIP -->
-  <div class="stats-strip">
-    <div class="stats-inner">
-      <div class="stat-item reveal">
-        <div class="stat-num" data-target="30">0</div>
-        <div class="stat-label">Servers</div>
+  <!-- STATUS SECTION -->
+  <section class="status-section" id="status">
+    <div class="section-label reveal">Live</div>
+    <div class="section-title reveal reveal-delay-1">Bot Status</div>
+
+    <div id="status-badge" class="online-badge reveal reveal-delay-2">
+      <span class="online-dot"></span> Checking...
+    </div>
+
+    <div class="status-cards reveal reveal-delay-2">
+      <div class="status-card">
+        <div class="status-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="status-info">
+          <div class="status-label">Guilds</div>
+          <div class="status-value loading" id="stat-guilds">—</div>
+        </div>
       </div>
-      <div class="stat-item reveal reveal-delay-1">
-        <div class="stat-num" data-target="180+">0</div>
-        <div class="stat-label">Commands</div>
+      <div class="status-card">
+        <div class="status-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="status-info">
+          <div class="status-label">Members</div>
+          <div class="status-value loading" id="stat-members">—</div>
+        </div>
       </div>
-      <div class="stat-item reveal reveal-delay-2">
-        <div class="stat-num" data-target="99">0</div>
-        <div class="stat-label">Uptime %</div>
-      </div>
-      <div class="stat-item reveal reveal-delay-3">
-        <div class="stat-num" data-target="24">0</div>
-        <div class="stat-label">Support hours</div>
+      <div class="status-card">
+        <div class="status-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="status-info">
+          <div class="status-label">Latency</div>
+          <div class="status-value loading" id="stat-latency">—</div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <div class="uptime-row reveal reveal-delay-3">
+      <span class="uptime-label">Uptime</span>
+      <span class="uptime-value" id="stat-uptime">—</span>
+      <div class="uptime-sep"></div>
+      <span class="uptime-label">Commands</span>
+      <span class="uptime-value">180+</span>
+      <div class="uptime-sep"></div>
+      <span class="uptime-label">Support</span>
+      <span class="uptime-value">24/7</span>
+      <span class="last-updated" id="last-updated">Fetching...</span>
+    </div>
+  </section>
 
   <!-- FEATURES -->
   <section class="features" id="features">
@@ -383,7 +459,7 @@
       <div class="feature-card reveal reveal-delay-3">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
         <h3>Embed Builder</h3>
-        <p>Create stunning embeds with fields, buttons, thumbnails and live preview. Use the builder above to get started instantly.</p>
+        <p>Create stunning embeds with fields, buttons, thumbnails and live preview. Use the builder on this page to get started instantly.</p>
       </div>
       <div class="feature-card reveal reveal-delay-4">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -419,11 +495,7 @@
     <div class="section-title reveal reveal-delay-1">Commands at a glance.</div>
     <div class="commands-grid">
       <div class="cmd-category reveal reveal-delay-1">
-        <div class="cmd-category-header">
-          <div class="cmd-category-dot"></div>
-          <span class="cmd-category-name">Moderation</span>
-          <span class="cmd-category-count">7 commands</span>
-        </div>
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Moderation</span><span class="cmd-category-count">7 commands</span></div>
         <div class="cmd-list">
           <div class="cmd-item"><span class="cmd-name">,ban</span><span class="cmd-desc">Ban a user</span></div>
           <div class="cmd-item"><span class="cmd-name">,kick</span><span class="cmd-desc">Kick a user</span></div>
@@ -435,11 +507,7 @@
         </div>
       </div>
       <div class="cmd-category reveal reveal-delay-2">
-        <div class="cmd-category-header">
-          <div class="cmd-category-dot"></div>
-          <span class="cmd-category-name">Utility</span>
-          <span class="cmd-category-count">8 commands</span>
-        </div>
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Utility</span><span class="cmd-category-count">8 commands</span></div>
         <div class="cmd-list">
           <div class="cmd-item"><span class="cmd-name">,userinfo</span><span class="cmd-desc">User details</span></div>
           <div class="cmd-item"><span class="cmd-name">,serverinfo</span><span class="cmd-desc">Server details</span></div>
@@ -452,11 +520,7 @@
         </div>
       </div>
       <div class="cmd-category reveal reveal-delay-3">
-        <div class="cmd-category-header">
-          <div class="cmd-category-dot"></div>
-          <span class="cmd-category-name">Config</span>
-          <span class="cmd-category-count">6 commands</span>
-        </div>
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Config</span><span class="cmd-category-count">6 commands</span></div>
         <div class="cmd-list">
           <div class="cmd-item"><span class="cmd-name">,setwelcome</span><span class="cmd-desc">Set welcome channel</span></div>
           <div class="cmd-item"><span class="cmd-name">,setlog</span><span class="cmd-desc">Set log channel</span></div>
@@ -466,14 +530,10 @@
           <div class="cmd-item"><span class="cmd-name">,settings</span><span class="cmd-desc">View server settings</span></div>
         </div>
       </div>
-       <div class="cmd-category reveal reveal-delay-3">
-        <div class="cmd-category-header">
-          <div class="cmd-category-dot"></div>
-          <span class="cmd-category-name">Commands</span>
-          <span class="cmd-category-count">180+ commands</span>
-        </div>
+      <div class="cmd-category reveal reveal-delay-3">
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">All Commands</span><span class="cmd-category-count">180+</span></div>
         <div class="cmd-list">
-          <div class="cmd-item"><span class="cmd-name">,cmds</span><span class="cmd-desc">Run ,cmds to see all commands!</span></div>
+          <div class="cmd-item"><span class="cmd-name">,cmds</span><span class="cmd-desc">Run ,cmds to see all 180+ commands!</span></div>
         </div>
       </div>
     </div>
@@ -497,7 +557,7 @@
         <div class="step-num">2</div>
         <div class="step-body">
           <h3>Configure your setup</h3>
-          <p>Use <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,enable welcome #channel</code>, <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,modlogs enable #channel</code> and <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,prefix AND ,setprefix</code> to tailor Lyrics to your server's needs.</p>
+          <p>Use <code class="inline">,enable welcome #channel</code>, <code class="inline">,modlogs enable #channel</code> and <code class="inline">,setprefix</code> to tailor Lyrics to your server's needs.</p>
         </div>
       </div>
       <div class="step-item reveal reveal-delay-3">
@@ -518,13 +578,13 @@
     </div>
   </section>
 
-  <!-- REQUIRED PERMISSIONS -->
+  <!-- PERMISSIONS -->
   <section class="setup-section">
     <div class="section-label reveal">Permissions</div>
     <div class="section-title reveal reveal-delay-1">What Lyrics needs access to.</div>
     <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:0.9rem;max-width:540px;line-height:1.7;margin-top:-24px;margin-bottom:0;">Lyrics only requests what it genuinely uses. No excessive permissions, no data collection beyond what Discord provides.</p>
     <div class="perms-grid">
-      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Administrator</strong> — Access to every permission in the guild.</div></div>
+      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Administrator</strong> — Full guild access for all features.</div></div>
     </div>
   </section>
 
@@ -533,7 +593,6 @@
     <div class="section-label reveal">Try it out</div>
     <div class="section-title reveal reveal-delay-1">Embed Builder</div>
     <div class="builder-wrap">
-      <!-- LEFT: FORM -->
       <div class="builder-panel reveal reveal-delay-2">
         <div class="builder-tabs">
           <button class="tab-btn active" data-tab="basic">Basic</button>
@@ -543,136 +602,58 @@
           <button class="tab-btn" data-tab="buttons">Buttons</button>
           <button class="tab-btn" data-tab="message">Message</button>
         </div>
-
         <div class="tab-content active" id="tab-basic">
-          <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="b-title" placeholder="Embed title..." oninput="updatePreview()" />
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="b-desc" placeholder="Embed description..." oninput="updatePreview()"></textarea>
-          </div>
-          <div class="form-group">
-            <label>Color</label>
-            <div class="color-row">
-              <input type="color" id="b-color-pick" value="#9aaf52" oninput="syncColor(this)" />
-              <input type="text" id="b-color" placeholder="9aaf52" value="9aaf52" oninput="syncColorText(this)" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label><input type="checkbox" id="b-timestamp" onchange="updatePreview()" style="accent-color:var(--green);margin-right:6px;">Add Timestamp</label>
-          </div>
+          <div class="form-group"><label>Title</label><input type="text" id="b-title" placeholder="Embed title..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Description</label><textarea id="b-desc" placeholder="Embed description..." oninput="updatePreview()"></textarea></div>
+          <div class="form-group"><label>Color</label><div class="color-row"><input type="color" id="b-color-pick" value="#9aaf52" oninput="syncColor(this)" /><input type="text" id="b-color" placeholder="9aaf52" value="9aaf52" oninput="syncColorText(this)" /></div></div>
+          <div class="form-group"><label><input type="checkbox" id="b-timestamp" onchange="updatePreview()" style="accent-color:var(--green);margin-right:6px;">Add Timestamp</label></div>
         </div>
-
         <div class="tab-content" id="tab-author">
-          <div class="form-group">
-            <label>Author Name</label>
-            <input type="text" id="b-author-name" placeholder="Author name or {username}..." oninput="updatePreview()" />
-          </div>
-          <div class="form-group">
-            <label>Author Icon URL</label>
-            <input type="text" id="b-author-icon" placeholder="{user.avatar} or https://..." oninput="updatePreview()" />
-          </div>
-          <div class="form-group">
-            <label>Footer Text</label>
-            <input type="text" id="b-footer" placeholder="Footer text..." oninput="updatePreview()" />
-          </div>
+          <div class="form-group"><label>Author Name</label><input type="text" id="b-author-name" placeholder="Author name or {username}..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Author Icon URL</label><input type="text" id="b-author-icon" placeholder="{user.avatar} or https://..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Footer Text</label><input type="text" id="b-footer" placeholder="Footer text..." oninput="updatePreview()" /></div>
         </div>
-
         <div class="tab-content" id="tab-media">
-          <div class="form-group">
-            <label>Thumbnail URL</label>
-            <input type="text" id="b-thumbnail" placeholder="{user.avatar} or https://..." oninput="updatePreview()" />
-          </div>
-          <div class="form-group">
-            <label>Image URL</label>
-            <input type="text" id="b-image" placeholder="https://example.com/image.png" oninput="updatePreview()" />
-          </div>
+          <div class="form-group"><label>Thumbnail URL</label><input type="text" id="b-thumbnail" placeholder="{user.avatar} or https://..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Image URL</label><input type="text" id="b-image" placeholder="https://example.com/image.png" oninput="updatePreview()" /></div>
         </div>
-
         <div class="tab-content" id="tab-fields">
-          <div class="form-group">
-            <label>Field Name</label>
-            <input type="text" id="f-name" placeholder="Field name..." />
-          </div>
-          <div class="form-group">
-            <label>Field Value</label>
-            <textarea id="f-value" placeholder="Field value..." style="min-height:60px;"></textarea>
-          </div>
-          <label class="inline-check">
-            <input type="checkbox" id="f-inline" />
-            <span>Inline</span>
-          </label>
+          <div class="form-group"><label>Field Name</label><input type="text" id="f-name" placeholder="Field name..." /></div>
+          <div class="form-group"><label>Field Value</label><textarea id="f-value" placeholder="Field value..." style="min-height:60px;"></textarea></div>
+          <label class="inline-check"><input type="checkbox" id="f-inline" /><span>Inline</span></label>
           <button class="add-btn" onclick="addField()">+ Add Field</button>
           <div class="fields-list" id="fields-list"></div>
         </div>
-
         <div class="tab-content" id="tab-buttons">
-          <div class="form-group">
-            <label>Button Label</label>
-            <input type="text" id="btn-label" placeholder="Click here..." />
-          </div>
-          <div class="form-group">
-            <label>Button URL</label>
-            <input type="text" id="btn-url" placeholder="https://discord.gg/..." />
-          </div>
-          <div class="form-group">
-            <label>Emoji (optional)</label>
-            <input type="text" id="btn-emoji" placeholder="optional" />
-          </div>
+          <div class="form-group"><label>Button Label</label><input type="text" id="btn-label" placeholder="Click here..." /></div>
+          <div class="form-group"><label>Button URL</label><input type="text" id="btn-url" placeholder="https://discord.gg/..." /></div>
+          <div class="form-group"><label>Emoji (optional)</label><input type="text" id="btn-emoji" placeholder="optional" /></div>
           <button class="add-btn" onclick="addButton()">+ Add Button</button>
           <div class="fields-list" id="buttons-list"></div>
         </div>
-
         <div class="tab-content" id="tab-message">
-          <div class="form-group">
-            <label>Message (above embed)</label>
-            <input type="text" id="b-message" placeholder="{user.mention} or any text..." oninput="updatePreview()" />
-          </div>
-          <div class="form-group">
-            <label>Message 2 (below embed)</label>
-            <input type="text" id="b-message2" placeholder="Text sent after embed..." oninput="updatePreview()" />
-          </div>
+          <div class="form-group"><label>Message (above embed)</label><input type="text" id="b-message" placeholder="{user.mention} or any text..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Message 2 (below embed)</label><input type="text" id="b-message2" placeholder="Text sent after embed..." oninput="updatePreview()" /></div>
         </div>
       </div>
-
-      <!-- RIGHT: PREVIEW -->
       <div class="reveal reveal-delay-3">
         <div class="preview-panel">
-          <div class="preview-header">
-            <span>Live Preview</span>
-            <span style="font-size:0.75rem;color:var(--muted);">Discord mock</span>
-          </div>
+          <div class="preview-header"><span>Live Preview</span><span style="font-size:0.75rem;color:var(--muted);">Discord mock</span></div>
           <div class="preview-body">
             <div class="discord-mock">
               <div class="mock-msg">
                 <div class="mock-avatar">L</div>
                 <div class="mock-right">
-                  <div class="mock-meta">
-                    <span class="mock-name">Lyrics</span>
-                    <span class="mock-bot-tag">BOT</span>
-                    <span class="mock-time">Today at 12:00 PM</span>
-                  </div>
+                  <div class="mock-meta"><span class="mock-name">Lyrics</span><span class="mock-bot-tag">BOT</span><span class="mock-time">Today at 12:00 PM</span></div>
                   <div class="mock-content" id="prev-message"></div>
                   <div class="mock-embed" id="prev-embed" style="display:none;">
-                    <div id="prev-author" style="display:none;" class="mock-embed-author">
-                      <img id="prev-author-icon" class="mock-embed-author-icon" src="" alt="" style="display:none;" />
-                      <span id="prev-author-name" class="mock-embed-author-name"></span>
-                    </div>
-                    <div id="prev-thumbnail" class="mock-embed-thumbnail" style="display:none;">
-                      <img id="prev-thumb-img" src="" alt="" />
-                    </div>
+                    <div id="prev-author" style="display:none;" class="mock-embed-author"><img id="prev-author-icon" class="mock-embed-author-icon" src="" alt="" style="display:none;" /><span id="prev-author-name" class="mock-embed-author-name"></span></div>
+                    <div id="prev-thumbnail" class="mock-embed-thumbnail" style="display:none;"><img id="prev-thumb-img" src="" alt="" /></div>
                     <div id="prev-title" class="mock-embed-title" style="display:none;"></div>
                     <div id="prev-desc" class="mock-embed-desc" style="display:none;"></div>
                     <div id="prev-fields" class="mock-embed-fields" style="display:none;"></div>
-                    <div id="prev-image" class="mock-embed-image" style="display:none;">
-                      <img id="prev-img" src="" alt="" />
-                    </div>
-                    <div id="prev-footer-wrap" class="mock-embed-footer" style="display:none;">
-                      <span id="prev-footer-text" class="mock-embed-footer-text"></span>
-                      <span id="prev-ts" class="mock-embed-ts" style="display:none;"></span>
-                    </div>
+                    <div id="prev-image" class="mock-embed-image" style="display:none;"><img id="prev-img" src="" alt="" /></div>
+                    <div id="prev-footer-wrap" class="mock-embed-footer" style="display:none;"><span id="prev-footer-text" class="mock-embed-footer-text"></span><span id="prev-ts" class="mock-embed-ts" style="display:none;"></span></div>
                   </div>
                   <div id="prev-buttons" class="mock-buttons" style="display:none;"></div>
                 </div>
@@ -686,8 +667,6 @@
             <button class="copy-btn" id="copy-btn" onclick="copyOutput()">Copy Command</button>
           </div>
         </div>
-
-        <!-- VARS REFERENCE -->
         <div class="vars-ref">
           <h3>Placeholders <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">— click to copy</span></h3>
           <div class="vars-grid" id="vars-grid"></div>
@@ -702,51 +681,36 @@
     <div class="section-title reveal reveal-delay-1">Frequently asked.</div>
     <div class="faq-list">
       <div class="faq-item reveal reveal-delay-1">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Is Lyrics free to use?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">Is Lyrics free to use?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
         <div class="faq-a">Yes, Lyrics is completely free. All commands and features are available to every server without any paid tier or subscription.</div>
       </div>
       <div class="faq-item reveal reveal-delay-2">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          How do I change the bot prefix?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Use the <code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,setprefix [new prefix]</code> command. The default prefix is a comma (<code style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green);">,</code>) and each server can have its own unique prefix.</div>
+        <div class="faq-q" onclick="toggleFaq(this)">How do I change the bot prefix?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-a">Use the <code class="inline">,setprefix [new prefix]</code> command. The default prefix is a comma and each server can have its own unique prefix.</div>
       </div>
       <div class="faq-item reveal reveal-delay-3">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          What permissions does Lyrics need?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
-        <div class="faq-a">Lyrics only requests permissions it actively uses. The full list is shown in the Permissions section above. If you're running into issues, make sure Lyrics' role is above the roles it needs to manage in your role hierarchy.</div>
+        <div class="faq-q" onclick="toggleFaq(this)">What permissions does Lyrics need?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <div class="faq-a">Lyrics requests Administrator permission so all features work correctly. Make sure Lyrics' role is above other roles in your hierarchy for moderation features to work.</div>
       </div>
       <div class="faq-item reveal reveal-delay-4">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          How do I use the Embed Builder?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">How do I use the Embed Builder?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
         <div class="faq-a">Fill in the fields in the builder on this page, watch the Discord preview update live, then click "Copy Command" and paste the generated syntax into any channel where Lyrics is present.</div>
       </div>
       <div class="faq-item reveal reveal-delay-1">
-        <div class="faq-q" onclick="toggleFaq(this)">
-          Where do I get help or report a bug?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </div>
+        <div class="faq-q" onclick="toggleFaq(this)">Where do I get help or report a bug?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
         <div class="faq-a">Join the support server at discord.gg/V3uXKHQvJu and open a ticket. The team responds quickly and all bug reports are tracked and fixed.</div>
       </div>
     </div>
   </section>
 
-  <!-- CTA BANNER -->
+  <!-- CTA -->
   <section class="cta-banner">
     <div class="cta-inner reveal">
       <h2>Ready to get started?</h2>
       <p>Add Lyrics to your server in seconds and start building the community you want.</p>
       <div class="cta-btns">
         <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.030z"/></svg>
           Add to Discord
         </a>
         <a href="https://discord.gg/V3uXKHQvJu" target="_blank" class="btn-secondary">Join Support Server</a>
@@ -758,10 +722,7 @@
   <footer>
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="footer-brand-row">
-          <img src="lyrics-pfp.png" alt="Lyrics" />
-          <span class="footer-brand-name">Lyrics</span>
-        </div>
+        <div class="footer-brand-row"><img src="lyrics-pfp.png" alt="Lyrics" /><span class="footer-brand-name">Lyrics</span></div>
         <p>A friendly Discord bot built to make your server better, one command at a time.</p>
       </div>
       <div class="footer-col">
@@ -774,6 +735,7 @@
       <div class="footer-col">
         <h4>Links</h4>
         <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+        <a href="#status">Status</a>
         <a href="#faq">FAQ</a>
         <a href="#setup">Setup Guide</a>
       </div>
@@ -785,57 +747,110 @@
   </footer>
 
   <script>
-    /* =========================================================
-       SCROLL REVEAL
-    ========================================================= */
+    /* ===================== CONFIG — CHANGE THIS ===================== */
+    // Replace with your ngrok URL each time you restart it
+    const API_URL = 'https://whacky-onion-erratic.ngrok-free.dev';
+    /* =============================================================== */
+
+    /* SCROLL REVEAL */
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target);
-        }
+        if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); }
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-    /* =========================================================
-       COUNT-UP ANIMATION FOR STATS
-    ========================================================= */
-    function animateCount(el, target, suffix) {
-      const duration = 1400;
+    /* ===================== LIVE STATS ===================== */
+    function formatNumber(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+      return n.toLocaleString();
+    }
+
+    function formatUptime(seconds) {
+      const d = Math.floor(seconds / 86400);
+      const h = Math.floor((seconds % 86400) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      if (d > 0) return `${d}d ${h}h ${m}m`;
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
+    function animateNum(el, target) {
+      const duration = 1200;
       const start = performance.now();
+      const from = 0;
       const update = (now) => {
-        const elapsed = now - start;
-        const progress = Math.min(elapsed / duration, 1);
+        const progress = Math.min((now - start) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target) + (suffix || '');
+        const current = Math.floor(from + eased * (target - from));
+        el.textContent = formatNumber(current);
         if (progress < 1) requestAnimationFrame(update);
-        else el.textContent = target + (suffix || '');
+        else el.textContent = formatNumber(target);
       };
       requestAnimationFrame(update);
     }
 
-    const statObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const nums = entry.target.querySelectorAll('.stat-num[data-target]');
-          nums.forEach(el => {
-            const target = parseInt(el.dataset.target);
-            const suffix = el.dataset.suffix || (el.dataset.target === '99' ? '%' : (el.dataset.target === '24' ? '/7' : '+'));
-            animateCount(el, target, suffix);
-          });
-          statObserver.unobserve(entry.target);
+    async function fetchStats() {
+      try {
+        const res = await fetch(`${API_URL}/stats`, {
+          headers: { 'ngrok-skip-browser-warning': 'true' }
+        });
+        if (!res.ok) throw new Error('non-ok');
+        const data = await res.json();
+
+        // Guilds
+        const guildsEl = document.getElementById('stat-guilds');
+        guildsEl.classList.remove('loading');
+        animateNum(guildsEl, data.guilds || 0);
+
+        // Members
+        const membersEl = document.getElementById('stat-members');
+        membersEl.classList.remove('loading');
+        animateNum(membersEl, data.members || 0);
+
+        // Latency
+        const latencyEl = document.getElementById('stat-latency');
+        latencyEl.classList.remove('loading');
+        const ms = data.latency || 0;
+        latencyEl.textContent = ms + 'ms';
+        if (ms < 100) latencyEl.classList.add('latency-good');
+        else if (ms < 250) latencyEl.classList.add('latency-ok');
+        else latencyEl.classList.add('latency-bad');
+
+        // Uptime
+        if (data.uptime) {
+          document.getElementById('stat-uptime').textContent = formatUptime(data.uptime);
         }
-      });
-    }, { threshold: 0.3 });
 
-    const strip = document.querySelector('.stats-strip');
-    if (strip) statObserver.observe(strip);
+        // Badge
+        const badge = document.getElementById('status-badge');
+        badge.className = 'online-badge reveal visible';
+        badge.innerHTML = '<span class="online-dot"></span> Online';
 
-    /* =========================================================
-       FAQ ACCORDION
-    ========================================================= */
+        // Last updated
+        document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+      } catch (e) {
+        // Offline state
+        const badge = document.getElementById('status-badge');
+        badge.className = 'offline-badge reveal visible';
+        badge.innerHTML = '<span class="offline-dot"></span> Offline / Unreachable';
+
+        ['stat-guilds','stat-members','stat-latency'].forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.add('loading');
+          el.textContent = '—';
+        });
+        document.getElementById('last-updated').textContent = 'Could not reach API';
+      }
+    }
+
+    // Fetch on load, then every 30 seconds
+    fetchStats();
+    setInterval(fetchStats, 30000);
+
+    /* ===================== FAQ ===================== */
     function toggleFaq(el) {
       const item = el.closest('.faq-item');
       const isOpen = item.classList.contains('open');
@@ -843,11 +858,8 @@
       if (!isOpen) item.classList.add('open');
     }
 
-    /* =========================================================
-       EMBED BUILDER
-    ========================================================= */
-    const fields = [];
-    const buttons = [];
+    /* ===================== EMBED BUILDER ===================== */
+    const fields = [], buttons = [];
 
     const VARS = [
       { code: '{user.mention}', desc: 'pings the user' },
@@ -867,11 +879,7 @@
       const chip = document.createElement('div');
       chip.className = 'var-chip';
       chip.innerHTML = `<code>${v.code}</code><span>${v.desc}</span>`;
-      chip.onclick = () => {
-        navigator.clipboard.writeText(v.code);
-        chip.style.borderColor = 'var(--green)';
-        setTimeout(() => chip.style.borderColor = '', 1000);
-      };
+      chip.onclick = () => { navigator.clipboard.writeText(v.code); chip.style.borderColor = 'var(--green)'; setTimeout(() => chip.style.borderColor = '', 1000); };
       vg.appendChild(chip);
     });
 
@@ -884,36 +892,19 @@
       });
     });
 
-    function syncColor(el) {
-      document.getElementById('b-color').value = el.value.replace('#', '');
-      updatePreview();
-    }
-
-    function syncColorText(el) {
-      const hex = el.value.replace('#', '');
-      if (/^[0-9A-Fa-f]{6}$/.test(hex)) {
-        document.getElementById('b-color-pick').value = '#' + hex;
-      }
-      updatePreview();
-    }
+    function syncColor(el) { document.getElementById('b-color').value = el.value.replace('#', ''); updatePreview(); }
+    function syncColorText(el) { const hex = el.value.replace('#', ''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('b-color-pick').value = '#' + hex; updatePreview(); }
 
     function resolveVar(text) {
       return text
-        .replace(/\{user\.mention\}/g, '@username')
-        .replace(/\{username\}/g, 'username')
+        .replace(/\{user\.mention\}/g, '@username').replace(/\{username\}/g, 'username')
         .replace(/\{user\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/0.png')
-        .replace(/\{user\.id\}/g, '123456789')
-        .replace(/\{user\.created_at\}/g, 'Jan 1 2024')
-        .replace(/\{server\}/g, 'My Server')
-        .replace(/\{server\.icon\}/g, 'https://cdn.discordapp.com/embed/avatars/1.png')
-        .replace(/\{count\}/g, '1234')
-        .replace(/\{boosts\}/g, '5')
+        .replace(/\{user\.id\}/g, '123456789').replace(/\{user\.created_at\}/g, 'Jan 1 2024')
+        .replace(/\{server\}/g, 'My Server').replace(/\{server\.icon\}/g, 'https://cdn.discordapp.com/embed/avatars/1.png')
+        .replace(/\{count\}/g, '1234').replace(/\{boosts\}/g, '5')
         .replace(/\{bot\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/2.png');
     }
-
-    function isImageUrl(url) {
-      return url && (url.startsWith('http') || url.includes('cdn.discordapp'));
-    }
+    function isImageUrl(url) { return url && (url.startsWith('http') || url.includes('cdn.discordapp')); }
 
     function updatePreview() {
       const title = document.getElementById('b-title').value;
@@ -929,12 +920,9 @@
       const message2 = document.getElementById('b-message2').value;
       const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
 
-      const msgEl = document.getElementById('prev-message');
-      msgEl.textContent = resolveVar(message);
-
+      document.getElementById('prev-message').textContent = resolveVar(message);
       const msg2El = document.getElementById('prev-message2');
-      if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; }
-      else { msg2El.style.display = 'none'; }
+      if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; } else { msg2El.style.display = 'none'; }
 
       const authorEl = document.getElementById('prev-author');
       if (authorName) {
@@ -942,53 +930,36 @@
         document.getElementById('prev-author-name').textContent = resolveVar(authorName);
         const iconResolved = resolveVar(authorIcon);
         const authorIconEl = document.getElementById('prev-author-icon');
-        if (authorIcon && isImageUrl(iconResolved)) { authorIconEl.src = iconResolved; authorIconEl.style.display = 'block'; }
-        else { authorIconEl.style.display = 'none'; }
+        if (authorIcon && isImageUrl(iconResolved)) { authorIconEl.src = iconResolved; authorIconEl.style.display = 'block'; } else { authorIconEl.style.display = 'none'; }
       } else { authorEl.style.display = 'none'; }
 
       const thumbResolved = resolveVar(thumbnail);
       const thumbEl = document.getElementById('prev-thumbnail');
-      if (thumbnail && isImageUrl(thumbResolved)) { document.getElementById('prev-thumb-img').src = thumbResolved; thumbEl.style.display = 'block'; }
-      else { thumbEl.style.display = 'none'; }
+      if (thumbnail && isImageUrl(thumbResolved)) { document.getElementById('prev-thumb-img').src = thumbResolved; thumbEl.style.display = 'block'; } else { thumbEl.style.display = 'none'; }
 
       const titleEl = document.getElementById('prev-title');
-      if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; }
-      else { titleEl.style.display = 'none'; }
+      if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; } else { titleEl.style.display = 'none'; }
 
       const descEl = document.getElementById('prev-desc');
-      if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; }
-      else { descEl.style.display = 'none'; }
+      if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; } else { descEl.style.display = 'none'; }
 
       const fieldsEl = document.getElementById('prev-fields');
-      if (fields.length > 0) {
-        fieldsEl.style.display = 'flex';
-        fieldsEl.innerHTML = fields.map(f => `
-          <div class="mock-embed-field ${f.inline ? 'inline' : ''}">
-            <div class="mock-embed-field-name">${resolveVar(f.name)}</div>
-            <div class="mock-embed-field-value">${resolveVar(f.value)}</div>
-          </div>`).join('');
-      } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
+      if (fields.length > 0) { fieldsEl.style.display = 'flex'; fieldsEl.innerHTML = fields.map(f => `<div class="mock-embed-field ${f.inline ? 'inline' : ''}"><div class="mock-embed-field-name">${resolveVar(f.name)}</div><div class="mock-embed-field-value">${resolveVar(f.value)}</div></div>`).join(''); } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
 
       const imageResolved = resolveVar(image);
       const imageEl = document.getElementById('prev-image');
-      if (image && isImageUrl(imageResolved)) { document.getElementById('prev-img').src = imageResolved; imageEl.style.display = 'block'; }
-      else { imageEl.style.display = 'none'; }
+      if (image && isImageUrl(imageResolved)) { document.getElementById('prev-img').src = imageResolved; imageEl.style.display = 'block'; } else { imageEl.style.display = 'none'; }
 
       const footerWrap = document.getElementById('prev-footer-wrap');
-      const footerText = document.getElementById('prev-footer-text');
-      const tsEl = document.getElementById('prev-ts');
       if (footer || timestamp) {
         footerWrap.style.display = 'flex';
-        footerText.textContent = resolveVar(footer);
-        if (timestamp) { tsEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); tsEl.style.display = 'inline'; }
-        else { tsEl.style.display = 'none'; }
+        document.getElementById('prev-footer-text').textContent = resolveVar(footer);
+        const tsEl = document.getElementById('prev-ts');
+        if (timestamp) { tsEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); tsEl.style.display = 'inline'; } else { tsEl.style.display = 'none'; }
       } else { footerWrap.style.display = 'none'; }
 
       const btnsEl = document.getElementById('prev-buttons');
-      if (buttons.length > 0) {
-        btnsEl.style.display = 'flex';
-        btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label} </div>`).join('');
-      } else { btnsEl.style.display = 'none'; }
+      if (buttons.length > 0) { btnsEl.style.display = 'flex'; btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>`).join(''); } else { btnsEl.style.display = 'none'; }
 
       const hasEmbed = title || desc || authorName || footer || thumbnail || image || fields.length > 0 || timestamp;
       const embedEl = document.getElementById('prev-embed');
@@ -1004,24 +975,10 @@
       const inline = document.getElementById('f-inline').checked;
       if (!name || !value) return;
       fields.push({ name, value, inline });
-      document.getElementById('f-name').value = '';
-      document.getElementById('f-value').value = '';
-      document.getElementById('f-inline').checked = false;
+      document.getElementById('f-name').value = ''; document.getElementById('f-value').value = ''; document.getElementById('f-inline').checked = false;
       renderFieldsList(); updatePreview();
     }
-
-    function renderFieldsList() {
-      document.getElementById('fields-list').innerHTML = fields.map((f, i) => `
-        <div class="field-item">
-          <div class="field-item-info">
-            <div class="field-item-name">${f.name}</div>
-            <div class="field-item-val">${f.value}</div>
-          </div>
-          ${f.inline ? '<span class="field-item-badge">inline</span>' : ''}
-          <button class="remove-btn" onclick="removeField(${i})">x</button>
-        </div>`).join('');
-    }
-
+    function renderFieldsList() { document.getElementById('fields-list').innerHTML = fields.map((f, i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div>${f.inline ? '<span class="field-item-badge">inline</span>' : ''}<button class="remove-btn" onclick="removeField(${i})">x</button></div>`).join(''); }
     function removeField(i) { fields.splice(i, 1); renderFieldsList(); updatePreview(); }
 
     function addButton() {
@@ -1030,23 +987,10 @@
       const emoji = document.getElementById('btn-emoji').value.trim();
       if (!label || !url) return;
       buttons.push({ label, url, emoji });
-      document.getElementById('btn-label').value = '';
-      document.getElementById('btn-url').value = '';
-      document.getElementById('btn-emoji').value = '';
+      document.getElementById('btn-label').value = ''; document.getElementById('btn-url').value = ''; document.getElementById('btn-emoji').value = '';
       renderButtonsList(); updatePreview();
     }
-
-    function renderButtonsList() {
-      document.getElementById('buttons-list').innerHTML = buttons.map((b, i) => `
-        <div class="field-item">
-          <div class="field-item-info">
-            <div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>
-            <div class="field-item-val">${b.url}</div>
-          </div>
-          <button class="remove-btn" onclick="removeButton(${i})">x</button>
-        </div>`).join('');
-    }
-
+    function renderButtonsList() { document.getElementById('buttons-list').innerHTML = buttons.map((b, i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="removeButton(${i})">x</button></div>`).join(''); }
     function removeButton(i) { buttons.splice(i, 1); renderButtonsList(); updatePreview(); }
 
     function generateOutput() {
@@ -1061,15 +1005,11 @@
       const image = document.getElementById('b-image').value;
       const message = document.getElementById('b-message').value;
       const message2 = document.getElementById('b-message2').value;
-
       let out = ',ce';
       if (message) out += `\n$v{message: ${message}}`;
       if (title) out += `\n$v{title: ${title}}`;
       if (colorHex) out += `\n$v{color: ${colorHex}}`;
-      if (authorName) {
-        const iconPart = authorIcon ? ` {icon: ${authorIcon}}` : '';
-        out += `\n$v{author: ${authorName}${iconPart}}`;
-      }
+      if (authorName) { const iconPart = authorIcon ? ` {icon: ${authorIcon}}` : ''; out += `\n$v{author: ${authorName}${iconPart}}`; }
       if (desc) out += `\n$v{description: ${desc}}`;
       if (thumbnail) out += `\n$v{thumbnail: ${thumbnail}}`;
       if (image) out += `\n$v{image: ${image}}`;
@@ -1078,15 +1018,13 @@
       if (timestamp) out += `\n$v{timestamp: true}`;
       buttons.forEach(b => { out += `\n$v{button: ${b.label} && ${b.url}${b.emoji ? ' && ' + b.emoji : ''}}`; });
       if (message2) out += `\n$v{message2: ${message2}}`;
-
       document.getElementById('output-box').textContent = out;
     }
 
     function copyOutput() {
       navigator.clipboard.writeText(document.getElementById('output-box').textContent);
       const btn = document.getElementById('copy-btn');
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
+      btn.textContent = 'Copied!'; btn.classList.add('copied');
       setTimeout(() => { btn.textContent = 'Copy Command'; btn.classList.remove('copied'); }, 2000);
     }
 

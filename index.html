@@ -843,11 +843,11 @@
         const allCards = [...guilds, ...guilds];
         allCards.forEach(g => track.appendChild(makeCard(g)));
 
-        // Adjust animation speed based on total width
-        const cardWidth = 220; // approx per card
-        const totalWidth = guilds.length * cardWidth;
-        const speed = Math.max(20, totalWidth / 8); // seconds
-        track.style.animationDuration = speed + 's';
+// Adjust animation speed based on total width
+const cardWidth = 220;
+const totalWidth = guilds.length * cardWidth;
+const speed = Math.max(12, totalWidth / 12); // faster but still smooth
+track.style.animationDuration = speed + 's';
 
       } catch (e) {
         document.getElementById('guild-strip-label').textContent = '';

@@ -12,419 +12,199 @@
       --green-glow: rgba(154, 175, 82, 0.18);
       --bg: #0b0d09;
       --surface: #111408;
+      --surface2: #161a08;
       --nav-bg: rgba(11, 13, 9, 0.72);
       --text: #e8eedd;
       --muted: #8a9475;
       --border: rgba(154, 175, 82, 0.15);
+      --border2: rgba(154, 175, 82, 0.25);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* ---- NAV ---- */
+    /* NAV */
     nav {
-      position: fixed;
-      top: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 48px);
-      max-width: 900px;
-      background: var(--nav-bg);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 10px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 100;
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 48px); max-width: 900px;
+      background: var(--nav-bg); backdrop-filter: blur(18px);
+      border: 1px solid var(--border); border-radius: 999px;
+      padding: 10px 18px; display: flex; align-items: center;
+      justify-content: space-between; z-index: 100;
     }
-
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .nav-left img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid var(--green);
-    }
-
-    .nav-left span {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text);
-      letter-spacing: 0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      padding: 6px 14px;
-      border-radius: 999px;
-      transition: color 0.2s, background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+    .nav-left img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--green); }
+    .nav-left span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text); letter-spacing: 0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 14px; border-radius: 999px; transition: color 0.2s, background 0.2s; display: flex; align-items: center; gap: 6px; }
     .nav-links a:hover { color: var(--text); background: rgba(154,175,82,0.08); }
-
     .nav-links a svg { width: 14px; height: 14px; opacity: 0.7; }
-
-    .nav-add {
-      background: var(--green);
-      color: #0b0d09 !important;
-      font-weight: 700 !important;
-      font-size: 0.85rem !important;
-      padding: 8px 18px !important;
-      border-radius: 999px;
-      transition: background 0.2s, transform 0.15s !important;
-    }
-
+    .nav-add { background: var(--green); color: #0b0d09 !important; font-weight: 700 !important; font-size: 0.85rem !important; padding: 8px 18px !important; border-radius: 999px; transition: background 0.2s, transform 0.15s !important; }
     .nav-add:hover { background: #b0c860 !important; transform: scale(1.04) !important; }
 
-    /* ---- HERO ---- */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 120px 24px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-
-    .hero-bg::before {
-      content: '';
-      position: absolute;
-      top: -10%;
-      left: -10%;
-      width: 70%;
-      height: 70%;
-      background: radial-gradient(ellipse, rgba(154,175,82,0.12) 0%, transparent 70%);
-      animation: pulse 6s ease-in-out infinite alternate;
-    }
-
-    .hero-bg::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: -5%;
-      width: 50%;
-      height: 60%;
-      background: radial-gradient(ellipse, rgba(154,175,82,0.07) 0%, transparent 70%);
-    }
-
-    @keyframes pulse {
-      from { opacity: 0.6; transform: scale(1); }
-      to { opacity: 1; transform: scale(1.08); }
-    }
-
-    .hero-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      width: 100%;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      background: rgba(154,175,82,0.1);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 5px 14px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--green);
-      margin-bottom: 28px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
+    /* HERO */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 24px 80px; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+    .hero-bg::before { content: ''; position: absolute; top: -10%; left: -10%; width: 70%; height: 70%; background: radial-gradient(ellipse, rgba(154,175,82,0.12) 0%, transparent 70%); animation: pulse 6s ease-in-out infinite alternate; }
+    .hero-bg::after { content: ''; position: absolute; bottom: 0; right: -5%; width: 50%; height: 60%; background: radial-gradient(ellipse, rgba(154,175,82,0.07) 0%, transparent 70%); }
+    @keyframes pulse { from { opacity: 0.6; transform: scale(1); } to { opacity: 1; transform: scale(1.08); } }
+    .hero-inner { max-width: 900px; margin: 0 auto; width: 100%; position: relative; z-index: 1; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(154,175,82,0.1); border: 1px solid var(--border); border-radius: 999px; padding: 5px 14px; font-size: 0.75rem; font-weight: 500; color: var(--green); margin-bottom: 28px; letter-spacing: 0.05em; text-transform: uppercase; }
     .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: blink 2s ease-in-out infinite; }
-
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-    h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 24px;
-      color: var(--text);
-    }
-
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--text); }
     h1 .accent { color: var(--green); }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--muted);
-      max-width: 480px;
-      line-height: 1.7;
-      margin-bottom: 40px;
-      font-weight: 300;
-    }
-
-    .hero-btns {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--green);
-      color: #0b0d09;
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      padding: 13px 26px;
-      border-radius: 999px;
-      text-decoration: none;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 24px rgba(154,175,82,0.25);
-    }
-
+    .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 480px; line-height: 1.7; margin-bottom: 40px; font-weight: 300; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #0b0d09; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; text-decoration: none; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(154,175,82,0.25); }
     .btn-primary:hover { background: #b0c860; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(154,175,82,0.35); }
-
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: transparent;
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      font-weight: 600;
-      font-size: 0.9rem;
-      padding: 13px 26px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      text-decoration: none;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s;
-    }
-
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.15s; }
     .btn-secondary:hover { border-color: var(--green); background: var(--green-glow); transform: translateY(-2px); }
 
-    .btn-primary svg, .btn-secondary svg { width: 16px; height: 16px; }
-
-    /* ---- FEATURES ---- */
-    .features {
-      padding: 80px 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--green);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800;
-      margin-bottom: 48px;
-      letter-spacing: -0.02em;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
+    /* FEATURES */
+    .features { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 48px; letter-spacing: -0.02em; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); opacity: 0; transition: opacity 0.3s; }
     .feature-card:hover { border-color: rgba(154,175,82,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
     .feature-card:hover::before { opacity: 1; }
-
-    .feature-icon {
-      width: 42px;
-      height: 42px;
-      background: var(--green-glow);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      color: var(--green);
-    }
-
+    .feature-icon { width: 42px; height: 42px; background: var(--green-glow); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--green); }
     .feature-icon svg { width: 20px; height: 20px; }
+    .feature-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
 
-    .feature-card h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
+    /* EMBED BUILDER */
+    .embed-builder { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .builder-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 800px) { .builder-wrap { grid-template-columns: 1fr; } }
+
+    .builder-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+    .builder-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+    .builder-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { flex-shrink: 0; padding: 12px 16px; background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab-btn:hover { color: var(--text); background: rgba(154,175,82,0.05); }
+    .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+    .tab-content { display: none; padding: 20px; flex-direction: column; gap: 14px; }
+    .tab-content.active { display: flex; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.78rem; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .form-group input, .form-group textarea, .form-group select {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+      color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
+      padding: 10px 14px; transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%;
     }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(154,175,82,0.1); }
+    .form-group textarea { resize: vertical; min-height: 160px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .color-row { display: flex; gap: 10px; align-items: center; }
+    .color-row input[type="color"] { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); background: none; cursor: pointer; padding: 3px; flex-shrink: 0; }
+    .color-row input[type="text"] { flex: 1; }
 
-    .feature-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
+    .inline-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .inline-check input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+    .inline-check span { font-size: 0.85rem; color: var(--muted); }
 
-    /* ---- COMMANDS ---- */
-    .commands {
-      padding: 80px 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
+    .add-btn { background: var(--green-glow); border: 1px solid var(--border2); border-radius: 10px; color: var(--green); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; padding: 10px 16px; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
+    .add-btn:hover { background: rgba(154,175,82,0.25); transform: translateY(-1px); }
 
-    .coming-soon-box {
-      background: var(--surface);
-      border: 1px dashed var(--border);
-      border-radius: 20px;
-      padding: 64px 32px;
-      text-align: center;
-    }
+    .fields-list { display: flex; flex-direction: column; gap: 8px; }
+    .field-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .field-item-info { flex: 1; min-width: 0; }
+    .field-item-name { font-size: 0.8rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .field-item-val { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .field-item-badge { font-size: 0.7rem; color: var(--green); background: var(--green-glow); border-radius: 4px; padding: 2px 6px; flex-shrink: 0; }
+    .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 2px 6px; border-radius: 4px; transition: color 0.2s, background 0.2s; flex-shrink: 0; }
+    .remove-btn:hover { color: #e74c3c; background: rgba(231,76,60,0.1); }
 
-    .coming-soon-box .cs-icon {
-      font-size: 2.5rem;
-      margin-bottom: 16px;
-    }
+    /* PREVIEW */
+    .preview-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: sticky; top: 100px; }
+    .preview-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .preview-header span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--green); }
+    .preview-body { padding: 20px; }
 
-    .coming-soon-box h3 {
-      font-family: 'Syne', sans-serif;
-      font-weight: 700;
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-      color: var(--green);
-    }
+    /* DISCORD MOCK */
+    .discord-mock { background: #313338; border-radius: 12px; padding: 16px; font-family: 'gg sans', 'Noto Sans', sans-serif; }
+    .mock-msg { display: flex; gap: 12px; }
+    .mock-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: #0b0d09; flex-shrink: 0; overflow: hidden; }
+    .mock-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .mock-right { flex: 1; min-width: 0; }
+    .mock-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+    .mock-name { font-weight: 600; font-size: 0.95rem; color: #9aaf52; }
+    .mock-bot-tag { background: #5865f2; color: white; font-size: 0.6rem; font-weight: 700; padding: 1px 4px; border-radius: 3px; letter-spacing: 0.03em; }
+    .mock-time { color: #949ba4; font-size: 0.72rem; }
+    .mock-content { color: #dbdee1; font-size: 0.9rem; margin-bottom: 4px; word-break: break-word; }
+    .mock-content:empty { display: none; }
 
-    .coming-soon-box p {
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
+    .mock-embed { border-left: 4px solid #9aaf52; background: #2b2d31; border-radius: 4px; padding: 12px 16px; margin-top: 4px; max-width: 440px; }
+    .mock-embed-author { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .mock-embed-author-icon { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+    .mock-embed-author-name { font-size: 0.82rem; font-weight: 600; color: #dbdee1; }
+    .mock-embed-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .mock-embed-desc { font-size: 0.85rem; color: #dbdee1; white-space: pre-wrap; word-break: break-word; margin-bottom: 8px; line-height: 1.5; }
+    .mock-embed-fields { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .mock-embed-field { flex: 0 0 auto; }
+    .mock-embed-field.inline { flex: 1 1 120px; }
+    .mock-embed-field-name { font-size: 0.78rem; font-weight: 700; color: #dbdee1; margin-bottom: 2px; }
+    .mock-embed-field-value { font-size: 0.78rem; color: #b5bac1; white-space: pre-wrap; }
+    .mock-embed-thumbnail { float: right; margin-left: 12px; margin-bottom: 8px; }
+    .mock-embed-thumbnail img { width: 80px; height: 80px; border-radius: 4px; object-fit: cover; }
+    .mock-embed-image { margin-top: 8px; }
+    .mock-embed-image img { max-width: 100%; border-radius: 4px; }
+    .mock-embed-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .mock-embed-footer-icon { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+    .mock-embed-footer-text { font-size: 0.72rem; color: #949ba4; }
+    .mock-embed-ts { font-size: 0.72rem; color: #949ba4; }
+    .mock-embed-ts::before { content: ' • '; }
+    .mock-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .mock-button { background: #4e5058; border-radius: 4px; padding: 6px 14px; font-size: 0.82rem; color: #dbdee1; display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .mock-msg2 { color: #dbdee1; font-size: 0.9rem; margin-top: 4px; padding-left: 52px; }
 
-    /* ---- FOOTER ---- */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    /* OUTPUT */
+    .output-section { padding: 20px; border-top: 1px solid var(--border); }
+    .output-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--green); word-break: break-all; line-height: 1.6; max-height: 160px; overflow-y: auto; white-space: pre-wrap; }
+    .copy-btn { margin-top: 10px; background: var(--green); color: #0b0d09; border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
+    .copy-btn:hover { background: #b0c860; transform: translateY(-1px); }
+    .copy-btn.copied { background: #3bad64; }
 
-    .footer-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
+    /* PLACEHOLDERS REF */
+    .vars-ref { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-top: 24px; }
+    .vars-ref h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 20px; color: var(--text); }
+    .vars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+    .var-chip { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
+    .var-chip:hover { border-color: var(--green); background: var(--green-glow); }
+    .var-chip code { font-size: 0.78rem; color: var(--green); font-family: 'Courier New', monospace; }
+    .var-chip span { font-size: 0.72rem; color: var(--muted); }
 
-    .footer-left img {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--border);
-    }
-
-    footer a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.85rem;
-      transition: color 0.2s;
-    }
-
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-left { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.85rem; }
+    .footer-left img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+    footer a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
     footer a:hover { color: var(--green); }
 
-    /* ---- ANIMATIONS ---- */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      animation: fadeIn 0.7s ease forwards;
-    }
-
-    @keyframes fadeIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in:nth-child(1) { animation-delay: 0.1s; }
-    .fade-in:nth-child(2) { animation-delay: 0.2s; }
-    .fade-in:nth-child(3) { animation-delay: 0.3s; }
-    .fade-in:nth-child(4) { animation-delay: 0.4s; }
-    .fade-in:nth-child(5) { animation-delay: 0.5s; }
+    /* ANIMATIONS */
+    .fade-in { opacity: 0; transform: translateY(24px); animation: fadeIn 0.7s ease forwards; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    .fade-in:nth-child(1){animation-delay:0.1s}.fade-in:nth-child(2){animation-delay:0.2s}.fade-in:nth-child(3){animation-delay:0.3s}.fade-in:nth-child(4){animation-delay:0.4s}.fade-in:nth-child(5){animation-delay:0.5s}
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
   <nav>
     <div class="nav-left">
       <img src="lyrics-pfp.png" alt="Lyrics" />
       <span>Lyrics</span>
     </div>
     <div class="nav-links">
-      <a href="#commands">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        Commands
+      <a href="#builder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Builder
       </a>
       <a href="#features">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -438,7 +218,6 @@
     </div>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-inner">
@@ -447,65 +226,218 @@
       <p class="hero-desc fade-in">A friendly, all-in-one Discord bot built to make your server better — with moderation, utilities, and everything your community needs.</p>
       <div class="hero-btns fade-in">
         <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
           Add to Discord
         </a>
         <a href="https://discord.gg/V3uXKHQvJu" target="_blank" class="btn-secondary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Support Server
         </a>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
   <section class="features" id="features">
     <div class="section-label">What it does</div>
     <div class="section-title">Everything your server needs.</div>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>Moderation</h3>
         <p>Keep your server clean with powerful mod tools — ban, kick, mute, lock channels and more.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-        </div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
         <h3>Welcome System</h3>
         <p>Greet new members with fully customizable welcome messages and embed builder.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        </div>
-        <h3>Utility</h3>
-        <p>Handy utility commands to help manage and interact with your community effortlessly.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+        <h3>Embed Builder</h3>
+        <p>Create stunning embeds with fields, buttons, thumbnails and live preview using simple syntax.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <h3>User Friendly</h3>
         <p>Simple commands with a clean prefix system — easy for everyone in your server to use.</p>
       </div>
     </div>
   </section>
 
-  <!-- COMMANDS -->
-  <section class="commands" id="commands">
-    <div class="section-label">Commands</div>
-    <div class="section-title">What can Lyrics do?</div>
-    <div class="coming-soon-box">
-      <div class="cs-icon">🎵</div>
-      <h3>Coming Soon</h3>
-      <p>A full command list is on the way. Join the support server to stay updated.</p>
+  <!-- EMBED BUILDER -->
+  <section class="embed-builder" id="builder">
+    <div class="section-label">Try it out</div>
+    <div class="section-title">Embed Builder</div>
+    <div class="builder-wrap">
+      <!-- LEFT: FORM -->
+      <div class="builder-panel">
+        <div class="builder-tabs">
+          <button class="tab-btn active" data-tab="basic">Basic</button>
+          <button class="tab-btn" data-tab="author">Author & Footer</button>
+          <button class="tab-btn" data-tab="media">Media</button>
+          <button class="tab-btn" data-tab="fields">Fields</button>
+          <button class="tab-btn" data-tab="buttons">Buttons</button>
+          <button class="tab-btn" data-tab="message">Message</button>
+        </div>
+
+        <!-- BASIC -->
+        <div class="tab-content active" id="tab-basic">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="b-title" placeholder="Embed title..." oninput="updatePreview()" />
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="b-desc" placeholder="Embed description..." oninput="updatePreview()"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Color</label>
+            <div class="color-row">
+              <input type="color" id="b-color-pick" value="#9aaf52" oninput="syncColor(this)" />
+              <input type="text" id="b-color" placeholder="9aaf52" value="9aaf52" oninput="syncColorText(this)" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="b-timestamp" onchange="updatePreview()" style="accent-color:var(--green);margin-right:6px;">Add Timestamp</label>
+          </div>
+        </div>
+
+        <!-- AUTHOR & FOOTER -->
+        <div class="tab-content" id="tab-author">
+          <div class="form-group">
+            <label>Author Name</label>
+            <input type="text" id="b-author-name" placeholder="Author name or {username}..." oninput="updatePreview()" />
+          </div>
+          <div class="form-group">
+            <label>Author Icon URL</label>
+            <input type="text" id="b-author-icon" placeholder="{user.avatar} or https://..." oninput="updatePreview()" />
+          </div>
+          <div class="form-group">
+            <label>Footer Text</label>
+            <input type="text" id="b-footer" placeholder="Footer text..." oninput="updatePreview()" />
+          </div>
+        </div>
+
+        <!-- MEDIA -->
+        <div class="tab-content" id="tab-media">
+          <div class="form-group">
+            <label>Thumbnail URL</label>
+            <input type="text" id="b-thumbnail" placeholder="{user.avatar} or https://..." oninput="updatePreview()" />
+          </div>
+          <div class="form-group">
+            <label>Image URL</label>
+            <input type="text" id="b-image" placeholder="https://example.com/image.png" oninput="updatePreview()" />
+          </div>
+        </div>
+
+        <!-- FIELDS -->
+        <div class="tab-content" id="tab-fields">
+          <div class="form-group">
+            <label>Field Name</label>
+            <input type="text" id="f-name" placeholder="Field name..." />
+          </div>
+          <div class="form-group">
+            <label>Field Value</label>
+            <textarea id="f-value" placeholder="Field value..." style="min-height:60px;"></textarea>
+          </div>
+          <label class="inline-check">
+            <input type="checkbox" id="f-inline" />
+            <span>Inline</span>
+          </label>
+          <button class="add-btn" onclick="addField()">+ Add Field</button>
+          <div class="fields-list" id="fields-list"></div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="tab-content" id="tab-buttons">
+          <div class="form-group">
+            <label>Button Label</label>
+            <input type="text" id="btn-label" placeholder="Click here..." />
+          </div>
+          <div class="form-group">
+            <label>Button URL</label>
+            <input type="text" id="btn-url" placeholder="https://discord.gg/..." />
+          </div>
+          <div class="form-group">
+            <label>Emoji (optional)</label>
+            <input type="text" id="btn-emoji" placeholder="🔗" />
+          </div>
+          <button class="add-btn" onclick="addButton()">+ Add Button</button>
+          <div class="fields-list" id="buttons-list"></div>
+        </div>
+
+        <!-- MESSAGE -->
+        <div class="tab-content" id="tab-message">
+          <div class="form-group">
+            <label>Message (above embed)</label>
+            <input type="text" id="b-message" placeholder="{user.mention} or any text..." oninput="updatePreview()" />
+          </div>
+          <div class="form-group">
+            <label>Message 2 (below embed)</label>
+            <input type="text" id="b-message2" placeholder="Text sent after embed..." oninput="updatePreview()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: PREVIEW -->
+      <div>
+        <div class="preview-panel">
+          <div class="preview-header">
+            <span>Live Preview</span>
+            <span style="font-size:0.75rem;color:var(--muted);">Discord mock</span>
+          </div>
+          <div class="preview-body">
+            <div class="discord-mock">
+              <div class="mock-msg">
+                <div class="mock-avatar">L</div>
+                <div class="mock-right">
+                  <div class="mock-meta">
+                    <span class="mock-name">Lyrics</span>
+                    <span class="mock-bot-tag">BOT</span>
+                    <span class="mock-time">Today at 12:00 PM</span>
+                  </div>
+                  <div class="mock-content" id="prev-message"></div>
+                  <div class="mock-embed" id="prev-embed" style="display:none;">
+                    <div id="prev-author" style="display:none;" class="mock-embed-author">
+                      <img id="prev-author-icon" class="mock-embed-author-icon" src="" alt="" style="display:none;" />
+                      <span id="prev-author-name" class="mock-embed-author-name"></span>
+                    </div>
+                    <div id="prev-thumbnail" class="mock-embed-thumbnail" style="display:none;">
+                      <img id="prev-thumb-img" src="" alt="" />
+                    </div>
+                    <div id="prev-title" class="mock-embed-title" style="display:none;"></div>
+                    <div id="prev-desc" class="mock-embed-desc" style="display:none;"></div>
+                    <div id="prev-fields" class="mock-embed-fields" style="display:none;"></div>
+                    <div id="prev-image" class="mock-embed-image" style="display:none;">
+                      <img id="prev-img" src="" alt="" />
+                    </div>
+                    <div id="prev-footer-wrap" class="mock-embed-footer" style="display:none;">
+                      <span id="prev-footer-text" class="mock-embed-footer-text"></span>
+                      <span id="prev-ts" class="mock-embed-ts" style="display:none;"></span>
+                    </div>
+                  </div>
+                  <div id="prev-buttons" class="mock-buttons" style="display:none;"></div>
+                </div>
+              </div>
+              <div id="prev-message2" class="mock-msg2" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-label">Generated Syntax</div>
+            <div class="output-box" id="output-box">,ce</div>
+            <button class="copy-btn" id="copy-btn" onclick="copyOutput()">Copy Command</button>
+          </div>
+        </div>
+
+        <!-- VARS REFERENCE -->
+        <div class="vars-ref">
+          <h3>Placeholders <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">— click to copy</span></h3>
+          <div class="vars-grid" id="vars-grid"></div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-left">
       <img src="lyrics-pfp.png" alt="Lyrics" />
@@ -514,5 +446,279 @@
     <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
   </footer>
 
+  <script>
+    // State
+    const fields = [];
+    const buttons = [];
+
+    const VARS = [
+      { code: '{user.mention}', desc: 'pings the user' },
+      { code: '{username}', desc: 'their username' },
+      { code: '{user.avatar}', desc: 'their avatar URL' },
+      { code: '{user.id}', desc: 'their user ID' },
+      { code: '{user.created_at}', desc: 'account creation date' },
+      { code: '{server}', desc: 'server name' },
+      { code: '{server.icon}', desc: 'server icon URL' },
+      { code: '{count}', desc: 'member count' },
+      { code: '{boosts}', desc: 'total boost count' },
+      { code: '{bot.avatar}', desc: 'bot avatar URL' },
+    ];
+
+    // Render var chips
+    const vg = document.getElementById('vars-grid');
+    VARS.forEach(v => {
+      const chip = document.createElement('div');
+      chip.className = 'var-chip';
+      chip.innerHTML = `<code>${v.code}</code><span>${v.desc}</span>`;
+      chip.onclick = () => { navigator.clipboard.writeText(v.code); chip.style.borderColor='var(--green)'; setTimeout(()=>chip.style.borderColor='',1000); };
+      vg.appendChild(chip);
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function syncColor(el) {
+      const hex = el.value.replace('#', '');
+      document.getElementById('b-color').value = hex;
+      updatePreview();
+    }
+
+    function syncColorText(el) {
+      const hex = el.value.replace('#', '');
+      if (/^[0-9A-Fa-f]{6}$/.test(hex)) {
+        document.getElementById('b-color-pick').value = '#' + hex;
+      }
+      updatePreview();
+    }
+
+    function resolveVar(text) {
+      return text
+        .replace(/\{user\.mention\}/g, '@username')
+        .replace(/\{username\}/g, 'username')
+        .replace(/\{user\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/0.png')
+        .replace(/\{user\.id\}/g, '123456789')
+        .replace(/\{user\.created_at\}/g, 'Jan 1 2024')
+        .replace(/\{server\}/g, 'My Server')
+        .replace(/\{server\.icon\}/g, 'https://cdn.discordapp.com/embed/avatars/1.png')
+        .replace(/\{count\}/g, '1234')
+        .replace(/\{boosts\}/g, '5')
+        .replace(/\{bot\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/2.png');
+    }
+
+    function isImageUrl(url) {
+      return url && (url.startsWith('http') || url.includes('cdn.discordapp'));
+    }
+
+    function updatePreview() {
+      const title = document.getElementById('b-title').value;
+      const desc = document.getElementById('b-desc').value;
+      const colorHex = document.getElementById('b-color').value.replace('#','');
+      const timestamp = document.getElementById('b-timestamp').checked;
+      const authorName = document.getElementById('b-author-name').value;
+      const authorIcon = document.getElementById('b-author-icon').value;
+      const footer = document.getElementById('b-footer').value;
+      const thumbnail = document.getElementById('b-thumbnail').value;
+      const image = document.getElementById('b-image').value;
+      const message = document.getElementById('b-message').value;
+      const message2 = document.getElementById('b-message2').value;
+
+      const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
+
+      // Message above
+      const msgEl = document.getElementById('prev-message');
+      msgEl.textContent = resolveVar(message);
+
+      // Message2 below
+      const msg2El = document.getElementById('prev-message2');
+      if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; }
+      else { msg2El.style.display = 'none'; }
+
+      const embedEl = document.getElementById('prev-embed');
+
+      // Author
+      const authorEl = document.getElementById('prev-author');
+      if (authorName) {
+        authorEl.style.display = 'flex';
+        document.getElementById('prev-author-name').textContent = resolveVar(authorName);
+        const iconResolved = resolveVar(authorIcon);
+        const authorIconEl = document.getElementById('prev-author-icon');
+        if (authorIcon && isImageUrl(iconResolved)) {
+          authorIconEl.src = iconResolved; authorIconEl.style.display = 'block';
+        } else { authorIconEl.style.display = 'none'; }
+      } else { authorEl.style.display = 'none'; }
+
+      // Thumbnail
+      const thumbResolved = resolveVar(thumbnail);
+      const thumbEl = document.getElementById('prev-thumbnail');
+      if (thumbnail && isImageUrl(thumbResolved)) {
+        document.getElementById('prev-thumb-img').src = thumbResolved;
+        thumbEl.style.display = 'block';
+      } else { thumbEl.style.display = 'none'; }
+
+      // Title
+      const titleEl = document.getElementById('prev-title');
+      if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; }
+      else { titleEl.style.display = 'none'; }
+
+      // Desc
+      const descEl = document.getElementById('prev-desc');
+      if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; }
+      else { descEl.style.display = 'none'; }
+
+      // Fields
+      const fieldsEl = document.getElementById('prev-fields');
+      if (fields.length > 0) {
+        fieldsEl.style.display = 'flex';
+        fieldsEl.innerHTML = fields.map(f => `
+          <div class="mock-embed-field ${f.inline ? 'inline' : ''}">
+            <div class="mock-embed-field-name">${resolveVar(f.name)}</div>
+            <div class="mock-embed-field-value">${resolveVar(f.value)}</div>
+          </div>`).join('');
+      } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
+
+      // Image
+      const imageResolved = resolveVar(image);
+      const imageEl = document.getElementById('prev-image');
+      if (image && isImageUrl(imageResolved)) {
+        document.getElementById('prev-img').src = imageResolved;
+        imageEl.style.display = 'block';
+      } else { imageEl.style.display = 'none'; }
+
+      // Footer + timestamp
+      const footerWrap = document.getElementById('prev-footer-wrap');
+      const footerText = document.getElementById('prev-footer-text');
+      const tsEl = document.getElementById('prev-ts');
+      if (footer || timestamp) {
+        footerWrap.style.display = 'flex';
+        footerText.textContent = resolveVar(footer);
+        if (timestamp) { tsEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); tsEl.style.display = 'inline'; }
+        else { tsEl.style.display = 'none'; }
+      } else { footerWrap.style.display = 'none'; }
+
+      // Buttons
+      const btnsEl = document.getElementById('prev-buttons');
+      if (buttons.length > 0) {
+        btnsEl.style.display = 'flex';
+        btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label} ↗</div>`).join('');
+      } else { btnsEl.style.display = 'none'; }
+
+      // Show/hide embed
+      const hasEmbed = title || desc || authorName || footer || thumbnail || image || fields.length > 0 || timestamp;
+      embedEl.style.display = hasEmbed ? 'block' : 'none';
+      if (hasEmbed) embedEl.style.borderLeftColor = color;
+
+      generateOutput();
+    }
+
+    function addField() {
+      const name = document.getElementById('f-name').value.trim();
+      const value = document.getElementById('f-value').value.trim();
+      const inline = document.getElementById('f-inline').checked;
+      if (!name || !value) return;
+      fields.push({ name, value, inline });
+      document.getElementById('f-name').value = '';
+      document.getElementById('f-value').value = '';
+      document.getElementById('f-inline').checked = false;
+      renderFieldsList();
+      updatePreview();
+    }
+
+    function renderFieldsList() {
+      const list = document.getElementById('fields-list');
+      list.innerHTML = fields.map((f, i) => `
+        <div class="field-item">
+          <div class="field-item-info">
+            <div class="field-item-name">${f.name}</div>
+            <div class="field-item-val">${f.value}</div>
+          </div>
+          ${f.inline ? '<span class="field-item-badge">inline</span>' : ''}
+          <button class="remove-btn" onclick="removeField(${i})">✕</button>
+        </div>`).join('');
+    }
+
+    function removeField(i) { fields.splice(i, 1); renderFieldsList(); updatePreview(); }
+
+    function addButton() {
+      const label = document.getElementById('btn-label').value.trim();
+      const url = document.getElementById('btn-url').value.trim();
+      const emoji = document.getElementById('btn-emoji').value.trim();
+      if (!label || !url) return;
+      buttons.push({ label, url, emoji });
+      document.getElementById('btn-label').value = '';
+      document.getElementById('btn-url').value = '';
+      document.getElementById('btn-emoji').value = '';
+      renderButtonsList();
+      updatePreview();
+    }
+
+    function renderButtonsList() {
+      const list = document.getElementById('buttons-list');
+      list.innerHTML = buttons.map((b, i) => `
+        <div class="field-item">
+          <div class="field-item-info">
+            <div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>
+            <div class="field-item-val">${b.url}</div>
+          </div>
+          <button class="remove-btn" onclick="removeButton(${i})">✕</button>
+        </div>`).join('');
+    }
+
+    function removeButton(i) { buttons.splice(i, 1); renderButtonsList(); updatePreview(); }
+
+    function generateOutput() {
+      const title = document.getElementById('b-title').value;
+      const desc = document.getElementById('b-desc').value;
+      const colorHex = document.getElementById('b-color').value.replace('#','');
+      const timestamp = document.getElementById('b-timestamp').checked;
+      const authorName = document.getElementById('b-author-name').value;
+      const authorIcon = document.getElementById('b-author-icon').value;
+      const footer = document.getElementById('b-footer').value;
+      const thumbnail = document.getElementById('b-thumbnail').value;
+      const image = document.getElementById('b-image').value;
+      const message = document.getElementById('b-message').value;
+      const message2 = document.getElementById('b-message2').value;
+
+      let out = ',ce';
+      if (message) out += `\n$v{message: ${message}}`;
+      if (title) out += `\n$v{title: ${title}}`;
+      if (colorHex) out += `\n$v{color: ${colorHex}}`;
+      if (authorName) {
+        const iconPart = authorIcon ? ` {icon: ${authorIcon}}` : '';
+        out += `\n$v{author: ${authorName}${iconPart}}`;
+      }
+      if (desc) out += `\n$v{description: ${desc}}`;
+      if (thumbnail) out += `\n$v{thumbnail: ${thumbnail}}`;
+      if (image) out += `\n$v{image: ${image}}`;
+      fields.forEach(f => {
+        out += `\n$v{field: ${f.name} && ${f.value}${f.inline ? ' && inline' : ''}}`;
+      });
+      if (footer) out += `\n$v{footer: ${footer}}`;
+      if (timestamp) out += `\n$v{timestamp: true}`;
+      buttons.forEach(b => {
+        out += `\n$v{button: ${b.label} && ${b.url}${b.emoji ? ' && ' + b.emoji : ''}}`;
+      });
+      if (message2) out += `\n$v{message2: ${message2}}`;
+
+      document.getElementById('output-box').textContent = out;
+    }
+
+    function copyOutput() {
+      const text = document.getElementById('output-box').textContent;
+      navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy Command'; btn.classList.remove('copied'); }, 2000);
+    }
+
+    updatePreview();
+  </script>
 </body>
 </html>

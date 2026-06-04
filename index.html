@@ -1,8 +1,994 @@
-/* ══════════════════════════════════════════
-   CONFIG
-══════════════════════════════════════════ */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyrics — Discord Bot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green: #9aaf52;
+      --green-dim: #7a9040;
+      --green-glow: rgba(154, 175, 82, 0.18);
+      --green-glow-strong: rgba(154, 175, 82, 0.32);
+      --bg: #0b0d09;
+      --surface: #111408;
+      --surface2: #161a08;
+      --nav-bg: rgba(11, 13, 9, 0.72);
+      --text: #e8eedd;
+      --muted: #8a9475;
+      --border: rgba(154, 175, 82, 0.15);
+      --border2: rgba(154, 175, 82, 0.25);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .reveal-delay-4 { transition-delay: 0.32s; }
+
+    .glow-card { position: relative; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .glow-card::before { content: ''; position: absolute; inset: -1px; border-radius: inherit; background: radial-gradient(ellipse at 50% 0%, var(--green-glow-strong) 0%, transparent 70%); opacity: 0; transition: opacity 0.35s; pointer-events: none; z-index: 0; }
+    .glow-card > * { position: relative; z-index: 1; }
+    .glow-card:hover { border-color: rgba(154,175,82,0.55) !important; transform: translateY(-3px); box-shadow: 0 8px 40px rgba(154,175,82,0.18); }
+    .glow-card:hover::before { opacity: 1; }
+    .glow-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--green), transparent); border-radius: inherit; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 2; }
+    .glow-card:hover::after { opacity: 1; }
+
+    nav { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 48px); max-width: 900px; background: var(--nav-bg); backdrop-filter: blur(18px); border: 1px solid var(--border); border-radius: 999px; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
+    .nav-left { display: flex; align-items: center; gap: 10px; }
+    .nav-left img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--green); }
+    .nav-left span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--text); letter-spacing: 0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 6px; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 6px 14px; border-radius: 999px; transition: color 0.2s, background 0.2s; display: flex; align-items: center; gap: 6px; }
+    .nav-links a:hover { color: var(--text); background: rgba(154,175,82,0.08); }
+    .nav-links a svg { width: 14px; height: 14px; opacity: 0.7; }
+    .nav-add { background: var(--green); color: #0b0d09 !important; font-weight: 700 !important; font-size: 0.85rem !important; padding: 8px 18px !important; border-radius: 999px; transition: background 0.2s, transform 0.15s !important; }
+    .nav-add:hover { background: #b0c860 !important; transform: scale(1.04) !important; }
+    .nav-login-btn { background: transparent; border: 1px solid var(--border2); color: var(--muted) !important; font-weight: 600 !important; font-size: 0.82rem !important; padding: 7px 16px !important; border-radius: 999px; transition: border-color 0.2s, color 0.2s, background 0.2s !important; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .nav-login-btn:hover { border-color: var(--green) !important; color: var(--green) !important; background: var(--green-glow) !important; transform: none !important; }
+
+    .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 24px 0; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+    .hero-bg::before { content: ''; position: absolute; top: -10%; left: -10%; width: 70%; height: 70%; background: radial-gradient(ellipse, rgba(154,175,82,0.12) 0%, transparent 70%); animation: pulse 6s ease-in-out infinite alternate; }
+    .hero-bg::after { content: ''; position: absolute; bottom: 0; right: -5%; width: 50%; height: 60%; background: radial-gradient(ellipse, rgba(154,175,82,0.07) 0%, transparent 70%); }
+    @keyframes pulse { from { opacity: 0.6; transform: scale(1); } to { opacity: 1; transform: scale(1.08); } }
+    .hero-inner { max-width: 900px; margin: 0 auto; width: 100%; position: relative; z-index: 1; padding-bottom: 60px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(154,175,82,0.1); border: 1px solid var(--border); border-radius: 999px; padding: 5px 14px; font-size: 0.75rem; font-weight: 500; color: var(--green); margin-bottom: 28px; letter-spacing: 0.05em; text-transform: uppercase; }
+    .hero-tag span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    h1 { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 24px; color: var(--text); }
+    h1 .accent { color: var(--green); }
+    .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 480px; line-height: 1.7; margin-bottom: 40px; font-weight: 300; }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--green); color: #0b0d09; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; text-decoration: none; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 24px rgba(154,175,82,0.25); }
+    .btn-primary:hover { background: #b0c860; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(154,175,82,0.4); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--text); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 13px 26px; border-radius: 999px; border: 1px solid var(--border); text-decoration: none; transition: border-color 0.2s, background 0.2s, transform 0.15s; }
+    .btn-secondary:hover { border-color: var(--green); background: var(--green-glow); transform: translateY(-2px); }
+    .hero-tag, h1, .hero-desc, .hero-btns { opacity: 0; transform: translateY(24px); animation: heroFadeIn 0.7s ease forwards; }
+    .hero-tag { animation-delay: 0.1s; }
+    h1 { animation-delay: 0.2s; }
+    .hero-desc { animation-delay: 0.3s; }
+    .hero-btns { animation-delay: 0.4s; }
+    @keyframes heroFadeIn { to { opacity: 1; transform: translateY(0); } }
+
+    .guild-strip-section { position: relative; z-index: 1; padding: 0 0 80px; opacity: 0; transform: translateY(20px); animation: heroFadeIn 0.7s ease 0.55s forwards; }
+    .guild-strip-label { text-align: center; font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+    .guild-strip-label strong { color: var(--text); font-weight: 600; }
+    .guild-strip-outer { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%); }
+    .guild-strip-track { display: flex; gap: 10px; width: max-content; animation: marquee 35s linear infinite; }
+    .guild-strip-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .guild-card { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 16px 7px 7px; white-space: nowrap; flex-shrink: 0; cursor: default; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; user-select: none; }
+    .guild-card:hover { border-color: rgba(154,175,82,0.5); background: var(--surface2); box-shadow: 0 4px 20px rgba(154,175,82,0.12); }
+    .guild-card-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--green-glow); border: 1px solid var(--border); }
+    .guild-card-fallback { width: 34px; height: 34px; border-radius: 50%; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.8rem; color: var(--green); flex-shrink: 0; }
+    .guild-card-info { display: flex; flex-direction: column; gap: 1px; }
+    .guild-card-name { font-size: 0.83rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+    .guild-card-members { font-size: 0.72rem; color: var(--muted); }
+    .guild-card-skeleton { display: flex; align-items: center; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 16px 7px 7px; flex-shrink: 0; }
+    .skeleton-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--border); animation: skshimmer 1.4s ease-in-out infinite; }
+    .skeleton-lines { display: flex; flex-direction: column; gap: 5px; }
+    .skeleton-line { height: 8px; border-radius: 4px; background: var(--border); animation: skshimmer 1.4s ease-in-out infinite; }
+    .skeleton-line.wide { width: 90px; }
+    .skeleton-line.narrow { width: 55px; animation-delay: 0.2s; }
+    @keyframes skshimmer { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
+
+    .status-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .section-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; margin-bottom: 40px; letter-spacing: -0.02em; }
+    .status-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+    @media (max-width: 600px) { .status-cards { grid-template-columns: 1fr; } }
+    .status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px 28px; display: flex; align-items: center; gap: 18px; overflow: hidden; }
+    .status-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--green-glow); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--green); flex-shrink: 0; }
+    .status-icon svg { width: 22px; height: 22px; }
+    .status-info { flex: 1; min-width: 0; }
+    .status-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 4px; }
+    .status-value { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
+    .status-value.loading { color: var(--muted); font-size: 1.2rem; animation: shimmer 1.5s ease-in-out infinite; }
+    @keyframes shimmer { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .latency-good { color: #4ade80; }
+    .latency-ok { color: #facc15; }
+    .latency-bad { color: #f87171; }
+    .online-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: #4ade80; margin-bottom: 32px; }
+    .online-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: blink 2s ease-in-out infinite; }
+    .offline-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.25); border-radius: 999px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; color: #f87171; margin-bottom: 32px; }
+    .offline-dot { width: 6px; height: 6px; border-radius: 50%; background: #f87171; }
+    .uptime-row { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .uptime-label { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+    .uptime-value { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--green); }
+    .uptime-sep { width: 1px; height: 20px; background: var(--border); }
+    .last-updated { font-size: 0.75rem; color: var(--muted); margin-left: auto; }
+
+    .features { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .feature-icon { width: 42px; height: 42px; background: var(--green-glow); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--green); }
+    .feature-icon svg { width: 20px; height: 20px; }
+    .feature-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .feature-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    .commands-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .commands-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .cmd-category { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; }
+    .cmd-category-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .cmd-category-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .cmd-category-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; letter-spacing: -0.01em; }
+    .cmd-category-count { font-size: 0.72rem; color: var(--muted); background: var(--green-glow); border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin-left: auto; }
+    .cmd-list { display: flex; flex-direction: column; gap: 6px; }
+    .cmd-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; transition: border-color 0.2s, box-shadow 0.2s; }
+    .cmd-item:hover { border-color: rgba(154,175,82,0.45); box-shadow: 0 2px 12px rgba(154,175,82,0.1); }
+    .cmd-name { font-family: 'Courier New', monospace; font-size: 0.8rem; color: var(--green); }
+    .cmd-desc { font-size: 0.75rem; color: var(--muted); }
+
+    .how-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .steps-list { display: flex; flex-direction: column; gap: 0; margin-top: 48px; }
+    .step-item { display: grid; grid-template-columns: 48px 1fr; gap: 24px; padding-bottom: 40px; position: relative; }
+    .step-item:last-child { padding-bottom: 0; }
+    .step-item:not(:last-child) .step-line { position: absolute; left: 23px; top: 48px; bottom: 0; width: 1px; background: var(--border); }
+    .step-num { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border2); background: var(--surface); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.9rem; color: var(--green); flex-shrink: 0; position: relative; z-index: 1; }
+    .step-body { padding-top: 10px; }
+    .step-body h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 6px; letter-spacing: -0.01em; }
+    .step-body p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+    .setup-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .perms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 32px; }
+    .perm-item { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-size: 0.85rem; color: var(--muted); transition: border-color 0.2s, box-shadow 0.2s; }
+    .perm-item:hover { border-color: rgba(154,175,82,0.4); box-shadow: 0 2px 14px rgba(154,175,82,0.1); }
+    .perm-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .perm-item strong { color: var(--text); font-weight: 500; }
+
+    .embed-builder { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .builder-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 800px) { .builder-wrap { grid-template-columns: 1fr; } }
+    .builder-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+    .builder-tabs { display: flex; overflow-x: auto; border-bottom: 1px solid var(--border); scrollbar-width: none; }
+    .builder-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { flex-shrink: 0; padding: 12px 16px; background: none; border: none; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab-btn:hover { color: var(--text); background: rgba(154,175,82,0.05); }
+    .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+    .tab-content { display: none; padding: 20px; flex-direction: column; gap: 14px; }
+    .tab-content.active { display: flex; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.78rem; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .form-group input, .form-group textarea, .form-group select { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.875rem; padding: 10px 14px; transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%; }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(154,175,82,0.1); }
+    .form-group textarea { resize: vertical; min-height: 160px; }
+    .color-row { display: flex; gap: 10px; align-items: center; }
+    .color-row input[type="color"] { width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); background: none; cursor: pointer; padding: 3px; flex-shrink: 0; }
+    .color-row input[type="text"] { flex: 1; }
+    .inline-check { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .inline-check input { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+    .inline-check span { font-size: 0.85rem; color: var(--muted); }
+    .add-btn { background: var(--green-glow); border: 1px solid var(--border2); border-radius: 10px; color: var(--green); font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.82rem; padding: 10px 16px; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
+    .add-btn:hover { background: rgba(154,175,82,0.25); transform: translateY(-1px); }
+    .fields-list { display: flex; flex-direction: column; gap: 8px; }
+    .field-item { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .field-item-info { flex: 1; min-width: 0; }
+    .field-item-name { font-size: 0.8rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .field-item-val { font-size: 0.75rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .field-item-badge { font-size: 0.7rem; color: var(--green); background: var(--green-glow); border-radius: 4px; padding: 2px 6px; flex-shrink: 0; }
+    .remove-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; line-height: 1; padding: 2px 6px; border-radius: 4px; transition: color 0.2s, background 0.2s; flex-shrink: 0; }
+    .remove-btn:hover { color: #e74c3c; background: rgba(231,76,60,0.1); }
+    .preview-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; position: sticky; top: 100px; }
+    .preview-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .preview-header span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--green); }
+    .preview-body { padding: 20px; }
+    .discord-mock { background: #313338; border-radius: 12px; padding: 16px; font-family: 'gg sans', 'Noto Sans', sans-serif; }
+    .mock-msg { display: flex; gap: 12px; }
+    .mock-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; color: #0b0d09; flex-shrink: 0; overflow: hidden; }
+    .mock-right { flex: 1; min-width: 0; }
+    .mock-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+    .mock-name { font-weight: 600; font-size: 0.95rem; color: #9aaf52; }
+    .mock-bot-tag { background: #5865f2; color: white; font-size: 0.6rem; font-weight: 700; padding: 1px 4px; border-radius: 3px; letter-spacing: 0.03em; }
+    .mock-time { color: #949ba4; font-size: 0.72rem; }
+    .mock-content { color: #dbdee1; font-size: 0.9rem; margin-bottom: 4px; word-break: break-word; }
+    .mock-content:empty { display: none; }
+    .mock-embed { border-left: 4px solid #9aaf52; background: #2b2d31; border-radius: 4px; padding: 12px 16px; margin-top: 4px; max-width: 440px; }
+    .mock-embed-author { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .mock-embed-author-icon { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+    .mock-embed-author-name { font-size: 0.82rem; font-weight: 600; color: #dbdee1; }
+    .mock-embed-title { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .mock-embed-desc { font-size: 0.85rem; color: #dbdee1; white-space: pre-wrap; word-break: break-word; margin-bottom: 8px; line-height: 1.5; }
+    .mock-embed-fields { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .mock-embed-field { flex: 0 0 auto; }
+    .mock-embed-field.inline { flex: 1 1 120px; }
+    .mock-embed-field-name { font-size: 0.78rem; font-weight: 700; color: #dbdee1; margin-bottom: 2px; }
+    .mock-embed-field-value { font-size: 0.78rem; color: #b5bac1; white-space: pre-wrap; }
+    .mock-embed-thumbnail { float: right; margin-left: 12px; margin-bottom: 8px; }
+    .mock-embed-thumbnail img { width: 80px; height: 80px; border-radius: 4px; object-fit: cover; }
+    .mock-embed-image { margin-top: 8px; }
+    .mock-embed-image img { max-width: 100%; border-radius: 4px; }
+    .mock-embed-footer { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .mock-embed-footer-text { font-size: 0.72rem; color: #949ba4; }
+    .mock-embed-ts { font-size: 0.72rem; color: #949ba4; }
+    .mock-embed-ts::before { content: ' • '; }
+    .mock-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .mock-button { background: #4e5058; border-radius: 4px; padding: 6px 14px; font-size: 0.82rem; color: #dbdee1; display: flex; align-items: center; gap: 6px; font-weight: 500; }
+    .mock-msg2 { color: #dbdee1; font-size: 0.9rem; margin-top: 4px; padding-left: 52px; }
+    .output-section { padding: 20px; border-top: 1px solid var(--border); }
+    .output-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .output-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px; font-family: 'Courier New', monospace; font-size: 0.75rem; color: var(--green); word-break: break-all; line-height: 1.6; max-height: 160px; overflow-y: auto; white-space: pre-wrap; }
+    .copy-btn { margin-top: 10px; background: var(--green); color: #0b0d09; border: none; border-radius: 10px; padding: 10px 20px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: background 0.2s, transform 0.15s; width: 100%; }
+    .copy-btn:hover { background: #b0c860; transform: translateY(-1px); }
+    .copy-btn.copied { background: #3bad64; }
+    .vars-ref { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin-top: 24px; }
+    .vars-ref h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 20px; color: var(--text); }
+    .vars-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+    .var-chip { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; cursor: pointer; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; }
+    .var-chip:hover { border-color: var(--green); background: var(--green-glow); box-shadow: 0 2px 12px rgba(154,175,82,0.12); }
+    .var-chip code { font-size: 0.78rem; color: var(--green); font-family: 'Courier New', monospace; }
+    .var-chip span { font-size: 0.72rem; color: var(--muted); }
+
+    .faq-section { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .faq-list { display: flex; flex-direction: column; gap: 10px; margin-top: 40px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+    .faq-item.open { border-color: var(--border2); box-shadow: 0 4px 24px rgba(154,175,82,0.1); }
+    .faq-item:hover:not(.open) { border-color: rgba(154,175,82,0.3); box-shadow: 0 2px 16px rgba(154,175,82,0.08); }
+    .faq-q { padding: 20px 24px; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; user-select: none; }
+    .faq-q:hover { color: var(--green); }
+    .faq-arrow { flex-shrink: 0; width: 20px; height: 20px; color: var(--muted); transition: transform 0.3s, color 0.2s; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--green); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.3s; padding: 0 24px; font-size: 0.875rem; color: var(--muted); line-height: 1.7; }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 24px 20px; }
+
+    .cta-banner { padding: 80px 24px; max-width: 900px; margin: 0 auto; }
+    .cta-inner { background: var(--surface); border: 1px solid var(--border2); border-radius: 24px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
+    .cta-inner::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 60%; height: 200%; background: radial-gradient(ellipse, rgba(154,175,82,0.1) 0%, transparent 60%); pointer-events: none; }
+    .cta-inner h2 { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; position: relative; }
+    .cta-inner p { color: var(--muted); font-size: 1rem; margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.65; position: relative; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
+
+    footer { border-top: 1px solid var(--border); padding: 48px 24px 32px; max-width: 900px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1fr auto auto; gap: 48px; margin-bottom: 40px; align-items: start; }
+    @media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; gap: 24px; } }
+    .footer-brand { display: flex; flex-direction: column; gap: 12px; }
+    .footer-brand-row { display: flex; align-items: center; gap: 10px; }
+    .footer-brand-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+    .footer-brand-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+    .footer-brand p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 240px; }
+    .footer-col h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--text); margin-bottom: 14px; letter-spacing: 0.02em; }
+    .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.85rem; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--green); }
+    .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-bottom span { color: var(--muted); font-size: 0.8rem; }
+    .footer-bottom a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+    .footer-bottom a:hover { color: var(--green); }
+
+    #login-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(11,13,9,0.88); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; }
+    #login-overlay.active { display: flex; }
+    .login-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 24px; padding: 44px 40px; width: 380px; max-width: 92vw; text-align: center; position: relative; box-shadow: 0 32px 80px rgba(0,0,0,0.6); }
+    .login-logo { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 6px; }
+    .login-logo img { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--green); }
+    .login-logo span { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); }
+    .login-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 32px; }
+    .login-card h2 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem; margin-bottom: 6px; }
+    .login-card p.login-hint { font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.5; }
+    .discord-oauth-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 14px; border-radius: 14px; background: #5865f2; color: #fff; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; text-decoration: none; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(88,101,242,0.35); margin-bottom: 14px; }
+    .discord-oauth-btn:hover { background: #4752c4; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(88,101,242,0.45); }
+    .discord-oauth-btn svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+    .login-divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.72rem; margin: 4px 0 12px; }
+    .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .login-browse-btn { width: 100%; padding: 12px; border-radius: 14px; background: transparent; border: 1px solid var(--border2); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+    .login-browse-btn:hover { border-color: var(--green); color: var(--text); background: var(--green-glow); }
+    .login-note { font-size: 0.72rem; color: var(--muted); margin-top: 18px; line-height: 1.6; }
+    .login-note a { color: var(--green); text-decoration: none; }
+    .login-close { position: absolute; top: 16px; right: 18px; background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.3rem; line-height: 1; padding: 4px 8px; border-radius: 6px; transition: color 0.2s; }
+    .login-close:hover { color: var(--text); }
+
+    #dashboard { display: none; min-height: 100vh; flex-direction: column; }
+    #dashboard.active { display: flex; }
+    #landing.hidden { display: none; }
+
+    .dash-topbar { height: 58px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 90; }
+    .dash-topbar-left { display: flex; align-items: center; gap: 10px; }
+    .dash-topbar-left img { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--green); }
+    .dash-topbar-left span { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .dash-topbar-right { display: flex; align-items: center; gap: 12px; }
+    .dash-user-pill { display: flex; align-items: center; gap: 8px; background: var(--bg); border: 1px solid var(--border2); border-radius: 999px; padding: 5px 14px 5px 5px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s; }
+    .dash-user-pill:hover { border-color: var(--green); box-shadow: 0 2px 16px rgba(154,175,82,0.12); }
+    .dash-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+    .dash-avatar-fallback { width: 28px; height: 28px; border-radius: 50%; background: var(--green-glow); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.75rem; color: var(--green); }
+    .dash-username { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .dash-signout { background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 6px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+    .dash-signout:hover { border-color: var(--green); color: var(--green); }
+
+    .dash-body { display: flex; flex: 1; min-height: 0; }
+    .dash-sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); padding: 16px 0; display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+    .sidebar-section-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 14px 20px 6px; }
+    .sidebar-link { display: flex; align-items: center; gap: 10px; padding: 9px 14px; margin: 1px 8px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 0.875rem; font-weight: 500; transition: color 0.2s, background 0.2s, border-color 0.2s; cursor: pointer; border: 1px solid transparent; }
+    .sidebar-link:hover { color: var(--text); background: rgba(154,175,82,0.06); border-color: var(--border); }
+    .sidebar-link.active { color: var(--green); background: var(--green-glow); border-color: var(--border2); }
+    .sidebar-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .sidebar-badge { margin-left: auto; background: var(--green-glow); color: var(--green); border: 1px solid var(--border2); font-size: 0.65rem; padding: 1px 6px; border-radius: 999px; font-weight: 700; }
+
+    .dash-content { flex: 1; overflow-y: auto; background: var(--bg); }
+    .dash-page { display: none; padding: 32px 36px; animation: dashFadeIn 0.25s ease; }
+    .dash-page.active { display: block; }
+    @keyframes dashFadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .dash-page-header { margin-bottom: 28px; }
+    .dash-page-header h1 { font-family: 'Syne', sans-serif; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .dash-page-header p { font-size: 0.875rem; color: var(--muted); }
+
+    .dash-stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-bottom: 28px; }
+    .dash-stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .dash-stat-card:hover { border-color: rgba(154,175,82,0.45); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(154,175,82,0.14); }
+    .dash-stat-card .s-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .dash-stat-card .s-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -0.03em; }
+    .dash-stat-card .s-sub { font-size: 0.72rem; color: var(--muted); margin-top: 6px; }
+
+    .config-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 8px; }
+    .config-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 24px; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .config-card:hover { border-color: rgba(154,175,82,0.45); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(154,175,82,0.14); }
+    .config-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .config-card h3 svg { width: 15px; height: 15px; color: var(--green); flex-shrink: 0; }
+    .cfg-row { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+    .cfg-row label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .cfg-row input, .cfg-row select { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; padding: 9px 12px; outline: none; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; }
+    .cfg-row input:focus, .cfg-row select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(154,175,82,0.1); }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; }
+    .toggle-label { font-size: 0.85rem; color: var(--text); }
+    .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--surface2); border-radius: 999px; cursor: pointer; transition: background 0.2s; border: 1px solid var(--border2); }
+    .toggle-slider::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: #fff; top: 3px; left: 3px; transition: transform 0.2s; }
+    .toggle input:checked + .toggle-slider { background: var(--green); border-color: var(--green); }
+    .toggle input:checked + .toggle-slider::after { transform: translateX(18px); }
+    .cfg-save-btn { width: 100%; margin-top: 14px; background: var(--green); color: #0b0d09; border: none; border-radius: 10px; padding: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s, transform 0.15s; }
+    .cfg-save-btn:hover { background: #b0c860; transform: translateY(-1px); }
+
+    .guild-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 8px; }
+    .guild-select-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 18px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; gap: 10px; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .guild-select-card:hover { border-color: rgba(154,175,82,0.5); transform: translateY(-3px); box-shadow: 0 8px 32px rgba(154,175,82,0.16); }
+    .guild-select-icon { width: 52px; height: 52px; border-radius: 14px; background: var(--green-glow); border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--green); }
+    .guild-select-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; }
+    .guild-select-meta { font-size: 0.75rem; color: var(--muted); }
+    .guild-select-manage { margin-top: 4px; background: var(--green); color: #0b0d09; border: none; border-radius: 8px; padding: 7px 16px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem; cursor: pointer; transition: background 0.2s; }
+    .guild-select-manage:hover { background: #b0c860; }
+
+    .quick-actions { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+    .quick-actions h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; margin-bottom: 14px; color: var(--muted); letter-spacing: 0.02em; }
+    .qa-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .qa-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; border-radius: 10px; border: 1px solid var(--border2); color: var(--text); background: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; }
+    .qa-btn:hover { border-color: var(--green); background: var(--green-glow); box-shadow: 0 2px 14px rgba(154,175,82,0.12); }
+    .qa-btn svg { width: 14px; height: 14px; color: var(--green); }
+
+    .dash-status-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-top: 8px; }
+    .dash-status-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px; transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s; }
+    .dash-status-card:hover { border-color: rgba(154,175,82,0.45); transform: translateY(-2px); box-shadow: 0 6px 28px rgba(154,175,82,0.14); }
+    .dash-status-card .ds-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+    .dash-status-card .ds-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--text); line-height: 1; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 12px 20px; font-size: 0.85rem; font-weight: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.5); transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); pointer-events: none; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(154,175,82,0.4); color: var(--green); }
+
+    /* AI CHAT */
+    #lyrics-chat-btn { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 54px; height: 54px; border-radius: 50%; background: #9aaf52; border: none; cursor: pointer; display: none; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(154,175,82,0.4); transition: transform 0.2s, box-shadow 0.2s; }
+    #lyrics-chat-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(154,175,82,0.55); }
+    #lyrics-chat-btn.dash-visible { display: flex; }
+    #lyrics-chat-btn svg { width: 24px; height: 24px; fill: #0b0d09; }
+    #lyrics-chat-panel { position: fixed; bottom: 92px; right: 28px; z-index: 998; width: 360px; max-height: 520px; background: #111408; border: 1px solid rgba(154,175,82,0.25); border-radius: 20px; display: none; flex-direction: column; box-shadow: 0 16px 60px rgba(0,0,0,0.7); overflow: hidden; }
+    #lyrics-chat-panel.open { display: flex; }
+    .lcp-header { padding: 14px 18px; border-bottom: 1px solid rgba(154,175,82,0.15); display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: #161a08; }
+    .lcp-avatar { width: 32px; height: 32px; border-radius: 50%; background: #9aaf52; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.85rem; color: #0b0d09; flex-shrink: 0; }
+    .lcp-title { flex: 1; }
+    .lcp-title strong { display: block; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: #e8eedd; }
+    .lcp-title span { font-size: 0.72rem; color: #9aaf52; }
+    .lcp-close { background: none; border: none; color: #8a9475; cursor: pointer; font-size: 1.1rem; padding: 4px; border-radius: 6px; transition: color 0.2s; line-height: 1; }
+    .lcp-close:hover { color: #e8eedd; }
+    .lcp-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; scrollbar-width: thin; scrollbar-color: rgba(154,175,82,0.2) transparent; min-height: 200px; max-height: 320px; }
+    .lcp-msg { display: flex; gap: 8px; align-items: flex-end; }
+    .lcp-msg.user { flex-direction: row-reverse; }
+    .lcp-bubble { max-width: 78%; padding: 9px 13px; border-radius: 14px; font-size: 0.83rem; line-height: 1.5; }
+    .lcp-msg.bot .lcp-bubble { background: #161a08; border: 1px solid rgba(154,175,82,0.15); color: #e8eedd; border-radius: 14px 14px 14px 4px; }
+    .lcp-msg.user .lcp-bubble { background: #9aaf52; color: #0b0d09; font-weight: 500; border-radius: 14px 14px 4px 14px; }
+    .lcp-msg-avatar { width: 24px; height: 24px; border-radius: 50%; background: #9aaf52; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 800; color: #0b0d09; flex-shrink: 0; font-family: 'Syne', sans-serif; }
+    .lcp-msg.user .lcp-msg-avatar { background: #3a4a20; color: #9aaf52; }
+    .lcp-typing { display: flex; gap: 4px; align-items: center; padding: 10px 13px; }
+    .lcp-typing span { width: 6px; height: 6px; border-radius: 50%; background: #9aaf52; animation: lcpDot 1.2s ease-in-out infinite; display: inline-block; }
+    .lcp-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .lcp-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes lcpDot { 0%,60%,100%{opacity:0.2;transform:scale(0.8)} 30%{opacity:1;transform:scale(1)} }
+    .lcp-suggestions { padding: 0 16px 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .lcp-suggest-btn { background: rgba(154,175,82,0.08); border: 1px solid rgba(154,175,82,0.2); border-radius: 999px; color: #9aaf52; font-size: 0.72rem; padding: 5px 11px; cursor: pointer; transition: background 0.2s; white-space: nowrap; font-family: 'DM Sans', sans-serif; }
+    .lcp-suggest-btn:hover { background: rgba(154,175,82,0.18); }
+    .lcp-input-row { padding: 12px 14px; border-top: 1px solid rgba(154,175,82,0.12); display: flex; gap: 8px; align-items: center; flex-shrink: 0; background: #111408; }
+    .lcp-input { flex: 1; background: #161a08; border: 1px solid rgba(154,175,82,0.2); border-radius: 999px; color: #e8eedd; font-family: 'DM Sans', sans-serif; font-size: 0.83rem; padding: 8px 14px; outline: none; transition: border-color 0.2s; }
+    .lcp-input:focus { border-color: rgba(154,175,82,0.5); }
+    .lcp-input::placeholder { color: #8a9475; }
+    .lcp-send { width: 34px; height: 34px; border-radius: 50%; background: #9aaf52; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, transform 0.15s; }
+    .lcp-send:hover { background: #b0c860; transform: scale(1.08); }
+    .lcp-send:disabled { background: #3a4a20; cursor: not-allowed; transform: none; }
+    .lcp-send svg { width: 16px; height: 16px; fill: #0b0d09; }
+
+    @media (max-width: 680px) {
+      nav { width: calc(100% - 24px); }
+      .nav-links a:not(.nav-add):not(.nav-login-btn) { display: none; }
+      .cta-inner { padding: 36px 24px; }
+      .dash-sidebar { width: 52px; }
+      .sidebar-link span, .sidebar-section-label, .sidebar-badge { display: none; }
+      .sidebar-link { justify-content: center; padding: 10px; margin: 1px 4px; }
+      .dash-page { padding: 20px; }
+    }
+    code.inline { background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:monospace;font-size:0.82rem;color:var(--green); }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-card">
+    <button class="login-close" onclick="closeLogin()">&#x2715;</button>
+    <div class="login-logo">
+      <img src="lyrics-pfp.png" alt="Lyrics" />
+      <span>Lyrics</span>
+    </div>
+    <p class="login-sub">Discord Bot Dashboard</p>
+    <h2>Sign in</h2>
+    <p class="login-hint">Connect your Discord account to manage your servers, view stats, and configure Lyrics.</p>
+    <a class="discord-oauth-btn" href="#" onclick="startDiscordOAuth(event)">
+      <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      Continue with Discord
+    </a>
+    <div class="login-divider">or</div>
+    <button class="login-browse-btn" onclick="closeLogin()">Browse site without signing in</button>
+    <p class="login-note">We only request your Discord username, avatar, and the list of servers where you are an admin. No messages are ever read. <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<!-- LANDING PAGE -->
+<div id="landing">
+  <nav>
+    <div class="nav-left">
+      <img src="lyrics-pfp.png" alt="Lyrics" />
+      <span>Lyrics</span>
+    </div>
+    <div class="nav-links">
+      <a href="#status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Status</a>
+      <a href="#builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Builder</a>
+      <a href="#features"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Features</a>
+      <a href="#commands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>Commands</a>
+      <a href="https://discord.gg/V3uXKHQvJu" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Support</a>
+      <button class="nav-login-btn" onclick="openLogin()">Dashboard</button>
+      <a href="https://discord.com/oauth2/authorize" target="_blank" class="nav-add">Add now</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="hero-tag"><span></span> Discord Bot</div>
+      <h1>Lyrics is your server's<br><span class="accent">perfect companion.</span></h1>
+      <p class="hero-desc">A friendly, all-in-one Discord bot built to make your server better — with moderation, utilities, and everything your community needs.</p>
+      <div class="hero-btns">
+        <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Add to Discord
+        </a>
+        <button class="btn-secondary" onclick="openLogin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+          Open Dashboard
+        </button>
+      </div>
+    </div>
+    <div class="guild-strip-section">
+      <p class="guild-strip-label" id="guild-strip-label">Loading communities...</p>
+      <div class="guild-strip-outer">
+        <div class="guild-strip-track" id="guild-strip-track">
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+          <div class="guild-card-skeleton"><div class="skeleton-avatar"></div><div class="skeleton-lines"><div class="skeleton-line wide"></div><div class="skeleton-line narrow"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="status-section" id="status">
+    <div class="section-label reveal">Live</div>
+    <div class="section-title reveal reveal-delay-1">Bot Status</div>
+    <div id="status-badge" class="online-badge reveal reveal-delay-2"><span class="online-dot"></span> Checking...</div>
+    <div class="status-cards reveal reveal-delay-2">
+      <div class="status-card glow-card"><div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="status-info"><div class="status-label">Guilds</div><div class="status-value loading" id="stat-guilds">—</div></div></div>
+      <div class="status-card glow-card"><div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="status-info"><div class="status-label">Members</div><div class="status-value loading" id="stat-members">—</div></div></div>
+      <div class="status-card glow-card"><div class="status-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="status-info"><div class="status-label">Latency</div><div class="status-value loading" id="stat-latency">—</div></div></div>
+    </div>
+    <div class="uptime-row reveal reveal-delay-3">
+      <span class="uptime-label">Uptime</span><span class="uptime-value" id="stat-uptime">—</span>
+      <div class="uptime-sep"></div>
+      <span class="uptime-label">Commands</span><span class="uptime-value">180+</span>
+      <div class="uptime-sep"></div>
+      <span class="uptime-label">Support</span><span class="uptime-value">24/7</span>
+      <span class="last-updated" id="last-updated">Fetching...</span>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <div class="section-label reveal">What it does</div>
+    <div class="section-title reveal reveal-delay-1">Everything your server needs.</div>
+    <div class="features-grid">
+      <div class="feature-card glow-card reveal reveal-delay-1"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Moderation</h3><p>Keep your server clean with powerful mod tools — ban, kick, mute, warn, lock channels and more with full audit logging.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-2"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><h3>Welcome System</h3><p>Greet new members with fully customizable welcome messages, embeds, and auto-role assignment on join.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-3"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><h3>Embed Builder</h3><p>Create stunning embeds with fields, buttons, thumbnails and live preview. Use the builder on this page to get started instantly.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-4"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h3>User Info</h3><p>Look up detailed user and server info — join dates, roles, account creation, server stats and much more.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-1"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div><h3>Logging</h3><p>Track message edits, deletes, member joins/leaves, role changes, and more in a dedicated log channel.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-2"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><h3>Auto-Responses</h3><p>Set up custom triggers that automatically respond with messages or embeds when certain keywords are used.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-3"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h3>Custom Prefix</h3><p>Set a unique bot prefix per server so Lyrics fits right in alongside your other bots without any conflicts.</p></div>
+      <div class="feature-card glow-card reveal reveal-delay-4"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>Reliable</h3><p>Near-perfect uptime with fast response times. Lyrics is always there when your members need it.</p></div>
+    </div>
+  </section>
+
+  <section class="commands-section" id="commands">
+    <div class="section-label reveal">Full command list</div>
+    <div class="section-title reveal reveal-delay-1">Commands at a glance.</div>
+    <div class="commands-grid">
+      <div class="cmd-category glow-card reveal reveal-delay-1">
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Moderation</span><span class="cmd-category-count">7 commands</span></div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,ban</span><span class="cmd-desc">Ban a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,kick</span><span class="cmd-desc">Kick a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,mute</span><span class="cmd-desc">Timeout a user</span></div>
+          <div class="cmd-item"><span class="cmd-name">,warn</span><span class="cmd-desc">Issue a warning</span></div>
+          <div class="cmd-item"><span class="cmd-name">,purge</span><span class="cmd-desc">Bulk delete messages</span></div>
+          <div class="cmd-item"><span class="cmd-name">,lock</span><span class="cmd-desc">Lock a channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,slowmode</span><span class="cmd-desc">Set channel slowmode</span></div>
+        </div>
+      </div>
+      <div class="cmd-category glow-card reveal reveal-delay-2">
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Utility</span><span class="cmd-category-count">8 commands</span></div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,userinfo</span><span class="cmd-desc">User details</span></div>
+          <div class="cmd-item"><span class="cmd-name">,serverinfo</span><span class="cmd-desc">Server details</span></div>
+          <div class="cmd-item"><span class="cmd-name">,avatar</span><span class="cmd-desc">Get user avatar</span></div>
+          <div class="cmd-item"><span class="cmd-name">,ping</span><span class="cmd-desc">Check bot latency</span></div>
+          <div class="cmd-item"><span class="cmd-name">,prefix</span><span class="cmd-desc">Change bot prefix</span></div>
+          <div class="cmd-item"><span class="cmd-name">,help</span><span class="cmd-desc">View all commands</span></div>
+          <div class="cmd-item"><span class="cmd-name">,embed</span><span class="cmd-desc">Send a custom embed</span></div>
+          <div class="cmd-item"><span class="cmd-name">,announce</span><span class="cmd-desc">Post an announcement</span></div>
+        </div>
+      </div>
+      <div class="cmd-category glow-card reveal reveal-delay-3">
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Config</span><span class="cmd-category-count">6 commands</span></div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,setwelcome</span><span class="cmd-desc">Set welcome channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,setlog</span><span class="cmd-desc">Set log channel</span></div>
+          <div class="cmd-item"><span class="cmd-name">,setleave</span><span class="cmd-desc">Set leave message</span></div>
+          <div class="cmd-item"><span class="cmd-name">,autorole</span><span class="cmd-desc">Set auto-join role</span></div>
+          <div class="cmd-item"><span class="cmd-name">,autoreply</span><span class="cmd-desc">Add auto-response</span></div>
+          <div class="cmd-item"><span class="cmd-name">,settings</span><span class="cmd-desc">View server settings</span></div>
+        </div>
+      </div>
+      <div class="cmd-category glow-card reveal reveal-delay-3">
+        <div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">All Commands</span><span class="cmd-category-count">180+</span></div>
+        <div class="cmd-list">
+          <div class="cmd-item"><span class="cmd-name">,cmds</span><span class="cmd-desc">Run ,cmds to see all 180+ commands!</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-section" id="setup">
+    <div class="section-label reveal">Getting started</div>
+    <div class="section-title reveal reveal-delay-1">Up and running in minutes.</div>
+    <div class="steps-list">
+      <div class="step-item reveal reveal-delay-1"><div class="step-line"></div><div class="step-num">1</div><div class="step-body"><h3>Invite Lyrics to your server</h3><p>Click "Add to Discord" and authorise Lyrics on your server. Make sure to grant the recommended permissions so all features work correctly.</p></div></div>
+      <div class="step-item reveal reveal-delay-2"><div class="step-line"></div><div class="step-num">2</div><div class="step-body"><h3>Configure your setup</h3><p>Use <code class="inline">,enable welcome #channel</code>, <code class="inline">,modlogs enable #channel</code> and <code class="inline">,setprefix</code> to tailor Lyrics to your server's needs.</p></div></div>
+      <div class="step-item reveal reveal-delay-3"><div class="step-line"></div><div class="step-num">3</div><div class="step-body"><h3>Build your first embed</h3><p>Head to the Embed Builder on this page, design your welcome message or announcement, copy the generated command and paste it in Discord.</p></div></div>
+      <div class="step-item reveal reveal-delay-4"><div class="step-num">4</div><div class="step-body"><h3>You're done</h3><p>Lyrics will handle the rest. Join the support server any time if you run into questions or want to suggest new features.</p></div></div>
+    </div>
+  </section>
+
+  <section class="setup-section">
+    <div class="section-label reveal">Permissions</div>
+    <div class="section-title reveal reveal-delay-1">What Lyrics needs access to.</div>
+    <p class="reveal reveal-delay-2" style="color:var(--muted);font-size:0.9rem;max-width:540px;line-height:1.7;margin-top:-24px;margin-bottom:0;">Lyrics only requests what it genuinely uses. No excessive permissions, no data collection beyond what Discord provides.</p>
+    <div class="perms-grid">
+      <div class="perm-item reveal reveal-delay-1"><div class="perm-dot"></div><div><strong>Administrator</strong> — Full guild access for all features.</div></div>
+    </div>
+  </section>
+
+  <section class="embed-builder" id="builder">
+    <div class="section-label reveal">Try it out</div>
+    <div class="section-title reveal reveal-delay-1">Embed Builder</div>
+    <div class="builder-wrap">
+      <div class="builder-panel reveal reveal-delay-2">
+        <div class="builder-tabs">
+          <button class="tab-btn active" data-tab="basic">Basic</button>
+          <button class="tab-btn" data-tab="author">Author &amp; Footer</button>
+          <button class="tab-btn" data-tab="media">Media</button>
+          <button class="tab-btn" data-tab="fields">Fields</button>
+          <button class="tab-btn" data-tab="buttons">Buttons</button>
+          <button class="tab-btn" data-tab="message">Message</button>
+        </div>
+        <div class="tab-content active" id="tab-basic">
+          <div class="form-group"><label>Title</label><input type="text" id="b-title" placeholder="Embed title..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Description</label><textarea id="b-desc" placeholder="Embed description..." oninput="updatePreview()"></textarea></div>
+          <div class="form-group"><label>Color</label><div class="color-row"><input type="color" id="b-color-pick" value="#9aaf52" oninput="syncColor(this)" /><input type="text" id="b-color" placeholder="9aaf52" value="9aaf52" oninput="syncColorText(this)" /></div></div>
+          <div class="form-group"><label><input type="checkbox" id="b-timestamp" onchange="updatePreview()" style="accent-color:var(--green);margin-right:6px;">Add Timestamp</label></div>
+        </div>
+        <div class="tab-content" id="tab-author">
+          <div class="form-group"><label>Author Name</label><input type="text" id="b-author-name" placeholder="Author name or {username}..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Author Icon URL</label><input type="text" id="b-author-icon" placeholder="{user.avatar} or https://..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Footer Text</label><input type="text" id="b-footer" placeholder="Footer text..." oninput="updatePreview()" /></div>
+        </div>
+        <div class="tab-content" id="tab-media">
+          <div class="form-group"><label>Thumbnail URL</label><input type="text" id="b-thumbnail" placeholder="{user.avatar} or https://..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Image URL</label><input type="text" id="b-image" placeholder="https://example.com/image.png" oninput="updatePreview()" /></div>
+        </div>
+        <div class="tab-content" id="tab-fields">
+          <div class="form-group"><label>Field Name</label><input type="text" id="f-name" placeholder="Field name..." /></div>
+          <div class="form-group"><label>Field Value</label><textarea id="f-value" placeholder="Field value..." style="min-height:60px;"></textarea></div>
+          <label class="inline-check"><input type="checkbox" id="f-inline" /><span>Inline</span></label>
+          <button class="add-btn" onclick="addField()">+ Add Field</button>
+          <div class="fields-list" id="fields-list"></div>
+        </div>
+        <div class="tab-content" id="tab-buttons">
+          <div class="form-group"><label>Button Label</label><input type="text" id="btn-label" placeholder="Click here..." /></div>
+          <div class="form-group"><label>Button URL</label><input type="text" id="btn-url" placeholder="https://discord.gg/..." /></div>
+          <div class="form-group"><label>Emoji (optional)</label><input type="text" id="btn-emoji" placeholder="optional" /></div>
+          <button class="add-btn" onclick="addButton()">+ Add Button</button>
+          <div class="fields-list" id="buttons-list"></div>
+        </div>
+        <div class="tab-content" id="tab-message">
+          <div class="form-group"><label>Message (above embed)</label><input type="text" id="b-message" placeholder="{user.mention} or any text..." oninput="updatePreview()" /></div>
+          <div class="form-group"><label>Message 2 (below embed)</label><input type="text" id="b-message2" placeholder="Text sent after embed..." oninput="updatePreview()" /></div>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-3">
+        <div class="preview-panel">
+          <div class="preview-header"><span>Live Preview</span><span style="font-size:0.75rem;color:var(--muted);">Discord mock</span></div>
+          <div class="preview-body">
+            <div class="discord-mock">
+              <div class="mock-msg">
+                <div class="mock-avatar">L</div>
+                <div class="mock-right">
+                  <div class="mock-meta"><span class="mock-name">Lyrics</span><span class="mock-bot-tag">BOT</span><span class="mock-time">Today at 12:00 PM</span></div>
+                  <div class="mock-content" id="prev-message"></div>
+                  <div class="mock-embed" id="prev-embed" style="display:none;">
+                    <div id="prev-author" style="display:none;" class="mock-embed-author"><img id="prev-author-icon" class="mock-embed-author-icon" src="" alt="" style="display:none;" /><span id="prev-author-name" class="mock-embed-author-name"></span></div>
+                    <div id="prev-thumbnail" class="mock-embed-thumbnail" style="display:none;"><img id="prev-thumb-img" src="" alt="" /></div>
+                    <div id="prev-title" class="mock-embed-title" style="display:none;"></div>
+                    <div id="prev-desc" class="mock-embed-desc" style="display:none;"></div>
+                    <div id="prev-fields" class="mock-embed-fields" style="display:none;"></div>
+                    <div id="prev-image" class="mock-embed-image" style="display:none;"><img id="prev-img" src="" alt="" /></div>
+                    <div id="prev-footer-wrap" class="mock-embed-footer" style="display:none;"><span id="prev-footer-text" class="mock-embed-footer-text"></span><span id="prev-ts" class="mock-embed-ts" style="display:none;"></span></div>
+                  </div>
+                  <div id="prev-buttons" class="mock-buttons" style="display:none;"></div>
+                </div>
+              </div>
+              <div id="prev-message2" class="mock-msg2" style="display:none;"></div>
+            </div>
+          </div>
+          <div class="output-section">
+            <div class="output-label">Generated Syntax</div>
+            <div class="output-box" id="output-box">,ce</div>
+            <button class="copy-btn" id="copy-btn" onclick="copyOutput()">Copy Command</button>
+          </div>
+        </div>
+        <div class="vars-ref">
+          <h3>Placeholders <span style="font-size:0.75rem;color:var(--muted);font-weight:400;">— click to copy</span></h3>
+          <div class="vars-grid" id="vars-grid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section" id="faq">
+    <div class="section-label reveal">Questions</div>
+    <div class="section-title reveal reveal-delay-1">Frequently asked.</div>
+    <div class="faq-list">
+      <div class="faq-item reveal reveal-delay-1"><div class="faq-q" onclick="toggleFaq(this)">Is Lyrics free to use?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Yes, Lyrics is completely free. All commands and features are available to every server without any paid tier or subscription.</div></div>
+      <div class="faq-item reveal reveal-delay-2"><div class="faq-q" onclick="toggleFaq(this)">How do I change the bot prefix?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Use the <code class="inline">,setprefix [new prefix]</code> command. The default prefix is a comma and each server can have its own unique prefix.</div></div>
+      <div class="faq-item reveal reveal-delay-3"><div class="faq-q" onclick="toggleFaq(this)">What permissions does Lyrics need?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Lyrics requests Administrator permission so all features work correctly. Make sure Lyrics' role is above other roles in your hierarchy for moderation features to work.</div></div>
+      <div class="faq-item reveal reveal-delay-4"><div class="faq-q" onclick="toggleFaq(this)">How do I use the Embed Builder?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Fill in the fields in the builder on this page, watch the Discord preview update live, then click "Copy Command" and paste the generated syntax into any channel where Lyrics is present.</div></div>
+      <div class="faq-item reveal reveal-delay-1"><div class="faq-q" onclick="toggleFaq(this)">Where do I get help or report a bug?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Join the support server at discord.gg/V3uXKHQvJu and open a ticket. The team responds quickly and all bug reports are tracked and fixed.</div></div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="cta-inner reveal">
+      <h2>Ready to get started?</h2>
+      <p>Add Lyrics to your server in seconds and start building the community you want.</p>
+      <div class="cta-btns">
+        <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn-primary"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.032.056a19.9 19.9 0 0 0 5.993 3.03.077.077 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>Add to Discord</a>
+        <a href="https://discord.gg/V3uXKHQvJu" target="_blank" class="btn-secondary">Join Support Server</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-row"><img src="lyrics-pfp.png" alt="Lyrics" /><span class="footer-brand-name">Lyrics</span></div>
+        <p>A friendly Discord bot built to make your server better, one command at a time.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Bot</h4>
+        <a href="https://discord.com/oauth2/authorize" target="_blank">Add to Discord</a>
+        <a href="#features">Features</a>
+        <a href="#commands">Commands</a>
+        <a href="#builder">Embed Builder</a>
+      </div>
+      <div class="footer-col">
+        <h4>Links</h4>
+        <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+        <a href="#status">Status</a>
+        <a href="#faq">FAQ</a>
+        <a href="#setup">Setup Guide</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Lyrics &copy; 2026</span>
+      <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
+    </div>
+  </footer>
+</div><!-- end #landing -->
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-topbar">
+    <div class="dash-topbar-left"><img src="lyrics-pfp.png" alt="Lyrics" /><span>Lyrics</span></div>
+    <div class="dash-topbar-right">
+      <div class="dash-user-pill" id="dash-user-pill">
+        <div class="dash-avatar-fallback" id="dash-avatar-fallback">?</div>
+        <span class="dash-username" id="dash-username">Loading...</span>
+      </div>
+      <button class="dash-signout" onclick="signOut()">Sign out</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <aside class="dash-sidebar">
+      <div class="sidebar-section-label">Main</div>
+      <a class="sidebar-link active" data-page="overview" onclick="navTo('overview',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Overview</span></a>
+      <a class="sidebar-link" data-page="d-status" onclick="navTo('d-status',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span>Status</span></a>
+      <a class="sidebar-link" data-page="servers" onclick="navTo('servers',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Servers</span></a>
+      <div class="sidebar-section-label">Tools</div>
+      <a class="sidebar-link" data-page="d-builder" onclick="navTo('d-builder',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span>Embed Builder</span></a>
+      <a class="sidebar-link" data-page="d-features" onclick="navTo('d-features',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Features</span></a>
+      <a class="sidebar-link" data-page="d-commands" onclick="navTo('d-commands',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><span>Commands</span><span class="sidebar-badge">180+</span></a>
+      <div class="sidebar-section-label">Server</div>
+      <a class="sidebar-link" data-page="config" onclick="navTo('config',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg><span>Configuration</span></a>
+      <div class="sidebar-section-label">Links</div>
+      <a class="sidebar-link" href="https://discord.com/oauth2/authorize" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Add Bot</span></a>
+      <a class="sidebar-link" href="https://discord.gg/V3uXKHQvJu" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Support</span></a>
+      <a class="sidebar-link" onclick="signOut()" style="cursor:pointer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Back to site</span></a>
+    </aside>
+    <main class="dash-content">
+
+      <div class="dash-page active" id="page-overview">
+        <div class="dash-page-header"><h1>Overview</h1><p>Welcome back, <span id="greet-name">there</span>. Here's Lyrics at a glance.</p></div>
+        <div class="dash-stat-grid">
+          <div class="dash-stat-card"><div class="s-label">Servers</div><div class="s-val" id="d-guilds">—</div><div class="s-sub">guilds using Lyrics</div></div>
+          <div class="dash-stat-card"><div class="s-label">Members</div><div class="s-val" id="d-members">—</div><div class="s-sub">across all servers</div></div>
+          <div class="dash-stat-card"><div class="s-label">Latency</div><div class="s-val" id="d-latency">—</div><div class="s-sub">average response</div></div>
+          <div class="dash-stat-card"><div class="s-label">Commands</div><div class="s-val">180+</div><div class="s-sub">available</div></div>
+        </div>
+        <div class="quick-actions">
+          <h3>Quick Actions</h3>
+          <div class="qa-row">
+            <button class="qa-btn" onclick="navTo('d-builder',document.querySelector('[data-page=d-builder]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>Open Embed Builder</button>
+            <button class="qa-btn" onclick="navTo('config',document.querySelector('[data-page=config]'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>Configure Server</button>
+            <a class="qa-btn" href="https://discord.gg/V3uXKHQvJu" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Support Server</a>
+            <a class="qa-btn" href="https://discord.com/oauth2/authorize" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add to Another Server</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-page" id="page-d-status">
+        <div class="dash-page-header"><h1>Bot Status</h1><p>Real-time statistics pulled live from the API.</p></div>
+        <div class="dash-status-grid">
+          <div class="dash-status-card"><div class="ds-label">Status</div><div class="ds-val" style="color:#4ade80;font-size:1.2rem;" id="ds-status">Checking...</div></div>
+          <div class="dash-status-card"><div class="ds-label">Servers</div><div class="ds-val" id="ds-guilds">—</div></div>
+          <div class="dash-status-card"><div class="ds-label">Members</div><div class="ds-val" id="ds-members">—</div></div>
+          <div class="dash-status-card"><div class="ds-label">Latency</div><div class="ds-val" id="ds-latency">—</div></div>
+          <div class="dash-status-card"><div class="ds-label">Uptime</div><div class="ds-val" id="ds-uptime">—</div></div>
+          <div class="dash-status-card"><div class="ds-label">Commands</div><div class="ds-val">180+</div></div>
+        </div>
+      </div>
+
+      <div class="dash-page" id="page-servers">
+        <div class="dash-page-header"><h1>Your Servers</h1><p>Servers where you have admin access and Lyrics is present.</p></div>
+        <div class="guild-select-grid" id="dash-guild-grid"><div style="color:var(--muted);font-size:0.875rem;padding:12px 0;grid-column:1/-1;">Loading your servers...</div></div>
+      </div>
+
+      <div class="dash-page" id="page-d-builder">
+        <div class="dash-page-header"><h1>Embed Builder</h1><p>Design your embed and copy the command to use in Discord.</p></div>
+        <div class="builder-wrap">
+          <div class="builder-panel">
+            <div class="builder-tabs">
+              <button class="tab-btn active" data-tab="db-basic">Basic</button>
+              <button class="tab-btn" data-tab="db-author">Author &amp; Footer</button>
+              <button class="tab-btn" data-tab="db-media">Media</button>
+              <button class="tab-btn" data-tab="db-fields">Fields</button>
+              <button class="tab-btn" data-tab="db-buttons">Buttons</button>
+              <button class="tab-btn" data-tab="db-message">Message</button>
+            </div>
+            <div class="tab-content active" id="tab-db-basic">
+              <div class="form-group"><label>Title</label><input type="text" id="db-title" placeholder="Embed title..." oninput="updateDashPreview()" /></div>
+              <div class="form-group"><label>Description</label><textarea id="db-desc" placeholder="Embed description..." oninput="updateDashPreview()"></textarea></div>
+              <div class="form-group"><label>Color</label><div class="color-row"><input type="color" id="db-color-pick" value="#9aaf52" oninput="syncDashColor(this)" /><input type="text" id="db-color" placeholder="9aaf52" value="9aaf52" oninput="syncDashColorText(this)" /></div></div>
+              <div class="form-group"><label><input type="checkbox" id="db-timestamp" onchange="updateDashPreview()" style="accent-color:var(--green);margin-right:6px;">Add Timestamp</label></div>
+            </div>
+            <div class="tab-content" id="tab-db-author">
+              <div class="form-group"><label>Author Name</label><input type="text" id="db-author-name" placeholder="Author name..." oninput="updateDashPreview()" /></div>
+              <div class="form-group"><label>Author Icon URL</label><input type="text" id="db-author-icon" placeholder="https://..." oninput="updateDashPreview()" /></div>
+              <div class="form-group"><label>Footer Text</label><input type="text" id="db-footer" placeholder="Footer text..." oninput="updateDashPreview()" /></div>
+            </div>
+            <div class="tab-content" id="tab-db-media">
+              <div class="form-group"><label>Thumbnail URL</label><input type="text" id="db-thumbnail" placeholder="https://..." oninput="updateDashPreview()" /></div>
+              <div class="form-group"><label>Image URL</label><input type="text" id="db-image" placeholder="https://..." oninput="updateDashPreview()" /></div>
+            </div>
+            <div class="tab-content" id="tab-db-fields">
+              <div class="form-group"><label>Field Name</label><input type="text" id="dbf-name" placeholder="Field name..." /></div>
+              <div class="form-group"><label>Field Value</label><textarea id="dbf-value" placeholder="Field value..." style="min-height:60px;"></textarea></div>
+              <label class="inline-check"><input type="checkbox" id="dbf-inline" /><span>Inline</span></label>
+              <button class="add-btn" onclick="addDashField()">+ Add Field</button>
+              <div class="fields-list" id="db-fields-list"></div>
+            </div>
+            <div class="tab-content" id="tab-db-buttons">
+              <div class="form-group"><label>Button Label</label><input type="text" id="dbb-label" placeholder="Click here..." /></div>
+              <div class="form-group"><label>Button URL</label><input type="text" id="dbb-url" placeholder="https://..." /></div>
+              <button class="add-btn" onclick="addDashButton()">+ Add Button</button>
+              <div class="fields-list" id="db-buttons-list"></div>
+            </div>
+            <div class="tab-content" id="tab-db-message">
+              <div class="form-group"><label>Message (above embed)</label><input type="text" id="db-message" placeholder="Text above embed..." oninput="updateDashPreview()" /></div>
+              <div class="form-group"><label>Message 2 (below embed)</label><input type="text" id="db-message2" placeholder="Text below embed..." oninput="updateDashPreview()" /></div>
+            </div>
+          </div>
+          <div>
+            <div class="preview-panel">
+              <div class="preview-header"><span>Live Preview</span><span style="font-size:0.75rem;color:var(--muted);">Discord mock</span></div>
+              <div class="preview-body">
+                <div class="discord-mock">
+                  <div class="mock-msg">
+                    <div class="mock-avatar">L</div>
+                    <div class="mock-right">
+                      <div class="mock-meta"><span class="mock-name">Lyrics</span><span class="mock-bot-tag">BOT</span><span class="mock-time">Today at 12:00 PM</span></div>
+                      <div class="mock-content" id="db-prev-message"></div>
+                      <div class="mock-embed" id="db-prev-embed" style="display:none;">
+                        <div id="db-prev-title" class="mock-embed-title" style="display:none;"></div>
+                        <div id="db-prev-desc" class="mock-embed-desc" style="display:none;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="output-section">
+                <div class="output-label">Generated Syntax</div>
+                <div class="output-box" id="db-output-box">,ce</div>
+                <button class="copy-btn" onclick="copyDashOutput()">Copy Command</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-page" id="page-d-features">
+        <div class="dash-page-header"><h1>Features</h1><p>Everything Lyrics can do for your server.</p></div>
+        <div class="features-grid">
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>Moderation</h3><p>Ban, kick, mute, warn, lock channels and more with full audit logging.</p></div>
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div><h3>Welcome System</h3><p>Greet new members with customizable welcome messages and auto-role.</p></div>
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><h3>Embed Builder</h3><p>Create stunning embeds with fields, buttons, thumbnails and live preview.</p></div>
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div><h3>Logging</h3><p>Track edits, deletes, joins/leaves, role changes in a dedicated channel.</p></div>
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><h3>Auto-Responses</h3><p>Custom triggers that auto-respond when certain keywords are used.</p></div>
+          <div class="feature-card glow-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>Reliable</h3><p>Near-perfect uptime with fast response times, always available.</p></div>
+        </div>
+      </div>
+
+      <div class="dash-page" id="page-d-commands">
+        <div class="dash-page-header"><h1>Commands</h1><p>All 180+ commands organised by category.</p></div>
+        <div class="commands-grid">
+          <div class="cmd-category glow-card"><div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Moderation</span><span class="cmd-category-count">7</span></div><div class="cmd-list"><div class="cmd-item"><span class="cmd-name">,ban</span><span class="cmd-desc">Ban a user</span></div><div class="cmd-item"><span class="cmd-name">,kick</span><span class="cmd-desc">Kick a user</span></div><div class="cmd-item"><span class="cmd-name">,mute</span><span class="cmd-desc">Timeout a user</span></div><div class="cmd-item"><span class="cmd-name">,warn</span><span class="cmd-desc">Issue a warning</span></div><div class="cmd-item"><span class="cmd-name">,purge</span><span class="cmd-desc">Bulk delete messages</span></div><div class="cmd-item"><span class="cmd-name">,lock</span><span class="cmd-desc">Lock a channel</span></div><div class="cmd-item"><span class="cmd-name">,slowmode</span><span class="cmd-desc">Set slowmode</span></div></div></div>
+          <div class="cmd-category glow-card"><div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Utility</span><span class="cmd-category-count">8</span></div><div class="cmd-list"><div class="cmd-item"><span class="cmd-name">,userinfo</span><span class="cmd-desc">User details</span></div><div class="cmd-item"><span class="cmd-name">,serverinfo</span><span class="cmd-desc">Server details</span></div><div class="cmd-item"><span class="cmd-name">,avatar</span><span class="cmd-desc">Get user avatar</span></div><div class="cmd-item"><span class="cmd-name">,ping</span><span class="cmd-desc">Check latency</span></div><div class="cmd-item"><span class="cmd-name">,prefix</span><span class="cmd-desc">Change prefix</span></div><div class="cmd-item"><span class="cmd-name">,help</span><span class="cmd-desc">View all commands</span></div><div class="cmd-item"><span class="cmd-name">,embed</span><span class="cmd-desc">Send an embed</span></div><div class="cmd-item"><span class="cmd-name">,announce</span><span class="cmd-desc">Post announcement</span></div></div></div>
+          <div class="cmd-category glow-card"><div class="cmd-category-header"><div class="cmd-category-dot"></div><span class="cmd-category-name">Config</span><span class="cmd-category-count">6</span></div><div class="cmd-list"><div class="cmd-item"><span class="cmd-name">,setwelcome</span><span class="cmd-desc">Set welcome channel</span></div><div class="cmd-item"><span class="cmd-name">,setlog</span><span class="cmd-desc">Set log channel</span></div><div class="cmd-item"><span class="cmd-name">,setleave</span><span class="cmd-desc">Set leave message</span></div><div class="cmd-item"><span class="cmd-name">,autorole</span><span class="cmd-desc">Set auto-join role</span></div><div class="cmd-item"><span class="cmd-name">,autoreply</span><span class="cmd-desc">Add auto-response</span></div><div class="cmd-item"><span class="cmd-name">,settings</span><span class="cmd-desc">View settings</span></div></div></div>
+        </div>
+      </div>
+
+      <div class="dash-page" id="page-config">
+        <div class="dash-page-header">
+          <h1>Guild Configuration</h1>
+          <p>Settings for <strong id="cfg-guild-name" style="color:var(--green)">your server</strong>. Select a server from the Servers tab first.</p>
+        </div>
+        <div class="config-grid">
+          <div class="config-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Welcome System</h3>
+            <div class="cfg-row"><label>Welcome Channel</label><input placeholder="#welcome" id="cfg-welcome-ch" /></div>
+            <div class="cfg-row"><label>Welcome Message</label><input placeholder="Welcome {user.mention} to {server}!" id="cfg-welcome-msg" /></div>
+            <div class="toggle-row"><span class="toggle-label">Enable welcome messages</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Auto-assign role on join</span><label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label></div>
+            <button class="cfg-save-btn" onclick="saveCfg('Welcome')">Save Welcome Config</button>
+          </div>
+          <div class="config-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg> Logging</h3>
+            <div class="cfg-row"><label>Log Channel</label><input placeholder="#mod-logs" id="cfg-log-ch" /></div>
+            <div class="toggle-row"><span class="toggle-label">Log message deletes</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Log message edits</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Log member join/leave</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <button class="cfg-save-btn" onclick="saveCfg('Logging')">Save Logging Config</button>
+          </div>
+          <div class="config-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg> Bot Settings</h3>
+            <div class="cfg-row"><label>Custom Prefix</label><input placeholder="," id="cfg-prefix" maxlength="5" /></div>
+            <div class="toggle-row"><span class="toggle-label">Enable slash commands</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">DM user on warn/ban</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <button class="cfg-save-btn" onclick="saveCfg('Settings')">Save Bot Settings</button>
+          </div>
+          <div class="config-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Moderation</h3>
+            <div class="cfg-row"><label>Mod Log Channel</label><input placeholder="#mod-actions" id="cfg-modlog" /></div>
+            <div class="toggle-row"><span class="toggle-label">Anti-spam protection</span><label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label></div>
+            <div class="toggle-row"><span class="toggle-label">Auto-delete warn msgs</span><label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label></div>
+            <button class="cfg-save-btn" onclick="saveCfg('Moderation')">Save Mod Config</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- AI CHAT BUTTON + PANEL -->
+<button id="lyrics-chat-btn" onclick="toggleLyricsChat()" title="Chat with Lyrics AI">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l4.93-1.37A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.66 0-3.21-.47-4.53-1.28l-.32-.19-3.31.92.92-3.31-.19-.32A7.94 7.94 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8zm4.5-6c-.25-.12-1.47-.72-1.7-.8-.23-.08-.4-.12-.57.12-.17.25-.64.8-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43s.16-.25.25-.41c.08-.17.04-.31-.02-.43-.06-.12-.57-1.37-.78-1.87-.2-.49-.41-.42-.57-.43-.14 0-.31-.01-.48-.01-.17 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.11-.23-.17-.48-.29z"/></svg>
+</button>
+<div id="lyrics-chat-panel">
+  <div class="lcp-header">
+    <div class="lcp-avatar">L</div>
+    <div class="lcp-title"><strong>Lyrics</strong><span>● Online — AI Assistant</span></div>
+    <button class="lcp-close" onclick="toggleLyricsChat()">✕</button>
+  </div>
+  <div class="lcp-messages" id="lcp-messages">
+    <div class="lcp-msg bot"><div class="lcp-msg-avatar">L</div><div class="lcp-bubble">Hey! I'm Lyrics 👋 Ask me anything about commands, setup, or how to configure your server!</div></div>
+  </div>
+  <div class="lcp-suggestions" id="lcp-suggestions">
+    <button class="lcp-suggest-btn" onclick="lcpSend('How do I set up welcome messages?')">Welcome setup</button>
+    <button class="lcp-suggest-btn" onclick="lcpSend('What moderation commands are there?')">Mod commands</button>
+    <button class="lcp-suggest-btn" onclick="lcpSend('How do I change the prefix?')">Change prefix</button>
+    <button class="lcp-suggest-btn" onclick="lcpSend('How do I use the embed builder?')">Embed builder</button>
+  </div>
+  <div class="lcp-input-row">
+    <input class="lcp-input" id="lcp-input" placeholder="Ask Lyrics anything..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){lcpSend();event.preventDefault();}" />
+    <button class="lcp-send" id="lcp-send-btn" onclick="lcpSend()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SINGLE SCRIPT BLOCK — all JS lives here, nowhere else
+════════════════════════════════════════════════════════ -->
+<script>
+/* ── CONFIG ──────────────────────────────────────────── */
 const API_URL = 'https://whacky-onion-erratic.ngrok-free.dev';
-const DISCORD_CLIENT_ID  = '1418360724631060641';
+const DISCORD_CLIENT_ID = '1418360724631060641';
 const DISCORD_REDIRECT_URI = encodeURIComponent(window.location.origin + window.location.pathname);
 const DISCORD_SCOPES = 'identify%20guilds';
 const DISCORD_OAUTH_URL =
@@ -11,20 +997,15 @@ const DISCORD_OAUTH_URL =
   `&redirect_uri=${DISCORD_REDIRECT_URI}` +
   `&response_type=token` +
   `&scope=${DISCORD_SCOPES}`;
-
 const ngrokHdr = { 'ngrok-skip-browser-warning': 'true' };
 
-/* ══════════════════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════════════════ */
+/* ── SCROLL REVEAL ───────────────────────────────────── */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
 }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
-/* ══════════════════════════════════════════
-   GUILD STRIP
-══════════════════════════════════════════ */
+/* ── GUILD STRIP ─────────────────────────────────────── */
 async function fetchGuilds() {
   try {
     const res = await fetch(`${API_URL}/guilds`, { headers: ngrokHdr });
@@ -52,8 +1033,7 @@ async function fetchGuilds() {
       return card;
     };
     [...guilds, ...guilds].forEach(g => track.appendChild(makeCard(g)));
-    const totalWidth = guilds.length * 220;
-    track.style.animationDuration = Math.max(12, totalWidth / 12) + 's';
+    track.style.animationDuration = Math.max(12, guilds.length * 220 / 12) + 's';
   } catch (e) {
     document.getElementById('guild-strip-label').textContent = '';
     document.getElementById('guild-strip-track').innerHTML = '';
@@ -61,16 +1041,14 @@ async function fetchGuilds() {
 }
 fetchGuilds();
 
-/* ══════════════════════════════════════════
-   LIVE STATS
-══════════════════════════════════════════ */
+/* ── LIVE STATS ──────────────────────────────────────── */
 function formatNumber(n) {
   if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
   if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
   return n.toLocaleString();
 }
-function formatUptime(seconds) {
-  const d = Math.floor(seconds / 86400), h = Math.floor((seconds % 86400) / 3600), m = Math.floor((seconds % 3600) / 60);
+function formatUptime(s) {
+  const d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
   if (d > 0) return `${d}d ${h}h ${m}m`;
   if (h > 0) return `${h}h ${m}m`;
   return `${m}m`;
@@ -78,10 +1056,9 @@ function formatUptime(seconds) {
 function animateNum(el, target) {
   const duration = 1200, start = performance.now();
   const update = (now) => {
-    const progress = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = formatNumber(Math.floor(eased * target));
-    if (progress < 1) requestAnimationFrame(update); else el.textContent = formatNumber(target);
+    const p = Math.min((now - start) / duration, 1);
+    el.textContent = formatNumber(Math.floor((1 - Math.pow(1 - p, 3)) * target));
+    if (p < 1) requestAnimationFrame(update); else el.textContent = formatNumber(target);
   };
   requestAnimationFrame(update);
 }
@@ -94,23 +1071,24 @@ async function fetchStats() {
     const ge = document.getElementById('stat-guilds'); ge.classList.remove('loading'); animateNum(ge, gv);
     const me = document.getElementById('stat-members'); me.classList.remove('loading'); animateNum(me, mv);
     const le = document.getElementById('stat-latency'); le.classList.remove('loading');
-    le.textContent = ms + 'ms'; le.className = 'status-value ' + (ms < 100 ? 'latency-good' : ms < 250 ? 'latency-ok' : 'latency-bad');
+    le.textContent = ms + 'ms';
+    le.className = 'status-value ' + (ms < 100 ? 'latency-good' : ms < 250 ? 'latency-ok' : 'latency-bad');
     if (data.uptime) document.getElementById('stat-uptime').textContent = formatUptime(data.uptime);
-    const badge = document.getElementById('status-badge');
-    badge.className = 'online-badge reveal visible';
-    badge.innerHTML = '<span class="online-dot"></span> Online';
+    document.getElementById('status-badge').className = 'online-badge reveal visible';
+    document.getElementById('status-badge').innerHTML = '<span class="online-dot"></span> Online';
     document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
-    const setD = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+    const setD = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setD('d-guilds', formatNumber(gv)); setD('d-members', formatNumber(mv)); setD('d-latency', ms + 'ms');
     setD('ds-guilds', formatNumber(gv)); setD('ds-members', formatNumber(mv)); setD('ds-latency', ms + 'ms');
     if (data.uptime) setD('ds-uptime', formatUptime(data.uptime));
     const dsStatus = document.getElementById('ds-status');
     if (dsStatus) { dsStatus.textContent = 'Online'; dsStatus.style.color = '#4ade80'; }
   } catch (e) {
-    const badge = document.getElementById('status-badge');
-    badge.className = 'offline-badge reveal visible';
-    badge.innerHTML = '<span class="offline-dot"></span> Offline / Unreachable';
-    ['stat-guilds','stat-members','stat-latency'].forEach(id => { const el = document.getElementById(id); if(el){ el.classList.add('loading'); el.textContent = '—'; } });
+    document.getElementById('status-badge').className = 'offline-badge reveal visible';
+    document.getElementById('status-badge').innerHTML = '<span class="offline-dot"></span> Offline / Unreachable';
+    ['stat-guilds','stat-members','stat-latency'].forEach(id => {
+      const el = document.getElementById(id); if (el) { el.classList.add('loading'); el.textContent = '—'; }
+    });
     document.getElementById('last-updated').textContent = 'Could not reach API';
     const dsStatus = document.getElementById('ds-status');
     if (dsStatus) { dsStatus.textContent = 'Offline'; dsStatus.style.color = '#f87171'; }
@@ -119,9 +1097,7 @@ async function fetchStats() {
 fetchStats();
 setInterval(fetchStats, 30000);
 
-/* ══════════════════════════════════════════
-   FAQ
-══════════════════════════════════════════ */
+/* ── FAQ ─────────────────────────────────────────────── */
 function toggleFaq(el) {
   const item = el.closest('.faq-item');
   const isOpen = item.classList.contains('open');
@@ -129,9 +1105,7 @@ function toggleFaq(el) {
   if (!isOpen) item.classList.add('open');
 }
 
-/* ══════════════════════════════════════════
-   EMBED BUILDER — LANDING
-══════════════════════════════════════════ */
+/* ── EMBED BUILDER — LANDING ─────────────────────────── */
 const fields = [], buttons = [];
 const VARS = [
   { code: '{user.mention}', desc: 'pings the user' }, { code: '{username}', desc: 'their username' },
@@ -147,6 +1121,7 @@ VARS.forEach(v => {
   chip.onclick = () => { navigator.clipboard.writeText(v.code); chip.style.borderColor = 'var(--green)'; setTimeout(() => chip.style.borderColor = '', 1000); };
   vg.appendChild(chip);
 });
+
 document.querySelectorAll('.builder-tabs .tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const panel = btn.closest('.builder-panel') || btn.closest('.dash-page');
@@ -157,21 +1132,24 @@ document.querySelectorAll('.builder-tabs .tab-btn').forEach(btn => {
     if (target) target.classList.add('active');
   });
 });
-function syncColor(el) { document.getElementById('b-color').value = el.value.replace('#',''); updatePreview(); }
-function syncColorText(el) { const hex = el.value.replace('#',''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('b-color-pick').value = '#' + hex; updatePreview(); }
+
+function syncColor(el) { document.getElementById('b-color').value = el.value.replace('#', ''); updatePreview(); }
+function syncColorText(el) { const hex = el.value.replace('#', ''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('b-color-pick').value = '#' + hex; updatePreview(); }
 function resolveVar(text) {
-  return text.replace(/\{user\.mention\}/g,'@username').replace(/\{username\}/g,'username')
-    .replace(/\{user\.avatar\}/g,'https://cdn.discordapp.com/embed/avatars/0.png')
-    .replace(/\{user\.id\}/g,'123456789').replace(/\{user\.created_at\}/g,'Jan 1 2024')
-    .replace(/\{server\}/g,'My Server').replace(/\{server\.icon\}/g,'https://cdn.discordapp.com/embed/avatars/1.png')
-    .replace(/\{count\}/g,'1234').replace(/\{boosts\}/g,'5')
-    .replace(/\{bot\.avatar\}/g,'https://cdn.discordapp.com/embed/avatars/2.png');
+  return text
+    .replace(/\{user\.mention\}/g, '@username').replace(/\{username\}/g, 'username')
+    .replace(/\{user\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/0.png')
+    .replace(/\{user\.id\}/g, '123456789').replace(/\{user\.created_at\}/g, 'Jan 1 2024')
+    .replace(/\{server\}/g, 'My Server').replace(/\{server\.icon\}/g, 'https://cdn.discordapp.com/embed/avatars/1.png')
+    .replace(/\{count\}/g, '1234').replace(/\{boosts\}/g, '5')
+    .replace(/\{bot\.avatar\}/g, 'https://cdn.discordapp.com/embed/avatars/2.png');
 }
 function isImageUrl(url) { return url && (url.startsWith('http') || url.includes('cdn.discordapp')); }
+
 function updatePreview() {
   const title = document.getElementById('b-title').value;
   const desc = document.getElementById('b-desc').value;
-  const colorHex = document.getElementById('b-color').value.replace('#','');
+  const colorHex = document.getElementById('b-color').value.replace('#', '');
   const timestamp = document.getElementById('b-timestamp').checked;
   const authorName = document.getElementById('b-author-name').value;
   const authorIcon = document.getElementById('b-author-icon').value;
@@ -181,65 +1159,83 @@ function updatePreview() {
   const message = document.getElementById('b-message').value;
   const message2 = document.getElementById('b-message2').value;
   const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
+
   document.getElementById('prev-message').textContent = resolveVar(message);
   const msg2El = document.getElementById('prev-message2');
   if (message2) { msg2El.textContent = resolveVar(message2); msg2El.style.display = 'block'; } else { msg2El.style.display = 'none'; }
   const authorEl = document.getElementById('prev-author');
   if (authorName) {
     authorEl.style.display = 'flex'; document.getElementById('prev-author-name').textContent = resolveVar(authorName);
-    const iconResolved = resolveVar(authorIcon); const authorIconEl = document.getElementById('prev-author-icon');
-    if (authorIcon && isImageUrl(iconResolved)) { authorIconEl.src = iconResolved; authorIconEl.style.display = 'block'; } else { authorIconEl.style.display = 'none'; }
+    const ir = resolveVar(authorIcon); const aie = document.getElementById('prev-author-icon');
+    if (authorIcon && isImageUrl(ir)) { aie.src = ir; aie.style.display = 'block'; } else { aie.style.display = 'none'; }
   } else { authorEl.style.display = 'none'; }
-  const thumbResolved = resolveVar(thumbnail); const thumbEl = document.getElementById('prev-thumbnail');
-  if (thumbnail && isImageUrl(thumbResolved)) { document.getElementById('prev-thumb-img').src = thumbResolved; thumbEl.style.display = 'block'; } else { thumbEl.style.display = 'none'; }
-  const titleEl = document.getElementById('prev-title');
-  if (title) { titleEl.textContent = resolveVar(title); titleEl.style.display = 'block'; } else { titleEl.style.display = 'none'; }
-  const descEl = document.getElementById('prev-desc');
-  if (desc) { descEl.textContent = resolveVar(desc); descEl.style.display = 'block'; } else { descEl.style.display = 'none'; }
-  const fieldsEl = document.getElementById('prev-fields');
-  if (fields.length > 0) { fieldsEl.style.display = 'flex'; fieldsEl.innerHTML = fields.map(f => `<div class="mock-embed-field ${f.inline?'inline':''}"><div class="mock-embed-field-name">${resolveVar(f.name)}</div><div class="mock-embed-field-value">${resolveVar(f.value)}</div></div>`).join(''); } else { fieldsEl.style.display = 'none'; fieldsEl.innerHTML = ''; }
-  const imageResolved = resolveVar(image); const imageEl = document.getElementById('prev-image');
-  if (image && isImageUrl(imageResolved)) { document.getElementById('prev-img').src = imageResolved; imageEl.style.display = 'block'; } else { imageEl.style.display = 'none'; }
-  const footerWrap = document.getElementById('prev-footer-wrap');
+  const tr = resolveVar(thumbnail); const te = document.getElementById('prev-thumbnail');
+  if (thumbnail && isImageUrl(tr)) { document.getElementById('prev-thumb-img').src = tr; te.style.display = 'block'; } else { te.style.display = 'none'; }
+  const tle = document.getElementById('prev-title');
+  if (title) { tle.textContent = resolveVar(title); tle.style.display = 'block'; } else { tle.style.display = 'none'; }
+  const de = document.getElementById('prev-desc');
+  if (desc) { de.textContent = resolveVar(desc); de.style.display = 'block'; } else { de.style.display = 'none'; }
+  const fe = document.getElementById('prev-fields');
+  if (fields.length > 0) {
+    fe.style.display = 'flex';
+    fe.innerHTML = fields.map(f => `<div class="mock-embed-field ${f.inline ? 'inline' : ''}"><div class="mock-embed-field-name">${resolveVar(f.name)}</div><div class="mock-embed-field-value">${resolveVar(f.value)}</div></div>`).join('');
+  } else { fe.style.display = 'none'; fe.innerHTML = ''; }
+  const ir2 = resolveVar(image); const ie = document.getElementById('prev-image');
+  if (image && isImageUrl(ir2)) { document.getElementById('prev-img').src = ir2; ie.style.display = 'block'; } else { ie.style.display = 'none'; }
+  const fw = document.getElementById('prev-footer-wrap');
   if (footer || timestamp) {
-    footerWrap.style.display = 'flex'; document.getElementById('prev-footer-text').textContent = resolveVar(footer);
-    const tsEl = document.getElementById('prev-ts');
-    if (timestamp) { tsEl.textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); tsEl.style.display = 'inline'; } else { tsEl.style.display = 'none'; }
-  } else { footerWrap.style.display = 'none'; }
-  const btnsEl = document.getElementById('prev-buttons');
-  if (buttons.length > 0) { btnsEl.style.display = 'flex'; btnsEl.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji+' ' : ''}${b.label}</div>`).join(''); } else { btnsEl.style.display = 'none'; }
+    fw.style.display = 'flex'; document.getElementById('prev-footer-text').textContent = resolveVar(footer);
+    const ts = document.getElementById('prev-ts');
+    if (timestamp) { ts.textContent = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); ts.style.display = 'inline'; } else { ts.style.display = 'none'; }
+  } else { fw.style.display = 'none'; }
+  const be = document.getElementById('prev-buttons');
+  if (buttons.length > 0) {
+    be.style.display = 'flex';
+    be.innerHTML = buttons.map(b => `<div class="mock-button">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div>`).join('');
+  } else { be.style.display = 'none'; }
   const hasEmbed = title || desc || authorName || footer || thumbnail || image || fields.length > 0 || timestamp;
-  const embedEl = document.getElementById('prev-embed');
-  embedEl.style.display = hasEmbed ? 'block' : 'none';
-  if (hasEmbed) embedEl.style.borderLeftColor = color;
+  const ee = document.getElementById('prev-embed');
+  ee.style.display = hasEmbed ? 'block' : 'none';
+  if (hasEmbed) ee.style.borderLeftColor = color;
   generateOutput();
 }
+
 function addField() {
   const name = document.getElementById('f-name').value.trim();
   const value = document.getElementById('f-value').value.trim();
   const inline = document.getElementById('f-inline').checked;
   if (!name || !value) return;
-  fields.push({name,value,inline});
+  fields.push({ name, value, inline });
   document.getElementById('f-name').value = ''; document.getElementById('f-value').value = ''; document.getElementById('f-inline').checked = false;
   renderFieldsList(); updatePreview();
 }
-function renderFieldsList() { document.getElementById('fields-list').innerHTML = fields.map((f,i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div>${f.inline?'<span class="field-item-badge">inline</span>':''}<button class="remove-btn" onclick="removeField(${i})">&#x2715;</button></div>`).join(''); }
-function removeField(i) { fields.splice(i,1); renderFieldsList(); updatePreview(); }
+function renderFieldsList() {
+  document.getElementById('fields-list').innerHTML = fields.map((f, i) =>
+    `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div>${f.inline ? '<span class="field-item-badge">inline</span>' : ''}<button class="remove-btn" onclick="removeField(${i})">&#x2715;</button></div>`
+  ).join('');
+}
+function removeField(i) { fields.splice(i, 1); renderFieldsList(); updatePreview(); }
+
 function addButton() {
   const label = document.getElementById('btn-label').value.trim();
   const url = document.getElementById('btn-url').value.trim();
   const emoji = document.getElementById('btn-emoji').value.trim();
   if (!label || !url) return;
-  buttons.push({label,url,emoji});
-  document.getElementById('btn-label').value=''; document.getElementById('btn-url').value=''; document.getElementById('btn-emoji').value='';
+  buttons.push({ label, url, emoji });
+  document.getElementById('btn-label').value = ''; document.getElementById('btn-url').value = ''; document.getElementById('btn-emoji').value = '';
   renderButtonsList(); updatePreview();
 }
-function renderButtonsList() { document.getElementById('buttons-list').innerHTML = buttons.map((b,i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.emoji?b.emoji+' ':''}${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="removeButton(${i})">&#x2715;</button></div>`).join(''); }
-function removeButton(i) { buttons.splice(i,1); renderButtonsList(); updatePreview(); }
+function renderButtonsList() {
+  document.getElementById('buttons-list').innerHTML = buttons.map((b, i) =>
+    `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.emoji ? b.emoji + ' ' : ''}${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="removeButton(${i})">&#x2715;</button></div>`
+  ).join('');
+}
+function removeButton(i) { buttons.splice(i, 1); renderButtonsList(); updatePreview(); }
+
 function generateOutput() {
   const title = document.getElementById('b-title').value;
   const desc = document.getElementById('b-desc').value;
-  const colorHex = document.getElementById('b-color').value.replace('#','');
+  const colorHex = document.getElementById('b-color').value.replace('#', '');
   const timestamp = document.getElementById('b-timestamp').checked;
   const authorName = document.getElementById('b-author-name').value;
   const authorIcon = document.getElementById('b-author-icon').value;
@@ -252,14 +1248,14 @@ function generateOutput() {
   if (message) out += `\n$v{message: ${message}}`;
   if (title) out += `\n$v{title: ${title}}`;
   if (colorHex) out += `\n$v{color: ${colorHex}}`;
-  if (authorName) { const iconPart = authorIcon ? ` {icon: ${authorIcon}}` : ''; out += `\n$v{author: ${authorName}${iconPart}}`; }
+  if (authorName) { const ip = authorIcon ? ` {icon: ${authorIcon}}` : ''; out += `\n$v{author: ${authorName}${ip}}`; }
   if (desc) out += `\n$v{description: ${desc}}`;
   if (thumbnail) out += `\n$v{thumbnail: ${thumbnail}}`;
   if (image) out += `\n$v{image: ${image}}`;
-  fields.forEach(f => { out += `\n$v{field: ${f.name} && ${f.value}${f.inline?' && inline':''}}`; });
+  fields.forEach(f => { out += `\n$v{field: ${f.name} && ${f.value}${f.inline ? ' && inline' : ''}}`; });
   if (footer) out += `\n$v{footer: ${footer}}`;
   if (timestamp) out += `\n$v{timestamp: true}`;
-  buttons.forEach(b => { out += `\n$v{button: ${b.label} && ${b.url}${b.emoji?' && '+b.emoji:''}}`; });
+  buttons.forEach(b => { out += `\n$v{button: ${b.label} && ${b.url}${b.emoji ? ' && ' + b.emoji : ''}}`; });
   if (message2) out += `\n$v{message2: ${message2}}`;
   document.getElementById('output-box').textContent = out;
 }
@@ -271,35 +1267,32 @@ function copyOutput() {
 }
 updatePreview();
 
-/* ══════════════════════════════════════════
-   EMBED BUILDER — DASHBOARD
-══════════════════════════════════════════ */
+/* ── EMBED BUILDER — DASHBOARD ───────────────────────── */
 const dbFields = [], dbButtons = [];
-function syncDashColor(el) { document.getElementById('db-color').value = el.value.replace('#',''); updateDashPreview(); }
-function syncDashColorText(el) { const hex = el.value.replace('#',''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('db-color-pick').value = '#' + hex; updateDashPreview(); }
+function syncDashColor(el) { document.getElementById('db-color').value = el.value.replace('#', ''); updateDashPreview(); }
+function syncDashColorText(el) { const hex = el.value.replace('#', ''); if (/^[0-9A-Fa-f]{6}$/.test(hex)) document.getElementById('db-color-pick').value = '#' + hex; updateDashPreview(); }
 function updateDashPreview() {
   const title = document.getElementById('db-title').value;
   const desc = document.getElementById('db-desc').value;
-  const colorHex = document.getElementById('db-color').value.replace('#','');
+  const colorHex = document.getElementById('db-color').value.replace('#', '');
   const color = /^[0-9A-Fa-f]{6}$/.test(colorHex) ? '#' + colorHex : '#9aaf52';
   const message = document.getElementById('db-message').value;
   document.getElementById('db-prev-message').textContent = message;
-  const titleEl = document.getElementById('db-prev-title');
-  if (title) { titleEl.textContent = title; titleEl.style.display = 'block'; } else { titleEl.style.display = 'none'; }
-  const descEl = document.getElementById('db-prev-desc');
-  if (desc) { descEl.textContent = desc; descEl.style.display = 'block'; } else { descEl.style.display = 'none'; }
-  const embedEl = document.getElementById('db-prev-embed');
+  const tle = document.getElementById('db-prev-title');
+  if (title) { tle.textContent = title; tle.style.display = 'block'; } else { tle.style.display = 'none'; }
+  const de = document.getElementById('db-prev-desc');
+  if (desc) { de.textContent = desc; de.style.display = 'block'; } else { de.style.display = 'none'; }
+  const ee = document.getElementById('db-prev-embed');
   const hasEmbed = title || desc;
-  embedEl.style.display = hasEmbed ? 'block' : 'none';
-  if (hasEmbed) embedEl.style.borderLeftColor = color;
+  ee.style.display = hasEmbed ? 'block' : 'none';
+  if (hasEmbed) ee.style.borderLeftColor = color;
   let out = ',ce';
   if (message) out += `\n$v{message: ${message}}`;
   if (title) out += `\n$v{title: ${title}}`;
   if (colorHex) out += `\n$v{color: ${colorHex}}`;
   const footer = document.getElementById('db-footer').value;
   if (footer) out += `\n$v{footer: ${footer}}`;
-  const ts = document.getElementById('db-timestamp').checked;
-  if (ts) out += `\n$v{timestamp: true}`;
+  if (document.getElementById('db-timestamp').checked) out += `\n$v{timestamp: true}`;
   document.getElementById('db-output-box').textContent = out;
 }
 function addDashField() {
@@ -307,32 +1300,35 @@ function addDashField() {
   const value = document.getElementById('dbf-value').value.trim();
   const inline = document.getElementById('dbf-inline').checked;
   if (!name || !value) return;
-  dbFields.push({name,value,inline});
-  document.getElementById('dbf-name').value=''; document.getElementById('dbf-value').value=''; document.getElementById('dbf-inline').checked=false;
-  document.getElementById('db-fields-list').innerHTML = dbFields.map((f,i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div><button class="remove-btn" onclick="dbFields.splice(${i},1);renderDbFields();">&#x2715;</button></div>`).join('');
+  dbFields.push({ name, value, inline });
+  document.getElementById('dbf-name').value = ''; document.getElementById('dbf-value').value = ''; document.getElementById('dbf-inline').checked = false;
+  renderDbFields();
 }
 function renderDbFields() {
-  document.getElementById('db-fields-list').innerHTML = dbFields.map((f,i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div><button class="remove-btn" onclick="dbFields.splice(${i},1);renderDbFields();">&#x2715;</button></div>`).join('');
+  document.getElementById('db-fields-list').innerHTML = dbFields.map((f, i) =>
+    `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${f.name}</div><div class="field-item-val">${f.value}</div></div><button class="remove-btn" onclick="dbFields.splice(${i},1);renderDbFields();">&#x2715;</button></div>`
+  ).join('');
 }
 function addDashButton() {
   const label = document.getElementById('dbb-label').value.trim();
   const url = document.getElementById('dbb-url').value.trim();
   if (!label || !url) return;
-  dbButtons.push({label,url});
-  document.getElementById('dbb-label').value=''; document.getElementById('dbb-url').value='';
-  document.getElementById('db-buttons-list').innerHTML = dbButtons.map((b,i) => `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="dbButtons.splice(${i},1);">&#x2715;</button></div>`).join('');
+  dbButtons.push({ label, url });
+  document.getElementById('dbb-label').value = ''; document.getElementById('dbb-url').value = '';
+  document.getElementById('db-buttons-list').innerHTML = dbButtons.map((b, i) =>
+    `<div class="field-item"><div class="field-item-info"><div class="field-item-name">${b.label}</div><div class="field-item-val">${b.url}</div></div><button class="remove-btn" onclick="dbButtons.splice(${i},1);">&#x2715;</button></div>`
+  ).join('');
 }
 function copyDashOutput() {
   navigator.clipboard.writeText(document.getElementById('db-output-box').textContent);
   showToast('Command copied!', 'success');
 }
 
-/* ══════════════════════════════════════════
-   LOGIN
-══════════════════════════════════════════ */
+/* ── LOGIN / OAUTH ───────────────────────────────────── */
 function openLogin() { document.getElementById('login-overlay').classList.add('active'); }
 function closeLogin() { document.getElementById('login-overlay').classList.remove('active'); }
-document.getElementById('login-overlay').addEventListener('click', function(e) { if (e.target === this) closeLogin(); });
+document.getElementById('login-overlay').addEventListener('click', function (e) { if (e.target === this) closeLogin(); });
+
 function startDiscordOAuth(e) {
   e.preventDefault();
   window.location.href = DISCORD_OAUTH_URL;
@@ -364,6 +1360,8 @@ async function fetchDiscordUser(token) {
     showToast('Login failed. Please try again.', '');
   }
 }
+
+/* ── DASHBOARD ───────────────────────────────────────── */
 function enterDashboard(user, guilds) {
   closeLogin();
   document.getElementById('landing').classList.add('hidden');
@@ -384,6 +1382,7 @@ function enterDashboard(user, guilds) {
   buildGuildGrid(guilds);
   navTo('overview', document.querySelector('[data-page=overview]'));
 }
+
 function buildGuildGrid(guilds) {
   const grid = document.getElementById('dash-guild-grid');
   if (!guilds || guilds.length === 0) {
@@ -396,16 +1395,16 @@ function buildGuildGrid(guilds) {
     const avatarHtml = iconUrl
       ? `<img src="${iconUrl}" alt="${g.name}" style="width:52px;height:52px;border-radius:14px;border:1px solid var(--border2);" onerror="this.outerHTML='<div class=guild-select-icon>${initial}</div>'">`
       : `<div class="guild-select-icon">${initial}</div>`;
-    return `<div class="guild-select-card" onclick="selectGuild('${g.id}','${g.name.replace(/'/g,"\\'")}')">
+    const safeName = g.name.replace(/'/g, "\\'");
+    return `<div class="guild-select-card" onclick="selectGuild('${g.id}','${safeName}')">
       ${avatarHtml}
       <div class="guild-select-name">${g.name}</div>
       <div class="guild-select-meta">Admin access</div>
-      <button class="guild-select-manage" onclick="event.stopPropagation();selectGuild('${g.id}','${g.name.replace(/'/g,"\\'")}')">Configure</button>
+      <button class="guild-select-manage" onclick="event.stopPropagation();selectGuild('${g.id}','${safeName}')">Configure</button>
     </div>`;
   }).join('');
 }
 
-// ── current guild state ────────────────────────────────────────
 let currentGuildId = null;
 let currentGuildName = null;
 
@@ -413,75 +1412,32 @@ async function selectGuild(guildId, guildName) {
   currentGuildId = guildId;
   currentGuildName = guildName;
   document.getElementById('cfg-guild-name').textContent = guildName;
-  document.getElementById('rp-guild-name').textContent = guildName;
   navTo('config', document.querySelector('[data-page=config]'));
   await loadGuildConfig(guildId);
 }
 
-/* ══════════════════════════════════════════
-   CHANNEL DROPDOWN HELPERS
-══════════════════════════════════════════ */
-function buildChannelDropdown(selectEl, channels, selectedId) {
-  selectEl.innerHTML = '<option value="">— None —</option>' +
-    channels.map(c => `<option value="${c.id}" ${c.id === selectedId ? 'selected' : ''}>#${c.name}</option>`).join('');
-}
-
 async function loadGuildConfig(guildId) {
   try {
-    // load channels + config in parallel
     const [chRes, cfgRes] = await Promise.all([
       fetch(`${API_URL}/channels/${guildId}`, { headers: ngrokHdr }),
       fetch(`${API_URL}/config/${guildId}`, { headers: ngrokHdr })
     ]);
-    const channels = chRes.ok ? await chRes.json() : [];
     const cfg = cfgRes.ok ? await cfgRes.json() : {};
-
-    // fill all channel dropdowns
-    ['cfg-welcome-ch','cfg-leave-ch','cfg-log-ch','cfg-join-log-ch','cfg-leave-log-ch','cfg-delete-log-ch','cfg-modlog'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el && el.tagName === 'SELECT') {
-        const key = {
-          'cfg-welcome-ch':    cfg.welcomeChannelId,
-          'cfg-leave-ch':      cfg.leaveChannelId,
-          'cfg-log-ch':        cfg.logChannelId,
-          'cfg-join-log-ch':   cfg.joinLogChannelId,
-          'cfg-leave-log-ch':  cfg.leaveLogChannelId,
-          'cfg-delete-log-ch': cfg.deleteLogChannelId,
-          'cfg-modlog':        cfg.logChannelId,
-        }[id];
-        buildChannelDropdown(el, channels, key || null);
-      }
-    });
-
-    // fill prefix
     const pfx = document.getElementById('cfg-prefix');
     if (pfx) pfx.value = cfg.prefix || ',';
-
     showToast('Config loaded', 'success');
-  } catch(e) {
+  } catch (e) {
     showToast('Could not load config', '');
   }
 }
 
 async function saveCfgSection(section) {
   if (!currentGuildId) { showToast('Select a server first', ''); return; }
-
   let body = {};
-  if (section === 'Welcome') {
-    body.welcomeChannelId = document.getElementById('cfg-welcome-ch').value || null;
-  } else if (section === 'Leave') {
-    body.leaveChannelId = document.getElementById('cfg-leave-ch').value || null;
-  } else if (section === 'Logging') {
-    body.logChannelId        = document.getElementById('cfg-log-ch').value || null;
-    body.joinLogChannelId    = document.getElementById('cfg-join-log-ch').value || null;
-    body.leaveLogChannelId   = document.getElementById('cfg-leave-log-ch').value || null;
-    body.deleteLogChannelId  = document.getElementById('cfg-delete-log-ch').value || null;
-  } else if (section === 'Settings') {
-    body.prefix = document.getElementById('cfg-prefix').value || ',';
-  } else if (section === 'Moderation') {
-    body.logChannelId = document.getElementById('cfg-modlog').value || null;
-  }
-
+  if (section === 'Welcome') body.welcomeChannelId = document.getElementById('cfg-welcome-ch').value || null;
+  else if (section === 'Logging') body.logChannelId = document.getElementById('cfg-log-ch').value || null;
+  else if (section === 'Settings') body.prefix = document.getElementById('cfg-prefix').value || ',';
+  else if (section === 'Moderation') body.logChannelId = document.getElementById('cfg-modlog').value || null;
   try {
     const res = await fetch(`${API_URL}/config/${currentGuildId}`, {
       method: 'PATCH',
@@ -490,122 +1446,17 @@ async function saveCfgSection(section) {
     });
     if (!res.ok) throw new Error('failed');
     showToast(section + ' config saved!', 'success');
-  } catch(e) {
+  } catch (e) {
     showToast('Save failed. Is the bot online?', '');
   }
 }
 
-/* ══════════════════════════════════════════
-   RESTORE POINTS
-══════════════════════════════════════════ */
-let snapshots = [];
-
-async function loadSnapshots() {
-  if (!currentGuildId) return;
-  const list = document.getElementById('rp-list');
-  list.innerHTML = '<div class="rp-empty">Loading...</div>';
-  try {
-    const res = await fetch(`${API_URL}/snapshots/${currentGuildId}`, { headers: ngrokHdr });
-    snapshots = res.ok ? await res.json() : [];
-    renderSnapshots();
-  } catch(e) {
-    list.innerHTML = '<div class="rp-empty">Could not load snapshots.</div>';
-  }
-}
-
-function renderSnapshots() {
-  const list = document.getElementById('rp-list');
-  if (!snapshots.length) {
-    list.innerHTML = '<div class="rp-empty">No snapshots found.</div>';
-    return;
-  }
-  list.innerHTML = snapshots.map(s => `
-    <div class="rp-item" id="rp-${s.id}">
-      <div class="rp-item-info">
-        <div class="rp-item-name">${s.name}</div>
-        <div class="rp-item-meta">Created at: ${new Date(s.createdAt).toLocaleString()} | ID: ${s.id}</div>
-        <div class="rp-item-counts">Contains: ${s.roleCount} Roles, ${s.channelCount} Channels &amp; Categories</div>
-      </div>
-      <div class="rp-item-actions">
-        <button class="rp-restore-btn" onclick="restoreSnapshot('${s.id}')">RESTORE THIS POINT</button>
-        <button class="rp-delete-btn" onclick="deleteSnapshot('${s.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function openSnapshotModal() {
-  if (!currentGuildId) { showToast('Select a server first', ''); return; }
-  document.getElementById('rp-modal').classList.add('active');
-  document.getElementById('rp-snapshot-name').value = '';
-  setTimeout(() => document.getElementById('rp-snapshot-name').focus(), 50);
-}
-function closeSnapshotModal() {
-  document.getElementById('rp-modal').classList.remove('active');
-}
-
-async function confirmCreateSnapshot() {
-  const name = document.getElementById('rp-snapshot-name').value.trim();
-  if (!name) { showToast('Enter a name first', ''); return; }
-  const btn = document.getElementById('rp-confirm-btn');
-  btn.disabled = true; btn.textContent = 'Creating...';
-  try {
-    const res = await fetch(`${API_URL}/snapshots/${currentGuildId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...ngrokHdr },
-      body: JSON.stringify({ name })
-    });
-    if (!res.ok) throw new Error('failed');
-    const snap = await res.json();
-    snapshots.unshift(snap);
-    renderSnapshots();
-    closeSnapshotModal();
-    showToast('Snapshot created!', 'success');
-  } catch(e) {
-    showToast('Failed to create snapshot', '');
-  }
-  btn.disabled = false; btn.textContent = 'Confirm';
-}
-
-async function deleteSnapshot(snapshotId) {
-  if (!confirm('Delete this snapshot?')) return;
-  try {
-    await fetch(`${API_URL}/snapshots/${currentGuildId}/${snapshotId}`, { method: 'DELETE', headers: ngrokHdr });
-    snapshots = snapshots.filter(s => s.id !== snapshotId);
-    renderSnapshots();
-    showToast('Snapshot deleted', '');
-  } catch(e) { showToast('Delete failed', ''); }
-}
-
-async function restoreSnapshot(snapshotId) {
-  if (!confirm('Restore this snapshot? Missing roles and channels will be re-created.')) return;
-  const btn = document.querySelector(`#rp-${snapshotId} .rp-restore-btn`);
-  if (btn) { btn.disabled = true; btn.textContent = 'Restoring...'; }
-  try {
-    const res = await fetch(`${API_URL}/snapshots/${currentGuildId}/${snapshotId}/restore`, {
-      method: 'POST', headers: ngrokHdr
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'failed');
-    const r = data.restored;
-    showToast(`Restored! ${r.roles.length} roles, ${r.channels.length} channels. ${r.errors.length ? r.errors.length+' errors.' : ''}`, 'success');
-  } catch(e) {
-    showToast('Restore failed: ' + e.message, '');
-  }
-  if (btn) { btn.disabled = false; btn.textContent = 'RESTORE THIS POINT'; }
-}
-
-/* ══════════════════════════════════════════
-   SIGN OUT / SESSION
-══════════════════════════════════════════ */
 function signOut() {
   sessionStorage.removeItem('dc_user');
   sessionStorage.removeItem('dc_guilds');
   document.getElementById('dashboard').classList.remove('active');
   document.getElementById('landing').classList.remove('hidden');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 function resumeSession() {
   const userStr = sessionStorage.getItem('dc_user');
@@ -614,26 +1465,19 @@ function resumeSession() {
       const user = JSON.parse(userStr);
       const guilds = JSON.parse(sessionStorage.getItem('dc_guilds') || '[]');
       enterDashboard(user, guilds);
-    } catch(e) { sessionStorage.clear(); }
+    } catch (e) { sessionStorage.clear(); }
   }
 }
 
-/* ══════════════════════════════════════════
-   DASHBOARD NAV
-══════════════════════════════════════════ */
 function navTo(pageId, el) {
   document.querySelectorAll('.dash-page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar-link').forEach(a => a.classList.remove('active'));
   const page = document.getElementById('page-' + pageId);
   if (page) page.classList.add('active');
   if (el) el.classList.add('active');
-  // auto-load snapshots when navigating to that page
-  if (pageId === 'restore-points' && currentGuildId) loadSnapshots();
 }
 
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
+/* ── TOAST ───────────────────────────────────────────── */
 function showToast(msg, type) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.className = 'toast' + (type ? ' ' + type : '');
@@ -642,21 +1486,13 @@ function showToast(msg, type) {
 }
 function saveCfg(section) { saveCfgSection(section); }
 
-/* INIT */
-checkOAuthCallback();
-resumeSession();
-
-/* ══════════════════════════════════════════
-   LYRICS AI CHAT
-══════════════════════════════════════════ */
+/* ── AI CHAT ─────────────────────────────────────────── */
 const GROQ_API_KEY = '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';
 const GROQ_MODEL = 'llama3-8b-8192';
 const lcpHistory = [];
 let lcpPanelOpen = false;
-const LYRICS_SYSTEM = `You are Lyrics, a friendly and helpful Discord bot assistant. Created by baufunt. Casual, fun, knowledgeable personality.
-Commands use the , prefix by default. Key commands: ,ban ,kick ,mute ,warn ,purge ,lock ,slowmode ,userinfo ,serverinfo ,avatar ,ping ,setprefix ,help ,embed ,announce ,setwelcome ,setlog ,setleave ,autorole ,autoreply ,settings ,cmds
-Embed builder uses ,ce with $v{title:} $v{description:} $v{color: hex} $v{footer:} $v{field: name && value} $v{button: label && url} syntax.
-Keep responses short and helpful. Use \`code\` for commands. You ARE Lyrics — never break character.`;
+const LYRICS_SYSTEM = `You are Lyrics, a friendly and helpful Discord bot. Created by baufunt. Casual, fun, helpful personality. Default prefix is , (comma). Commands: ,ban ,kick ,mute ,warn ,purge ,lock ,slowmode ,userinfo ,serverinfo ,avatar ,ping ,setprefix ,help ,embed ,announce ,setwelcome ,setlog ,setleave ,autorole ,autoreply ,settings ,cmds. Embed builder: ,ce with $v{title:} $v{description:} $v{color: hex} $v{footer:} $v{field: name && value} $v{button: label && url}. Keep responses short and helpful. Use \`code\` for commands. You ARE Lyrics — never break character.`;
+
 function toggleLyricsChat() {
   lcpPanelOpen = !lcpPanelOpen;
   const panel = document.getElementById('lyrics-chat-panel');
@@ -669,14 +1505,14 @@ function lcpAppendMsg(role, text) {
   const avatar = document.createElement('div'); avatar.className = 'lcp-msg-avatar'; avatar.textContent = role === 'user' ? 'U' : 'L';
   const bubble = document.createElement('div'); bubble.className = 'lcp-bubble'; bubble.textContent = text;
   if (role === 'user') { div.appendChild(bubble); div.appendChild(avatar); } else { div.appendChild(avatar); div.appendChild(bubble); }
-  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight; return bubble;
+  msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
 }
 function lcpShowTyping() {
   const msgs = document.getElementById('lcp-messages');
   const div = document.createElement('div'); div.className = 'lcp-msg bot'; div.id = 'lcp-typing-indicator';
-  const avatar = document.createElement('div'); avatar.className = 'lcp-msg-avatar'; avatar.textContent = 'L';
-  const bubble = document.createElement('div'); bubble.className = 'lcp-bubble lcp-typing'; bubble.innerHTML = '<span></span><span></span><span></span>';
-  div.appendChild(avatar); div.appendChild(bubble); msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
+  const av = document.createElement('div'); av.className = 'lcp-msg-avatar'; av.textContent = 'L';
+  const bub = document.createElement('div'); bub.className = 'lcp-bubble lcp-typing'; bub.innerHTML = '<span></span><span></span><span></span>';
+  div.appendChild(av); div.appendChild(bub); msgs.appendChild(div); msgs.scrollTop = msgs.scrollHeight;
 }
 function lcpHideTyping() { const el = document.getElementById('lcp-typing-indicator'); if (el) el.remove(); }
 async function lcpSend(presetText) {
@@ -697,12 +1533,12 @@ async function lcpSend(presetText) {
     });
     const data = await res.json();
     lcpHideTyping();
-    const reply = data.choices?.[0]?.message?.content || "Hmm, had trouble connecting. Try again!";
+    const reply = data.choices?.[0]?.message?.content || "Hmm, I had trouble connecting. Try again!";
     lcpHistory.push({ role: 'assistant', content: reply });
     lcpAppendMsg('bot', reply);
-  } catch(e) {
+  } catch (e) {
     lcpHideTyping();
-    lcpAppendMsg('bot', "Oops, couldn't reach the AI right now!");
+    lcpAppendMsg('bot', "Oops, couldn't reach the AI right now. Try again in a sec!");
   }
   document.getElementById('lcp-send-btn').disabled = false;
   document.getElementById('lcp-input').focus();
@@ -710,9 +1546,16 @@ async function lcpSend(presetText) {
 const _lcpDash = document.getElementById('dashboard');
 if (_lcpDash) {
   new MutationObserver(() => {
-    const dashActive = _lcpDash.classList.contains('active');
+    const active = _lcpDash.classList.contains('active');
     const btn = document.getElementById('lyrics-chat-btn');
-    if (dashActive) btn.classList.add('dash-visible');
+    if (active) btn.classList.add('dash-visible');
     else { btn.classList.remove('dash-visible'); if (lcpPanelOpen) toggleLyricsChat(); }
   }).observe(_lcpDash, { attributes: true, attributeFilter: ['class'] });
 }
+
+/* ── INIT ────────────────────────────────────────────── */
+checkOAuthCallback();
+resumeSession();
+</script>
+</body>
+</html>

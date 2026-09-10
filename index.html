@@ -232,9 +232,9 @@
   .mock-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:#0a0a0c;flex-shrink:0;overflow:hidden}
   .mock-right{flex:1;min-width:0}
   .mock-meta{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
-  .mock-name{font-weight:600;font-size:.95rem;color:#f3f0ff}
-  .mock-bot-tag{background:#5865f2;color:white;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;letter-spacing:.03em}
-  .mock-time{color:#949ba4;font-size:.72rem}
+  .mock-name{font-weight:600;font-size:.95rem;color:#f0f0f2}
+  .mock-bot-tag{background:#b0b0b5;color:white;font-size:.6rem;font-weight:700;padding:1px 4px;border-radius:3px;letter-spacing:.03em}
+  .mock-time{color:#99999f;font-size:.72rem}
   .mock-content{color:#dbdee1;font-size:.9rem;margin-bottom:4px;word-break:break-word}
   .mock-content:empty{display:none}
   .mock-embed{border-left:4px solid var(--accent);background:#2b2d31;border-radius:6px;padding:12px 16px;margin-top:4px;max-width:440px}
@@ -253,8 +253,8 @@
   .mock-embed-image{margin-top:8px}
   .mock-embed-image img{max-width:100%;border-radius:6px}
   .mock-embed-footer{display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06)}
-  .mock-embed-footer-text{font-size:.72rem;color:#949ba4}
-  .mock-embed-ts{font-size:.72rem;color:#949ba4}
+  .mock-embed-footer-text{font-size:.72rem;color:#99999f}
+  .mock-embed-ts{font-size:.72rem;color:#99999f}
   .mock-embed-ts::before{content:' • '}
   .mock-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
   .mock-button{background:#4e5058;border-radius:6px;padding:6px 14px;font-size:.82rem;color:#dbdee1;display:flex;align-items:center;gap:6px;font-weight:500}
@@ -295,7 +295,7 @@
   .login-sub{font-size:.8rem;color:var(--muted);margin-bottom:30px}
   .login-card h2{font-family:var(--font-display);font-weight:700;font-size:1.25rem;margin-bottom:6px}
   .login-card p.login-hint{font-size:.82rem;color:var(--muted);margin-bottom:26px;line-height:1.55}
-  .discord-oauth-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px;border-radius:12px;background:#5865f2;color:#fff;border:none;font-family:var(--font-display);font-weight:600;font-size:.92rem;cursor:pointer;text-decoration:none;margin-bottom:14px}
+  .discord-oauth-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:13px;border-radius:12px;background:#b0b0b5;color:#fff;border:none;font-family:var(--font-display);font-weight:600;font-size:.92rem;cursor:pointer;text-decoration:none;margin-bottom:14px}
   .discord-oauth-btn:hover{background:#4752c4}
   .discord-oauth-btn svg{width:20px;height:20px;fill:#fff;flex-shrink:0}
   .login-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.72rem;margin:2px 0 12px}
@@ -788,6 +788,10 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
   .command-picker-note{font-size:.72rem;color:var(--muted);margin-top:7px}
   .output-box{font-size:.72rem}
 
+
+/* VAILDS REVAMP */
+.dashboard-preview-section{padding:80px 0 20px}.dashboard-preview{display:grid;grid-template-columns:190px 1fr;min-height:390px;border:1px solid var(--border-strong);border-radius:18px;overflow:hidden;background:#0d0d10;box-shadow:0 24px 80px rgba(0,0,0,.28)}.preview-sidebar{background:#101012;border-right:1px solid var(--border);padding:22px 16px;display:flex;flex-direction:column;gap:12px;color:var(--muted);font-size:.76rem}.preview-brand{color:var(--text);font-weight:700;font-family:var(--font-display);display:flex;align-items:center;gap:8px;margin-bottom:18px}.preview-brand img{width:25px;height:25px;border-radius:7px}.preview-side-label{font-size:.58rem;letter-spacing:.12em;color:var(--muted-2);margin-top:12px}.preview-sidebar b{color:var(--text);font-weight:600}.preview-dashboard-main{padding:28px}.preview-dashboard-head{display:flex;justify-content:space-between;align-items:flex-start}.preview-dashboard-head h3{font:600 1.5rem var(--font-display);margin-top:4px}.preview-user{border:1px solid var(--border);border-radius:999px;padding:7px 11px;font-size:.7rem;color:var(--muted)}.preview-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:25px 0}.preview-metrics div,.preview-panels>div{border:1px solid var(--border);background:var(--surface);border-radius:12px;padding:16px}.preview-metrics strong{display:block;font:700 1.25rem var(--font-display)}.preview-metrics small,.preview-panels small{color:var(--muted);font-size:.68rem}.preview-panels{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}.preview-panels span{display:block;color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}.preview-panels b{display:block;font-size:.76rem;margin-top:9px}.preview-panels p{font-size:.74rem;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--border)}.cmd-row-button{width:100%;text-align:left;cursor:pointer;font:inherit}.cmd-row-button:hover{background:var(--surface-2);border-color:var(--border-strong)}.cmd-row-arrow{margin-left:auto;color:var(--muted-2)}.command-modal{position:fixed;inset:0;display:none;z-index:1000}.command-modal.open{display:block}.command-modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px)}.command-modal-card{position:relative;width:min(620px,calc(100% - 32px));margin:10vh auto 0;background:#101012;border:1px solid var(--border-strong);border-radius:18px;padding:30px;box-shadow:0 30px 100px rgba(0,0,0,.55)}.command-modal-close{position:absolute;right:15px;top:12px;border:0;background:none;color:var(--muted);font-size:25px;cursor:pointer}.command-modal-card h2{font:700 1.8rem var(--font-display);margin:7px 0}.command-modal-card>p{color:var(--muted);font-size:.88rem;margin-bottom:22px}.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.detail-grid>div,.detail-example{border:1px solid var(--border);background:var(--surface);border-radius:11px;padding:13px}.detail-grid span,.detail-example span{display:block;color:var(--muted-2);font-size:.61rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}.detail-grid strong,.detail-grid code,.detail-example code{font-size:.72rem;color:var(--text);font-family:'Courier New',monospace}.detail-example{margin:10px 0 18px}.detail-example code{display:block;white-space:pre-wrap}.dev-profile-card{grid-template-columns:140px 1fr}.dev-profile-avatar{width:140px;height:140px}.dev-profile h2{font-size:1.7rem}.dev-profile-copy{font-size:.84rem}.dev-skill{font-size:.7rem}.template-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}.template-chip{white-space:nowrap}@media(max-width:700px){.dashboard-preview{grid-template-columns:1fr}.preview-sidebar{display:none}.preview-panels,.preview-metrics,.detail-grid{grid-template-columns:1fr}.preview-dashboard-main{padding:20px}.dev-profile-card{grid-template-columns:1fr}.dev-profile-avatar{width:112px;height:112px}}
+
 </style>
 </head>
 <body>
@@ -938,6 +942,23 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
         <div class="feature-card card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h3>Built to stay up</h3><p>Near-perfect uptime and fast response times, so Vailds is there when your members need it.</p></div>
       </div>
     </section>
+    <section class="dashboard-preview-section">
+      <div class="section-label">Dashboard</div>
+      <div class="section-title">Everything important, one clean control panel.</div>
+      <div class="dashboard-preview">
+        <div class="preview-sidebar">
+          <div class="preview-brand"><img src="Vailds-pfp.png" alt="vailds">vailds</div>
+          <span class="preview-side-label">MAIN</span><b>Overview</b><span>Status</span>
+          <span class="preview-side-label">SERVER</span><span>Servers</span><span>Configuration</span>
+          <span class="preview-side-label">MODERATION</span><span>Warnings</span>
+        </div>
+        <div class="preview-dashboard-main">
+          <div class="preview-dashboard-head"><div><span class="eyebrow">Dashboard</span><h3>Good evening.</h3></div><span class="preview-user">Developer</span></div>
+          <div class="preview-metrics"><div><strong>1,284</strong><small>Members</small></div><div><strong>98.7%</strong><small>Uptime</small></div><div><strong>42ms</strong><small>Latency</small></div></div>
+          <div class="preview-panels"><div><span>Server configuration</span><b>Welcome system</b><small>Enabled · #welcome</small><b>Moderation logs</b><small>Enabled · #mod-logs</small></div><div><span>Recent activity</span><p>Configuration updated</p><p>Warning issued</p><p>New member joined</p></div></div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- COMMANDS -->
@@ -989,15 +1010,14 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
           <div>
             <h2>Vailds Developer</h2>
             <div class="dev-profile-meta">Creator &amp; maintainer</div>
-            <p class="dev-profile-copy">I build and maintain Vailds on my own — from moderation and automation to the dashboard and embed builder. Feature requests, ideas, and bug reports are welcome through the support server.</p>
+            <p class="dev-profile-copy">I build and maintain Vailds on my own — from moderation and automation to the dashboard and embed builder.</p>
             <div class="dev-profile-label">Skills</div>
             <div class="dev-skills">
-              <span class="dev-skill">JavaScript</span><span class="dev-skill">Node.js</span><span class="dev-skill">Discord.js</span><span class="dev-skill">HTML</span><span class="dev-skill">CSS</span><span class="dev-skill">APIs</span>
+              <span class="dev-skill">HTML</span><span class="dev-skill">CSS</span><span class="dev-skill">APIs</span>
             </div>
             <div class="dev-profile-label">Projects</div>
             <p class="dev-profile-copy" style="margin-bottom:0">Vailds — an all-in-one Discord bot for moderation, security, automation, music, embeds, and more.</p>
             <div class="dev-links">
-              <a class="btn btn-primary" href="https://discord.gg/V3uXKHQvJu" target="_blank">Support server</a>
               <button class="btn btn-ghost" onclick="openLogin()">Dashboard</button>
             </div>
           </div>
@@ -1029,7 +1049,7 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
           <div class="step-item"><div class="step-num">1</div><div class="step-body"><h3>Invite Vailds to your server</h3><p>Click "Add to Discord" and authorize Vailds. Grant the recommended permissions so every feature works correctly.</p></div></div>
           <div class="step-item"><div class="step-num">2</div><div class="step-body"><h3>Configure your setup</h3><p>Use <code class="inline">,enable welcome #channel</code>, <code class="inline">,modlogs enable #channel</code> and <code class="inline">,setprefix</code> to tailor Vailds to your server, or do it all from the Dashboard.</p></div></div>
           <div class="step-item"><div class="step-num">3</div><div class="step-body"><h3>Build your first embed</h3><p>Head to the <a href="#" onclick="showView('embed');return false;" style="color:var(--accent);text-decoration:none;">Embed</a> page, design your welcome message or announcement, and copy the generated command into Discord.</p></div></div>
-          <div class="step-item"><div class="step-num">4</div><div class="step-body"><h3>You're set</h3><p>Vailds handles the rest. Join the support server any time with questions or feature requests.</p></div></div>
+          <div class="step-item"><div class="step-num">4</div><div class="step-body"><h3>You're set</h3><p>Vailds handles the rest.</p></div></div>
         </div>
       </div>
 
@@ -1068,7 +1088,7 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
           <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I change the bot prefix?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Use <code class="inline">,setprefix [new prefix]</code>. The default is a comma, and each server can set its own.</div></div>
           <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What permissions does Vailds need?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Vailds requests Administrator so every feature works. Keep its role above others in your hierarchy for moderation to function correctly.</div></div>
           <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I use the Embed Builder?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Fill in the fields on the Embed page, watch the Discord preview update live, then copy the generated command and paste it into any channel Vailds is in.</div></div>
-          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Where do I get help or report a bug?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Join the support server and open a ticket — reports are tracked and answered quickly.</div></div>
+          <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Where do I get help or report a bug?<svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="faq-a">Contact the developer through the links on the developer page.</div></div>
         </div>
       </div>
     </section>
@@ -1102,7 +1122,14 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
           <button class="template-chip" onclick="applyTemplate('welcome')">Welcome</button>
           <button class="template-chip" onclick="applyTemplate('announce')">Announcement</button>
           <button class="template-chip" onclick="applyTemplate('rules')">Rules</button>
-          <button class="template-chip clear-chip" onclick="applyTemplate('clear')">Clear</button>
+          <button class="template-chip" onclick="applyTemplate('giveaway')">Giveaway</button>
+          <button class="template-chip" onclick="applyTemplate('ticket')">Ticket</button>
+          <button class="template-chip" onclick="applyTemplate('warning')">Warning</button>
+          <button class="template-chip" onclick="applyTemplate('event')">Event</button>
+          <button class="template-chip" onclick="applyTemplate('update')">Update</button>
+          <button class="template-chip" onclick="applyTemplate('faq')">FAQ</button>
+          <button class="template-chip" onclick="applyTemplate('verification')">Verification</button>
+          <button class="template-chip clear-chip" onclick="applyTemplate('clear')">Reset</button>
         </div>
       </div>
 
@@ -1254,16 +1281,29 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
           <h4>Community</h4>
           <a href="#" onclick="showView('discover');return false;">Discover</a>
           <a href="#" onclick="showView('devs');return false;">Meet the devs</a>
-          <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
         </div>
       </div>
       <div class="footer-bottom">
         <span>Vailds © 2026</span>
-        <a href="https://discord.gg/V3uXKHQvJu" target="_blank">Support Server</a>
       </div>
     </div>
   </footer>
 </div><!-- end #site -->
+
+
+<!-- COMMAND DETAIL MODAL -->
+<div class="command-modal" id="command-modal" aria-hidden="true">
+  <div class="command-modal-backdrop" onclick="closeCommandDetail()"></div>
+  <div class="command-modal-card">
+    <button class="command-modal-close" onclick="closeCommandDetail()">×</button>
+    <div class="eyebrow" id="detail-category">Command</div>
+    <h2 id="detail-name">,command</h2>
+    <p id="detail-desc">Command description</p>
+    <div class="detail-grid"><div><span>Usage</span><code id="detail-usage">,command &lt;member&gt;</code></div><div><span>Permissions</span><strong id="detail-perms">Manage Server</strong></div><div><span>Aliases</span><strong id="detail-aliases">None</strong></div></div>
+    <div class="detail-example"><span>Example</span><code id="detail-example">,command @user</code></div>
+    <button class="btn btn-primary" id="detail-copy" onclick="copyDetailCommand()">Copy command</button>
+  </div>
+</div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
@@ -1334,10 +1374,6 @@ footer{border-top-color:rgba(255,255,255,.07) !important;background:#070708 !imp
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
               View Warnings
             </button>
-            <a class="qa-btn" href="https://discord.gg/V3uXKHQvJu" target="_blank">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-              Support Server
-            </a>
           </div>
         </div>
       </div>
@@ -1647,10 +1683,24 @@ function filterCommands(){
 function renderCommands(list){
   const el = document.getElementById('cmd-list');
   if(!list.length){ el.innerHTML = '<div class="cmd-empty">No commands match your search.</div>'; return; }
-  el.innerHTML = list.map(c=>`<div class="cmd-row"><span class="cmd-row-name">${c.name}</span><span class="cmd-row-desc">${c.desc}</span><span class="cmd-row-tag">${c.cat}</span></div>`).join('');
+  el.innerHTML = list.map((c,i)=>`<button class="cmd-row cmd-row-button" onclick="openCommandDetail('${encodeURIComponent(c.name)}')"><span class="cmd-row-name">${c.name}</span><span class="cmd-row-desc">${c.desc}</span><span class="cmd-row-tag">${c.cat}</span><span class="cmd-row-arrow">→</span></button>`).join('');
 }
 buildCommandFilters();
 renderCommands(COMMANDS);
+
+
+function openCommandDetail(encoded){
+  const name=decodeURIComponent(encoded); const c=COMMANDS.find(x=>x.name===name); if(!c)return;
+  const base=name.replace(/^,/, '');
+  const examples={ban:',ban @user reason',kick:',kick @user reason',warn:',warn @user reason',mute:',mute @user 10m',userinfo:',userinfo @user',serverinfo:',serverinfo',avatar:',avatar @user',ping:',ping',help:',help',embed:',embed'};
+  const usage={Moderation:name+' <member> [reason]',Utility:name,Config:name+' <value>',Security:name+' <member> [reason]',Music:name+' [query]'}[c.cat]||name+' [options]';
+  document.getElementById('detail-category').textContent=c.cat; document.getElementById('detail-name').textContent=name; document.getElementById('detail-desc').textContent=c.desc;
+  document.getElementById('detail-usage').textContent=usage; document.getElementById('detail-perms').textContent=c.cat==='Moderation'?'Moderate Members':c.cat==='Config'?'Manage Server':'None required'; document.getElementById('detail-aliases').textContent='None'; document.getElementById('detail-example').textContent=examples[base]||name;
+  document.getElementById('detail-copy').dataset.command=name;
+  document.getElementById('command-modal').classList.add('open'); document.getElementById('command-modal').setAttribute('aria-hidden','false');
+}
+function closeCommandDetail(){const m=document.getElementById('command-modal');m.classList.remove('open');m.setAttribute('aria-hidden','true');}
+function copyDetailCommand(){const c=document.getElementById('detail-copy').dataset.command||document.getElementById('detail-name').textContent;navigator.clipboard?.writeText(c);const b=document.getElementById('detail-copy');const old=b.textContent;b.textContent='Copied';setTimeout(()=>b.textContent=old,1000);}
 
 /* ── PLACEHOLDERS (shared by Embed + Docs) ── */
 const VARS=[
@@ -1677,7 +1727,7 @@ buildVarsGrid('docs-vars-grid');
 
 /* ── EMBED BUILDER ── */
 const fields=[], buttons=[];
-const PRESET_COLORS=['ff4d78','ff8fab','5865f2','38d99b','f2b84b','ff6b81','ffffff','8f8e98'];
+const PRESET_COLORS=['ffffff','d8d8dc','bdbdc2','99999f','8f8e98','6f6f76','4d4d54','2d2d32'];
 const cpEl=document.getElementById('color-presets');
 PRESET_COLORS.forEach(hex=>{ const sw=document.createElement('div'); sw.className='swatch'; sw.style.background='#'+hex; sw.title='#'+hex; sw.onclick=()=>setColorPreset(hex); cpEl.appendChild(sw); });
 function setColorPreset(hex){ document.getElementById('b-color').value=hex; document.getElementById('b-color-pick').value='#'+hex; updatePreview(); }
@@ -1687,13 +1737,20 @@ function applyTemplate(type){
     ['b-title','b-desc','b-author-name','b-author-icon','b-footer','b-thumbnail','b-image','b-message','b-message2'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('b-timestamp').checked=false;
     fields.length=0; buttons.length=0; renderFieldsList(); renderButtonsList();
-    setColorPreset('ff4d78');
+    setColorPreset('d8d8dc');
     return;
   }
   const presets={
-    welcome:{title:'Welcome to {server}',desc:"Hey {user.mention}, we're glad you're here.\nTake a look around and introduce yourself.",color:'ff4d78',footer:'Member #{count}',timestamp:true},
-    announce:{title:'Announcement',desc:'Something new is happening — here are the details.',color:'5865f2',footer:'',timestamp:true},
-    rules:{title:'Server Rules',desc:'1. Be respectful to everyone\n2. No spam or self-promotion\n3. Follow the Discord ToS\n4. Have fun',color:'8f8e98',footer:'',timestamp:false}
+    welcome:{title:'Welcome to {server}',desc:"Hey {user.mention}, we're glad you're here.\nTake a look around and introduce yourself.",color:'d8d8dc',footer:'Member #{count}',timestamp:true},
+    announce:{title:'Announcement',desc:'Something new is happening — here are the details.',color:'bdbdc2',footer:'',timestamp:true},
+    rules:{title:'Server Rules',desc:'1. Be respectful to everyone\n2. No spam or self-promotion\n3. Follow the Discord ToS\n4. Have fun',color:'8f8e98',footer:'',timestamp:false},
+    giveaway:{title:'Giveaway',desc:'Something is up for grabs. React or follow the instructions below to enter.',color:'cfcfd4',footer:'Good luck!',timestamp:true},
+    ticket:{title:'Need help?',desc:'Open a ticket and our team will help you as soon as possible.',color:'a9a9b0',footer:'Support',timestamp:false},
+    warning:{title:'Moderation Notice',desc:'This is an official moderation notice. Please review the information below.',color:'b0b0b5',footer:'Vailds Moderation',timestamp:true},
+    event:{title:'Upcoming Event',desc:'Join us for an upcoming community event. Check the details below.',color:'eeeeef',footer:'See you there!',timestamp:true},
+    update:{title:'Server Update',desc:'Here is what has changed in the latest update.',color:'99999f',footer:'Changelog',timestamp:true},
+    faq:{title:'Frequently Asked Questions',desc:'Question: How do I get started?\nAnswer: Invite Vailds and configure your server from the dashboard.',color:'c4c4c9',footer:'Documentation',timestamp:false},
+    verification:{title:'Verification',desc:'Complete the verification steps below to gain access to the server.',color:'dddddf',footer:'Server Security',timestamp:false}
   };
   const p=presets[type]; if(!p) return;
   document.getElementById('b-title').value=p.title;
@@ -2208,7 +2265,7 @@ async function confirmCreateSnapshot(){
     structure={
       categories:[{id:'cat1',name:'Information',position:0},{id:'cat2',name:'General',position:1},{id:'cat3',name:'Voice Channels',position:2}],
       channels:[{id:'ch1',name:'rules',type:'text',parentId:'cat1',position:0},{id:'ch2',name:'announcements',type:'text',parentId:'cat1',position:1},{id:'ch3',name:'general',type:'text',parentId:'cat2',position:0},{id:'ch4',name:'off-topic',type:'text',parentId:'cat2',position:1},{id:'ch5',name:'General Voice',type:'voice',parentId:'cat3',position:0}],
-      roles:[{id:'r1',name:'Admin',color:0xff4d78,position:10},{id:'r2',name:'Moderator',color:0xff8fab,position:9},{id:'r3',name:'Member',color:0x8ecae6,position:1}]
+      roles:[{id:'r1',name:'Admin',color:0xd8d8dc,position:10},{id:'r2',name:'Moderator',color:0xbdbdc2,position:9},{id:'r3',name:'Member',color:0x88888f,position:1}]
     };
     showToast('API offline — saved demo structure','');
   }
